@@ -1,0 +1,17 @@
+@import './variables.scss';
+@import './mixin.scss';
+
+html,
+body .app {
+  color: #333333;
+  font-family: Arial, Helvetica, 'STHeiti STXihei', 'Microsoft YaHei', Tohoma, sans-serif;
+  background-color: $background-color;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.app-container {
+  padding-bottom: 50px;
+}
