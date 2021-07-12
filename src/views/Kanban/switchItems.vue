@@ -1,6 +1,12 @@
 <!-- 切换项目 -->
 <template>
   <div>
+    <van-nav-bar
+      title="标题"
+      left-text="返回"
+      left-arrow
+      @click-left="onClickLeft"
+    />
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
       <van-cell v-for="item in list" :key="item" :title="item" />
     </van-list>
@@ -37,6 +43,9 @@
             this.finished = true;
           }
         }, 1000);
+      },
+      onClickLeft() {
+        Toast('返回');
       },
     }
   }

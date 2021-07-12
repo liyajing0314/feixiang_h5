@@ -51,6 +51,24 @@ export const constantRouterMap = [
     meta: { title: '切换项目', keepAlive: false }
   },
   {
+    path: '/checkWork',
+    name: 'CheckWork',
+    component: () => import('@/views/Console/checkWork'),
+    meta: { title: '考勤管理', keepAlive: false }
+  },
+  {
+    path: '/classes',
+    name: 'Classes',
+    component: () => import('@/views/Console/classes'),
+    meta: { title: '班次管理', keepAlive: false }
+  },
+  {
+    path: '/updatePassword',
+    name: 'UpdatePassword',
+    component: () => import('@/views/Console/updatePassword'),
+    meta: { title: '修改密码', keepAlive: false }
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/Login/index'),

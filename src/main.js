@@ -23,6 +23,7 @@ import '@/assets/css/index.scss'
 // 移动端适配
 import 'lib-flexible/flexible.js'
 
+import '@/permission' 
 // filters
 import './filters'
 Vue.config.productionTip = false
