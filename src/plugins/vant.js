@@ -1,6 +1,6 @@
 // 按需全局引入 vant组件
 import Vue from 'vue'
-import { Button, List, Cell, Tabbar, TabbarItem,Popup,Form,Field,Toast,Grid, GridItem,NavBar,Dialog,Calendar    } from 'vant'
+import { Button, List, Cell, Tabbar, TabbarItem,Popup,Form,Field,Toast,Grid, GridItem,NavBar,Dialog,Calendar,IndexBar, IndexAnchor   } from 'vant'
 Vue.use(Button)
 Vue.use(Cell)
 Vue.use(List)
@@ -13,3 +13,4 @@ Vue.use(Grid).use(GridItem)
 Vue.use(NavBar)
 Vue.use(Dialog)
 Vue.use(Calendar)
+Vue.use(IndexBar).use(IndexAnchor)
