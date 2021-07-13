@@ -1,12 +1,7 @@
 <!-- 考勤管理 -->
 <template>
   <div>
-    <van-nav-bar
-      title="标题"
-      left-text="返回"
-      left-arrow
-      @click-left="onClickLeft"
-    />
+    <nav-bar @back="$router.back(-1)" title="考勤管理"></nav-bar>
     <div class="container">
       <div class="box">
         <p><span>当前人员:</span><span>某某人员</span><span>切换</span></p>
@@ -41,7 +36,9 @@
 </template>
 
 <script>
+  import NavBar from '@/components/NavBar'
   export default {
+    components:{NavBar},
     data(){
       return {
         color:'#1989fa',
