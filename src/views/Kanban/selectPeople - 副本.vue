@@ -2,23 +2,19 @@
 <template>
   <van-popup v-model="show" position="right" :style="{ height: '100%',width:'80%' }">
     <van-search v-model="value" placeholder="请输入搜索关键词" @search="onSearch"/>
-    <div ref="content" class="content">
+    <div>
       <van-checkbox-group v-model="result">
-        <!-- <van-index-bar :index-list="indexList" :sticky="false" ref="IndexBar">
+        <van-index-bar :index-list="indexList" :sticky="false" ref="IndexBar">
           <van-checkbox :name="index+1"  v-for="(item,index) in 50">
             <van-index-anchor  :index="index+1" >人员{{index+1}}</van-index-anchor>
           </van-checkbox>
-        </van-index-bar> -->
-        <van-checkbox :name="index"  v-for="(item,index) in 50">
-          <van-cell :title="'人员'+index" :ref="'anchor'+index"/>
-        </van-checkbox>
-
+        </van-index-bar>
       </van-checkbox-group>
     </div>
 
     <div class="bottom">
       <van-button type="primary">清空</van-button>
-      <van-button type="info" @click="confirm">确定（{{result.length}}）</van-button>
+      <van-button type="info">确定（{{result.length}}）</van-button>
     </div>
   </van-popup>
 </template>
@@ -45,21 +41,7 @@
       },
       onSearch(){
         console.info('搜索',this.$refs)
-        // this.$refs.IndexBar.scrollTo(11)
-        let index = 11
-
-        this.$refs.content.scrollTo({
-          top: this.$refs['anchor'+index].offsetTop - 60,
-          behavior: "smooth" // 平滑滚动
-        })
-      },
-      confirm(){
-        if(this.result.length === 0){
-          this.$toast('请选择人员');
-        }else{
-          this.show = false
-        }
-
+        this.$refs.IndexBar.scrollTo(11)
       }
     }
   }
@@ -72,9 +54,5 @@
     padding: 10px;
     bottom:0;
     right:0;
-  }
-  /deep/.content {
-    height:calc(100vh - 100px);
-    overflow: auto;
   }
 </style>
