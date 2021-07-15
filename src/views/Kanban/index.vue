@@ -3,6 +3,7 @@
     <div class="project"><span>万达影城</span>
     <van-button type="primary" size="mini" @click="switchItems">切换</van-button>
     <van-button type="primary" size="mini" @click="switchTime">时间</van-button>
+    <van-button type="primary" size="mini" @click="kaoqin">考勤</van-button>
     </div>
     <div class="profile">
       <div v-for="(item,index) in profileData" :key="index" class="profile-item">
@@ -17,10 +18,12 @@
     <fwzlzs></fwzlzs>
     <select-options ref="SelectOptions"></select-options>
     <sel-picker ref="SelPicker"></sel-picker>
+    <time-popup ref="TimePopup"></time-popup>
   </div>
 </template>
 
 <script>
+  import TimePopup from '@/components/TimePopup'
   import SelPicker from '@/components/SelPicker'
   import SelectOptions from '@/components/SelectOptions'
   import fwzlzs from './components/fwzlzs'
@@ -29,7 +32,7 @@
   import lskq from './components/lskq'
   import jrgk from './components/jrkq'
   export default {
-    components:{jrgk,lskq,fjsj,rwwcqk,fwzlzs,SelectOptions,SelPicker},
+    components:{jrgk,lskq,fjsj,rwwcqk,fwzlzs,SelectOptions,SelPicker,TimePopup},
     data(){
       return {
         profileData:[ //概况数据
@@ -72,6 +75,9 @@
       },
       switchTime(){
         this.$refs.SelPicker.showPopup()
+      },
+      kaoqin(){
+        this.$refs.TimePopup.showPopup()
       }
     }
   }

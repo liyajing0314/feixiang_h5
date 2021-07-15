@@ -1,14 +1,15 @@
 <template>
   <van-popup v-model="show" position="bottom" round>
-    <p>选择月份</p>
+    <p class="title">选择月份</p>
     <van-datetime-picker
       v-model="currentDate"
       type="year-month"
-      title="选择年月"
+      :show-toolbar="false"
       :min-date="minDate"
       :max-date="maxDate"
       :formatter="formatter"
-    />
+    >
+    </van-datetime-picker>
     <div class="bottom-oper">
       <van-button type="primary" class="btn btn-cancel" @click="cancel">取消</van-button>
       <van-button type="primary" class="btn btn-ok" @click="submit">确定</van-button>
@@ -32,7 +33,7 @@
       },
       formatter(type, val) {
         if (type === 'year') {
-          return `${val}年`;
+          return `${val}`;
         } else if (type === 'month') {
           return `${val}月`;
         }
@@ -49,6 +50,14 @@
 </script>
 
 <style scoped lang="scss">
+  .title {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .van-picker{
+    margin-bottom:88px;
+  }
   .bottom-oper {
     position: fixed;
     bottom:0;
