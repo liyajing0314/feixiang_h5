@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <div class="project"><span>万达影城</span><van-button type="primary" size="mini" @click="switchItems">切换</van-button></div>
+    <div class="project"><span>万达影城</span>
+    <van-button type="primary" size="mini" @click="switchItems">切换</van-button>
+    <van-button type="primary" size="mini" @click="switchTime">时间</van-button>
+    </div>
     <div class="profile">
       <div v-for="(item,index) in profileData" :key="index" class="profile-item">
         <p>{{item.label}}</p>
@@ -12,17 +15,21 @@
     <fjsj></fjsj>
     <rwwcqk></rwwcqk>
     <fwzlzs></fwzlzs>
+    <select-options ref="SelectOptions"></select-options>
+    <sel-picker ref="SelPicker"></sel-picker>
   </div>
 </template>
 
 <script>
+  import SelPicker from '@/components/SelPicker'
+  import SelectOptions from '@/components/SelectOptions'
   import fwzlzs from './components/fwzlzs'
   import rwwcqk from './components/rwwcqk'
   import fjsj from './components/fjsj'
   import lskq from './components/lskq'
   import jrgk from './components/jrkq'
   export default {
-    components:{jrgk,lskq,fjsj,rwwcqk,fwzlzs,},
+    components:{jrgk,lskq,fjsj,rwwcqk,fwzlzs,SelectOptions,SelPicker},
     data(){
       return {
         profileData:[ //概况数据
@@ -59,7 +66,12 @@
     },
     methods:{
       switchItems(){
-        this.$router.push('/switchItems')
+        console.info(this.$refs)
+        this.$refs.SelectOptions.showAction()
+        // this.$router.push('/switchItems')
+      },
+      switchTime(){
+        this.$refs.SelPicker.showPopup()
       }
     }
   }

@@ -13,12 +13,6 @@ export const constantRouterMap = [
     },
     children: [
       {
-        path: '/about',
-        name: 'About',
-        component: () => import('@/views/home/about'),
-        meta: { title: '关于我', keepAlive: false }
-      },
-      {
         path: '/kanban',
         name: 'Kanban',
         component: () => import('@/views/Kanban/index'),
@@ -40,7 +34,7 @@ export const constantRouterMap = [
         path: '/console',
         name: 'Console',
         component: () => import('@/views/Console/index'),
-        meta: { title: '我的', keepAlive: false }
+        meta: { title: '控制台', keepAlive: false }
       }
     ]
   },
@@ -49,6 +43,12 @@ export const constantRouterMap = [
     name: 'SwitchItems',
     component: () => import('@/views/Kanban/switchItems'),
     meta: { title: '切换项目', keepAlive: false }
+  },
+  {
+    path: '/locationList',
+    name: 'LocationList',
+    component: () => import('@/views/Location/list'),
+    meta: { title: '定位列表', keepAlive: false }
   },
   {
     path: '/checkWork',
