@@ -1,17 +1,57 @@
 <template>
   <div class="container">
-    <div class="project"><span>万达影城</span>
-    <van-button type="primary" size="mini" @click="switchItems">切换</van-button>
-    <van-button type="primary" size="mini" @click="switchTime">时间</van-button>
-    <van-button type="primary" size="mini" @click="kaoqin">考勤</van-button>
+    <div class="project">
+      <span>万达影城</span>
+      <img src="@/assets/images/icon_change.png" class="icon-change" @click="switchItems"/>
+     <!-- <van-button type="primary" size="mini" @click="switchItems">切换</van-button>
+      <van-button type="primary" size="mini" @click="switchTime">时间</van-button>
+      <van-button type="primary" size="mini" @click="kaoqin">考勤</van-button> -->
     </div>
     <div class="profile">
-      <div v-for="(item,index) in profileData" :key="index" class="profile-item">
-        <p>{{item.label}}</p>
-        <p>{{item.count}}</p>
+      <div class="profile-item">
+        <div>
+          <p class="nums">800</p>
+          <p class="desc">房间数</p>
+        </div>
+        <div class="icon-boxs boxs1"><img src="@/assets/images/kanban/icon_room.png"/></div>
+      </div>
+      <div class="profile-item">
+        <div>
+          <p class="nums">800</p>
+          <p class="desc">工牌数</p>
+        </div>
+        <div class="icon-boxs boxs1"><img src="@/assets/images/kanban/icon_card.png"/></div>
+      </div>
+      <div class="profile-item">
+        <div>
+          <p class="nums">800</p>
+          <p class="desc">信标数</p>
+        </div>
+        <div class="icon-boxs boxs1"><img src="@/assets/images/kanban/icon_beacon.png"/></div>
+      </div>
+      <div class="profile-item">
+        <div>
+          <p class="nums">800</p>
+          <p class="desc">劳动者总数</p>
+        </div>
+        <div class="icon-boxs boxs1"><img src="@/assets/images/kanban/icon_laborer.png"/></div>
+      </div>
+      <div class="profile-list">
+        <div>
+          <p class="nums">8963</p>
+          <p class="desc">昨日出勤人数</p>
+        </div>
+        <div>
+          <p class="nums">8963</p>
+          <p class="desc">昨日累计工时</p>
+        </div>
+        <div>
+          <p class="nums">8963</p>
+          <p class="desc">本月异常考勤</p>
+        </div>
       </div>
     </div>
-    <jrgk></jrgk>
+    <jrkq></jrkq>
     <lskq></lskq>
     <fjsj></fjsj>
     <rwwcqk></rwwcqk>
@@ -30,9 +70,9 @@
   import rwwcqk from './components/rwwcqk'
   import fjsj from './components/fjsj'
   import lskq from './components/lskq'
-  import jrgk from './components/jrkq'
+  import jrkq from './components/jrkq'
   export default {
-    components:{jrgk,lskq,fjsj,rwwcqk,fwzlzs,SelectOptions,SelPicker,TimePopup},
+    components:{jrkq,lskq,fjsj,rwwcqk,fwzlzs,SelectOptions,SelPicker,TimePopup},
     data(){
       return {
         profileData:[ //概况数据
@@ -85,22 +125,86 @@
 
 <style scoped lang="scss">
   .container {
-    padding: 20px;
+    padding: 12px;
+    background-color: #F7F7F8;
   }
   .project {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+    color:#000508;
+    font-weight: 600;
+    font-size: 20px;
+    .icon-change {
+      width:16px;
+      height:16px;
+      margin-left: 4px;
+    }
   }
   .profile {
-    display: -webkit-box;
-    overflow-x: scroll;
-    -webkit-overflow-scrolling:touch;
+    // display: -webkit-box;
+    // overflow-x: scroll;
+    // -webkit-overflow-scrolling:touch;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
     margin-bottom: 10px;
     .profile-item {
-      width:100px;
+      width:171px;
+      height:66px;
       background-color: #FFFFFF;
-      padding: 10px;
-      &:not(:last-of-type) {
-        margin-right:10px;
+      padding:9px 12px;
+      border-radius: 6px;
+      box-sizing: border-box;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .icon-boxs {
+      width:42px;
+      height:42px;
+      text-align: center;
+      border-radius: 50%;
+      >img {
+        width:24px;
+        height:24px;
+        margin-top: 9px;
+      }
+    }
+    .boxs1 {
+      background: rgba(47,196,255,0.10);
+    }
+    .boxs2 {
+      background: rgba(240,159,37,0.10);
+    }
+    .boxs3 {
+      background: rgba(76,240,37,0.10);
+    }
+    .boxs4 {
+      background: rgba(37,52,240,0.10);
+    }
+    .nums {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0 0 2px;
+    }
+    .desc {
+      color: #808896;
+      font-size: 12px;
+      font-weight: 400;
+      margin: 0;
+    }
+    .profile-list {
+      background-color: #ffffff;
+      border-radius: 4px;
+      padding:12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width:100%;
+      height:72px;
+      text-align: center;
+      >div {
+        margin: 0 16px;
       }
     }
   }

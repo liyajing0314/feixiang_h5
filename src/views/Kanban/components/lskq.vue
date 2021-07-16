@@ -1,9 +1,10 @@
 <template>
-  <div>
-    <p>历史考勤
-      <span @click="selPeople">选择人员</span>
-    </p>
-    <div ref="lskq" class="charts"></div>
+  <div class="pannel">
+    <p class="pannel-head">历史考勤<span @click="selPeople">选择人员</span></p>
+    <div>
+      <div ref="lskq" class="charts"></div>
+    </div>
+
     <select-people ref="selectPeople"></select-people>
   </div>
 </template>
@@ -43,29 +44,61 @@
         });
 
         this.options = {
+          color:['#63DAAB','#EFBC2D','#E37447','#74271F','#7E5EC6','#5699C7','#4459FC'],
           legend: {
-            data: ['蒸发量', '降水量']
+            data: ['出勤天数', '迟到次数','早退次数','矿工次数','请假次数','加班天数','应出勤天数']
           },
-          calculable: true,
-          xAxis: [{
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01],
+            axisLine: {
+              show: false
+            },
+            axisLabel: {
+              show: false
+            },
+            splitLine: {
+              show: false
+            }
+          },
+          yAxis: {
             type: 'category',
-            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
-          }],
-          yAxis: [{
-            type: 'value'
-          }],
+            data: ['巴西', '印尼', '美国', '印度', '中国', '世界人'],
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            splitLine: {
+              show: true
+            },
+            minorSplitLine: {
+              show: true
+            }
+          },
           series: [{
-              name: '蒸发量',
+              name: '出勤天数',
               type: 'bar',
-              data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+              itemStyle: {
+                borderRadius: [0, 2, 2, 0],
+              },
+
+              data: [18203, 23489, 29034, 104970, 131744, 630230]
             },
             {
-              name: '降水量',
+              name: '迟到次数',
               type: 'bar',
-              data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+              data: [19325, 23438, 31000, 121594, 134141, 681807]
             }
           ]
-        }
+        };
 
         this.chart.setOption(this.options, true)
         this.chart.hideLoading();

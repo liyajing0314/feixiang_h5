@@ -1,7 +1,20 @@
 <template>
-  <div>
-    <p>今日概况</p>
-    <div ref="jrgk" class="charts"></div>
+  <div class="pannel">
+    <p class="pannel-head">今日考勤</p>
+    <div class="pannel-body">
+      <div ref="jrgk" class="charts"></div>
+      <div class="right-item">
+        <div class="items">
+          <span><img src="@/assets/images/kanban/icon_yd.png" class="icon" />应到人数</span>
+          <span class="nums">215636</span>
+        </div>
+        <div class="items items-yd">
+          <span><img src="@/assets/images/kanban/icon_sd.png" class="icon" />实到人数</span>
+          <span class="nums">215636</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -24,6 +37,7 @@
     },
     methods: {
       getChart() {
+        let max = 240
         let that = this
         this.chart = this.$echarts.init(that.$refs.jrgk)
         this.chart.showLoading({
@@ -33,57 +47,101 @@
         });
 
         this.options = {
-          series: [{
-            type: 'gauge',
-            startAngle: 180,
-            endAngle: 0,
+          title: [{
+            text: '95%',
+            textStyle: {
+              color: '#333333',
+              fontSize: 24
+            },
+            itemGap: 20,
+            left: 'center',
+            top: '30%'
+          }, {
+            text: '到岗率',
+            textStyle: {
+              color: '#808896',
+              fontSize: 12,
+              fontWeight: 'normal'
+            },
+            itemGap: 20,
+            left: 'center',
+            top: '56%'
+          }],
+          angleAxis: {
+            polarIndex: 0,
             min: 0,
-            max: 240,
-            splitNumber: 12,
-            itemStyle: {
-              color: '#58D9F9',
-              shadowColor: 'rgba(0,138,255,0.45)',
-              shadowBlur: 10,
-              shadowOffsetX: 2,
-              shadowOffsetY: 2
-            },
-            progress: {
-              show: true,
-              roundCap: true,
-              width: 18
-            },
-            pointer: {
+            max: 100,
+            show: false,
+            boundaryGap: ['40%', '40%'],
+            startAngle: 90,
+          },
+          radiusAxis: {
+            type: 'category',
+            show: true,
+            axisLabel: {
               show: false,
             },
             axisLine: {
-              roundCap: true,
-              lineStyle: {
-                width: 18
-              }
+              show: false,
+
             },
             axisTick: {
-              splitNumber: 0,
-              lineStyle: {
-                width: 0,
-                color: '#999'
-              }
-            },
-            splitLine: {
-              show: false,
-            },
-            axisLabel: {
               show: false
             },
-            title: {
-              show: false
+          },
+          polar: [{
+            center: ['50%', '50%'], //中心点位置
+            radius: '175%' //图形大小
+          }],
+          xAxis: {
+            show: false,
+            type: 'value'
+          },
+          series: [{
+              type: 'bar',
+              z: 10,
+              name: "完成度",
+              data: [80],
+              showBackground: false,
+              backgroundStyle: {
+                borderWidth: 10,
+                width: 10
+              },
+              coordinateSystem: 'polar',
+              roundCap: false,
+              barWidth: 12, //大的占比环
+              itemStyle: {
+                normal: {
+                  opacity: 1,
+                  color: "#2574F0"
+                }
+              },
             },
-            detail: {
-              show: false
-            },
-            data: [{
-              value: 100
-            }]
-          }]
+            {
+              type: 'pie',
+              name: '内层细圆环',
+              radius: ['80%', '95%'],
+              center: ['50%', '50%'], //中心点位置
+              startAngle: 90,
+              hoverAnimation: false,
+              clockWise: true,
+              silent: true,
+              itemStyle: {
+                normal: {
+                  color: '#f3f3f7',
+                  shadowBlur: 0,
+                  shadowColor: '#66666a',
+                }
+              },
+              tooltip: {
+                show: false,
+              },
+              label: {
+                show: false
+              },
+              data: [100]
+            }
+          ]
         };
 
         this.chart.setOption(this.options, true)
@@ -94,8 +152,49 @@
 </script>
 
 <style scoped lang="scss">
+  .pannel-body {
+    display: flex;
+  }
+
   .charts {
-    height: 260px;
+    height: 120px;
+    width: calc(200% - 180px);
+  }
+
+  .right-item {
+    width: 180px;
+    min-width: 180px;
+  }
+
+  .items {
     width: 100%;
+    height: 48px;
+    border-radius: 6px;
+    padding: 12px;
+    background: #eaedf1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: #808896;
+  }
+
+  .items-yd {
+    background: rgba(37, 116, 240, 0.10);
+  }
+
+  .nums {
+    font-size: 14px;
+    color: #333333;
+    font-weight: 600;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 3px;
+    vertical-align: middle;
+    margin-top: -2px;
   }
 </style>
