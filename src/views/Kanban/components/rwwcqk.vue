@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <p>任务完成情况</p>
+  <div class="pannel">
+    <p class="pannel-head">任务完成情况</p>
     <div ref="rwwcqk" class="charts"></div>
   </div>
 </template>
@@ -32,22 +32,60 @@
         });
 
         this.options = {
+          color:['rgba(0,116,248,1)','rgba(248,175,0,1)'],
+          grid: {
+            containLabel: true,
+            bottom: 20,
+            top: 60,
+            left: 10,
+            right: 10
+          },
+          legend:{
+            data: ['总任务数', '已完成任务数'],
+            left:'left'
+          },
           xAxis: {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            // interval: 0,
+            boundaryGap :true,
+            axisTick: {
+              show: false,
+            },
+            axisLine: {
+              show: false
+            },
+            splitLine: {
+              show: true,
+              // interval: 0
+            },
+            axisLabel: {
+              show: true,
+              color: 'rgba(191,197,206,1)',
+              width: 30,
+              overflow: 'breakAll'
+            },
+            data: ['01', '02', '03', '04', '05', '06', '07']
           },
           yAxis: {
-            type: 'value'
+            type: 'value',
+            axisLabel: {
+              show: false
+            },
+            splitLine: {
+              show: false
+            }
           },
           series: [{
               data: [820, 932, 901, 934, 1290, 1330, 1320],
               type: 'line',
-              smooth: true
+              smooth: true,
+              name:'总任务数'
             },
             {
               data: [800, 902, 901, 904, 290, 130, 320],
               type: 'line',
-              smooth: true
+              smooth: true,
+              name:'已完成任务数'
             },
             ]
           }

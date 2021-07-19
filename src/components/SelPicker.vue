@@ -75,12 +75,5 @@
       border-radius: 6px;
       border:none;
     }
-    .btn-cancel {
-      background: #e9f1fd;
-      color: $theme-color;
-    }
-    .btn-ok {
-      background-color: $theme-color;
-    }
   }
 </style>
