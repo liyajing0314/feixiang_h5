@@ -51,6 +51,18 @@ export const constantRouterMap = [
     meta: { title: '定位列表', keepAlive: false }
   },
   {
+    path: '/taskDetail',
+    name: 'TaskDetail',
+    component: () => import('@/views/Task/detail'),
+    meta: { title: '任务详情', keepAlive: false }
+  },
+  {
+    path: '/taskRecord',
+    name: 'TaskRecord',
+    component: () => import('@/views/Task/record'),
+    meta: { title: '任务报表', keepAlive: false }
+  },
+  {
     path: '/checkWork',
     name: 'CheckWork',
     component: () => import('@/views/Console/checkWork'),

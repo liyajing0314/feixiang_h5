@@ -20,8 +20,9 @@ service.interceptors.request.use(
         forbidClick: true
       })
     }
-    if (store.getters.token) {
-      config.headers['X-Token'] = ''
+    let ACCESS_TOKEN = localStorage.getItem('token')
+    if (ACCESS_TOKEN) {
+      config.headers['Authorization'] = ACCESS_TOKEN
     }
     return config
   },
@@ -36,6 +37,7 @@ service.interceptors.response.use(
   response => {
     Toast.clear()
     const res = response.data
+   console.info('res',res)
     if (res.status && res.status !== 200) {
       // 登录超时,重新登录
       if (res.status === 401) {

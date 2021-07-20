@@ -1,7 +1,7 @@
 // 按需全局引入 vant组件
 import Vue from 'vue'
 import { Button,List, Cell, Tabbar, TabbarItem,Popup,Form,Field,Toast,Grid, GridItem,NavBar,Dialog,Calendar,
-IndexBar,IndexAnchor,Search,Checkbox,CheckboxGroup,Tab,Tabs,ActionSheet,DatetimePicker      } from 'vant'
+IndexBar,IndexAnchor,Search,Checkbox,CheckboxGroup,Tab,Tabs,ActionSheet,DatetimePicker,Popover,PullRefresh } from 'vant'
 Vue.use(Button)
 Vue.use(Cell)
 Vue.use(List)
@@ -20,3 +20,6 @@ Vue.use(Checkbox).use(CheckboxGroup);
 Vue.use(Tab).use(Tabs);
 Vue.use(ActionSheet);
 Vue.use(DatetimePicker);
+Vue.use(Popover);
+Vue.use(PullRefresh);
+

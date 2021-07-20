@@ -53,13 +53,10 @@ module.exports = {
     },
     proxy: {
       //配置跨域
-      '/qifu58': {
-          target: "http://fx.58qf.com",
-          // ws:true,
+      '/flying-elephant-h5': {
+          target: "http://apitest.fx.58qf.com/",
+          ws:false,
           changOrigin:true,
-          pathRewrite:{
-              '^/qifu58':'/'
-          }
       }
     }
   },

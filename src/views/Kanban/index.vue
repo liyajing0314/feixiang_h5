@@ -2,7 +2,9 @@
   <div class="container">
     <div class="project">
       <span>万达影城</span>
-      <img src="@/assets/images/icon_change.png" class="icon-change" @click="switchItems"/>
+      <img src="@/assets/images/icon_change.png"
+        srcset='../../assets/images/icon_change.png 1x,
+                 ../../assets/images/icon_change@2x.png 2x' class="icon-change" @click="switchItems"/>
       <!--<van-button type="primary" size="mini" @click="kaoqin">考勤</van-button> -->
     </div>
     <div class="profile">
@@ -11,28 +13,44 @@
           <p class="nums">800</p>
           <p class="desc">房间数</p>
         </div>
-        <div class="icon-boxs boxs1"><img src="@/assets/images/kanban/icon_room.png"/></div>
+        <div class="icon-boxs boxs1">
+          <img src="@/assets/images/kanban/icon_room.png"
+          srcset='../../assets/images/kanban/icon_room.png 1x,
+                 ../../assets/images/kanban/icon_room@2x.png 2x'/>
+        </div>
       </div>
       <div class="profile-item">
         <div>
           <p class="nums">800</p>
           <p class="desc">工牌数</p>
         </div>
-        <div class="icon-boxs boxs2"><img src="@/assets/images/kanban/icon_card.png"/></div>
+        <div class="icon-boxs boxs2">
+          <img src="@/assets/images/kanban/icon_card.png"
+          srcset='../../assets/images/kanban/icon_card.png 1x,
+                 ../../assets/images/kanban/icon_card@2x.png 2x'/>
+        </div>
       </div>
       <div class="profile-item">
         <div>
           <p class="nums">800</p>
           <p class="desc">信标数</p>
         </div>
-        <div class="icon-boxs boxs3"><img src="@/assets/images/kanban/icon_beacon.png"/></div>
+        <div class="icon-boxs boxs3">
+          <img src="@/assets/images/kanban/icon_beacon.png"
+          srcset='../../assets/images/kanban/icon_beacon.png 1x,
+                 ../../assets/images/kanban/icon_beacon@2x.png 2x'/>
+        </div>
       </div>
       <div class="profile-item">
         <div>
           <p class="nums">800</p>
           <p class="desc">劳动者总数</p>
         </div>
-        <div class="icon-boxs boxs4"><img src="@/assets/images/kanban/icon_laborer.png"/></div>
+        <div class="icon-boxs boxs4">
+          <img src="@/assets/images/kanban/icon_laborer.png"
+          srcset='../../assets/images/kanban/icon_laborer.png 1x,
+                 ../../assets/images/kanban/icon_laborer@2x.png 2x'/>
+        </div>
       </div>
       <div class="profile-list">
         <div>

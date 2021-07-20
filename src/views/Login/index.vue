@@ -26,6 +26,7 @@
 </template>
 
 <script>
+  import {login} from '@/api/user'
   export default {
     data() {
       return {
@@ -35,9 +36,19 @@
     },
     methods: {
       onSubmit(values) {
-        console.log('submit', values);
-        localStorage.setItem('token','123456')
-        this.$router.push('/kanban')
+        let param = {
+          username:this.username,
+          password:this.password
+        }
+        login(param).then(res=>{
+          if(res.code === 200){
+            let tokenId = res.data.tokenId
+            localStorage.setItem('token',tokenId)
+            this.$router.push('/kanban')
+          }else{
+            this.$toast(res.msg || '登录失败')
+          }
+        })
       }
     }
   }
