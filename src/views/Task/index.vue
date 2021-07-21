@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="project">
-      <span>万达影城</span>
+      <span>{{param.pName}}</span>
       <img src="@/assets/images/icon_change.png" class="icon-change" @click="switchItems" />
     </div>
     <div class="task-num">
@@ -19,7 +19,7 @@
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
         <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
           <div class="list-item" v-for="(item,index) in list" :key="item.id">
-            <div @click="toDetail(item.id)">
+            <div @click="toDetail(item)" style="flex:2">
               <p class="l-title">{{item.planname}}</p>
               <div>
                 <span class="tag tag-b">{{item.userNum}}人</span>
@@ -27,11 +27,11 @@
               </div>
             </div>
             <div>
-              <div class="progress status1">
+              <div class="progress" :class="{'status1':item.tbTaskDayInfoVo.status == 3,'status2':item.tbTaskDayInfoVo.status == 4}">
                 <span>{{item.tbTaskDayInfoVo.percent}}</span>
                 <span class="progress-line" style="width:100%"></span>
               </div>
-              <van-popover v-model="showPopover" trigger="click" placement="bottom-end" :actions="actions" @select="onSelect">
+              <van-popover v-model="item.showPopover" trigger="click" placement="bottom-end" :actions="item.actions" @select="onSelect">
                 <template #reference>
                   <span class="more"></span>
                 </template>
@@ -41,24 +41,27 @@
         </van-list>
       </van-pull-refresh>
     </div>
+    <select-options ref="SelectOptions" @selProject="selProject"></select-options>
   </div>
 </template>
 
 <script>
+  import SelectOptions from '@/components/SelectOptions'
   import {
     getYesterdayTaskUserNum,
     getYesterdayTaskInfo,
     taskList
   } from '@/api/task'
   export default {
+    components:{SelectOptions},
     data() {
       return {
         yesterdayTaskUserNum: 0,
         finish: 0,
         notFinish: 0,
-        projectid: 22,
         param: {
           projectid: 22,
+          pName:'',
           pageNum: 1,
           pageSize: 10
         },
@@ -85,7 +88,7 @@
     methods: {
       getYesterdayTaskUserNum() {
         getYesterdayTaskUserNum({
-          projectid: this.projectid
+          projectid: this.param.projectid
         }).then(res => {
           if (res.code === 200) {
             this.yesterdayTaskUserNum = res.data
@@ -94,7 +97,7 @@
       },
       getYesterdayTaskInfo() {
         getYesterdayTaskInfo({
-          projectid: this.projectid
+          projectid: this.param.projectid
         }).then(res => {
           if (res.code === 200) {
             this.finish = res.data.finish
@@ -115,6 +118,22 @@
           if (res.code === 200) {
             let total = res.total
             let rows = res.rows
+
+            if(rows.length >0){
+              let actions = this.actions
+              actions.map(item=>{
+                item.pid = rows[0].id
+                item.planname = rows[0].planname
+                return item
+              })
+              rows.map(item=>{
+                item.showPopover = false
+                item.actions = actions
+                return item
+              })
+            }
+
+
             this.list = this.list.concat(rows)
             // 加载状态结束
             this.loading = false;
@@ -131,19 +150,26 @@
       onRefresh() {
         // 清空列表数据
         this.finished = false;
+        this.refreshing = true
         // 重新加载数据
         // 将 loading 设置为 true，表示处于加载状态
         this.loading = true;
         this.onLoad();
       },
       switchItems() {
-
+        this.$refs.SelectOptions.showAction()
+      },
+      selProject(val){
+        this.param.projectid = val.id
+        this.param.pName = val.name
+        this.getYesterdayTaskUserNum()
+        this.getYesterdayTaskInfo()
+        this.onRefresh()
       },
       onSelect(action) {
-        console.info('action', action)
         let id = action.id
         if (id === 1) { //查看报表
-          this.$router.push('/taskRecord')
+          this.$router.push({ path: '/taskRecord',query:{id:action.pid,planname:action.planname}})
         } else {
           this.$dialog.confirm({
               title: '提示',
@@ -157,8 +183,9 @@
             });
         }
       },
-      toDetail(id) {
-        this.$router.push('/taskDetail?id='+id)
+      toDetail(item) {
+        this.$store.commit('SET_PLAN_DATA',item)
+        this.$router.push('/taskDetail')
       }
 
     }

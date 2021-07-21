@@ -5,7 +5,6 @@
       v-model="currentDate"
       type="year-month"
       :show-toolbar="false"
-      :min-date="minDate"
       :max-date="maxDate"
       :formatter="formatter"
     >
@@ -18,12 +17,13 @@
 </template>
 
 <script>
+  import {toChineseNum} from '@/utils/index.js'
   export default {
     data(){
       return {
         show:false,
         minDate: new Date(2020, 0, 1),
-        maxDate: new Date(2025, 10, 1),
+        maxDate: new Date(),
         currentDate: new Date(),
       }
     },
@@ -35,14 +35,21 @@
         if (type === 'year') {
           return `${val}`;
         } else if (type === 'month') {
-          return `${val}月`;
+          let data = val >= 10 ? val :(val.split('')[1])
+          let num = toChineseNum(data)
+          return `${num}月`;
         }
         return val;
       },
       cancel(){
         this.show = false
       },
-      submit(){
+      submit(val){
+        const currentDate = this.currentDate
+        const year = currentDate.getFullYear()
+        const month = currentDate.getMonth() + 1
+        let date = year + '-' + ( month >=10 ? month : '0'+month)
+        this.$emit('selPicker',date)
         this.cancel()
       }
     }

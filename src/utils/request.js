@@ -37,7 +37,7 @@ service.interceptors.response.use(
   response => {
     Toast.clear()
     const res = response.data
-   console.info('res',res)
+    console.info('res',res)
     if (res.status && res.status !== 200) {
       // 登录超时,重新登录
       if (res.status === 401) {
@@ -53,6 +53,7 @@ service.interceptors.response.use(
   error => {
     Toast.clear()
     console.log('err' + error) // for debug
+    
     return Promise.reject(error)
   }
 )

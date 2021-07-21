@@ -5,7 +5,7 @@
       <div class="task-info">
         <div class="task-line">
           <span class="label">完成条件</span>
-          <span class="cont">每次停留300秒</span>
+          <span class="cont">{{data.finishCondition}}</span>
         </div>
         <div class="task-line">
           <img src="@/assets/images/task/icon_zq.png"
@@ -13,7 +13,7 @@
                  ../../assets/images/task/icon_zq@2x.png 2x' class="icon-info"/>
           <span class="label">任务周期</span>
           <div class="task-contet">
-            <span>{{data.daylist}}</span>
+            <span>{{data.cycle}}</span>
           </div>
         </div>
         <div class="task-line">
@@ -22,7 +22,7 @@
                  ../../assets/images/task/icon_pc@2x.png 2x' class="icon-info"/>
           <span class="label">任务频次</span>
           <div class="task-contet">
-            <span>每天需打卡一次</span>
+            <span>{{data.frequency}}</span>
           </div>
         </div>
       </div>
@@ -70,28 +70,22 @@
   export default {
     data(){
       return{
-        data:{}
       }
     },
     mounted() {
-      let id = this.$route.query.id
-      this.getDetail(id)
+    },
+    computed:{
+      data(){
+        let planData = this.$store.getters.planData
+        planData.daylist = planData.daylist.toString()
+        planData.usernamelist = eval(planData.usernamelist)
+        planData.userlist = eval(planData.userlist)
+        planData.roomnamelist = eval(planData.roomnamelist)
+        return planData
+      }
     },
     methods:{
-      getDetail(id){
-        console.info('id',id)
-        taskPlanDetail(id).then(res=>{
-          if(res.code === 200){
-            let data = res.data
-            data.daylist = data.daylist.toString()
-            data.usernamelist = eval(data.usernamelist)
-            data.userlist = eval(data.userlist)
-            data.roomnamelist = eval(data.roomnamelist)
-            this.data = data
-            console.info('data',data)
-          }
-        })
-      }
+
     }
   }
 </script>
@@ -145,7 +139,7 @@
     background: #ffffff;
     border-radius: 12px 12px 0px 0px;
     padding:0 16px;
-    min-height: calc(100vh - 205px);
+    min-height: calc(100vh - 190px);
     .bottom-pannel {
       padding: 16px 0 6px;
       border-bottom: 1px solid #eaedf1;

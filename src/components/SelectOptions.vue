@@ -2,8 +2,8 @@
   <van-action-sheet v-model="show" title="选择项目" :closeable="false">
     <div class="content">
       <div class="list-box">
-        <div class="list" :class="{'active':active === index}" v-for="(item,index) in 50" :key="index" @click="toSel(index)">
-          <span>好设计让好产品可用好设计让好产品可用</span>
+        <div class="list" :class="{'active':active.id === item.id}" v-for="(item,index) in list" :key="item.id" @click="toSel(item)">
+          <span>{{item.name}}</span>
         </div>
       </div>
       <div class="bottom-oper">
@@ -15,25 +15,45 @@
 </template>
 
 <script>
+  import {projectList} from '@/api/common'
   export default {
     data(){
       return {
         show:false,
-        active:-1
+        active:{},
+        list:[]
       }
+    },
+    mounted() {
+      this.active = {}
+      this.getData()
     },
     methods:{
       showAction(){
         this.show = true
       },
-      toSel(index){
-        this.active = index
+      getData(){
+        projectList().then(res=>{
+          if(res.code === 200){
+            this.list = res.rows
+          }else{
+            this.list = []
+          }
+        })
+      },
+      toSel(item){
+        this.active = item
       },
       cancel(){
-        this.active = -1
+        this.active = {}
         this.show = false
       },
       submit(){
+        if(JSON.stringify(this.active)  === '{}'){
+          this.$toast('请选择项目')
+          return
+        }
+        this.$emit('selProject',this.active)
         this.cancel()
       }
     }

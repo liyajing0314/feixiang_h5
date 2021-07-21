@@ -43,9 +43,42 @@ export function taskList(params) {
  * @param {Object} params
  */
 export function taskPlanDetail(params) {
-  console.info('params',params)
   return request({
     url:`/taskManage/taskPlan/${params}`,
     method: 'get',
   })
 }
+/**
+ * 按任务查看某月任务完成情况
+ * @param {Object} params
+ */
+export function getMonthProjectTaskInfoByTask(params) {
+  return request({
+    url:`/taskManage/taskPlan/getMonthProjectTaskInfoByTask`,
+    method: 'get',
+    params
+  })
+}
+/**
+ * 按条件查看某月任务完成情况
+ * @param {Object} params
+ */
+export function getMonthProjectTaskInfo(params) {
+  return request({
+    url:`/taskManage/taskPlan/getMonthProjectTaskInfo`,
+    method: 'get',
+    params
+  })
+}
+/**
+ * 获取异常列表
+ * @param {Object} params
+ */
+export function getErrorList(params) {
+  return request({
+    url:`/taskManage/taskLog/getErrorList/${params}`,
+    method: 'get',
+  })
+}
+
+
