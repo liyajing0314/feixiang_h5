@@ -5,33 +5,22 @@
       <span class="fjh">房间号</span>
       <span class="date">时间</span>
     </div>
-    <van-list
-      v-model="loading"
-      :finished="finished"
-      finished-text="没有更多了"
-      @load="onLoad"
-    >
-      <div v-for="(item,index) in 20" :key="index" class="list-flex list-tr">
-        <span class="name">林轮窑</span>
-        <span class="fjh">5#2F-东北办公区</span>
-        <span class="date">07-01 14:22</span>
-      </div>
-    </van-list>
+    <div v-for="(item,index) in data" :key="index" class="list-flex list-tr">
+      <span class="name">{{item.username}}</span>
+      <span class="fjh">{{item.roomName}}</span>
+      <span class="date">{{item.time}}</span>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
+    props:['data'],
     data(){
       return {
-        loading: false,
-        finished: false,
       }
     },
     methods:{
-      onLoad(){
-
-      }
     }
   }
 </script>

@@ -4,22 +4,16 @@
       <span class="name">姓名</span>
       <span class="status">情况</span>
     </div>
-    <van-list
-      v-model="loading"
-      :finished="finished"
-      finished-text="没有更多了"
-      @load="onLoad"
-    >
-      <div v-for="(item,index) in 20" :key="index" class="list-flex list-tr" :class="{'bac1':index%2 ==1,'bac2':index%2 !=1}">
-        <span class="name">林轮窑</span>
-        <span class="status">{{index%2 ==1 ? '离岗' : '信号弱'}}</span>
-      </div>
-    </van-list>
+    <div v-for="(item,index) in data" :key="index" class="list-flex list-tr" :class="{'bac1':item.status === '离岗','bac2':item.status === '信号弱'}">
+      <span class="name">{{item.username}}</span>
+      <span class="status">{{item.status}}</span>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
+    props:['data'],
     data(){
       return {
         loading: false,

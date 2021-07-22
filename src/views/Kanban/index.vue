@@ -147,6 +147,11 @@
     color:#000508;
     font-weight: 600;
     font-size: 20px;
+    display: flex;
+    align-items: center;
+    >span {
+      @include textoverflow()
+    }
     .icon-change {
       width:16px;
       height:16px;

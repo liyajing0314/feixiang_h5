@@ -50,7 +50,6 @@
         }
       },
       select(value){
-        console.info('value',value)
         const year = value.getFullYear()
         const month = value.getMonth() + 1
         const date = value.getDate()
@@ -79,7 +78,15 @@
               day.className = 'finish'
             }else if(item.status === 4){
               day.bottomInfo = item.percent
-              day.className = 'noFinish'
+
+              let percent = item.percent
+              percent = percent.substring(0,percent.indexOf('%'))
+              let per = parseFloat(percent)
+              if(per >60){
+                day.className = 'noFinish noFinish2'
+              }else{
+                day.className = 'noFinish'
+              }
             }
             return item
           }
@@ -184,6 +191,15 @@
       display: flex;
       align-items: flex-end;
       justify-content: center;
+    }
+  }
+  /deep/.noFinish2 {
+    .van-calendar__bottom-info {
+      border: 1px solid rgba(255,184,39,0.10);
+    }
+    .bottomInfo {
+      color:rgba(255,184,39,1);
+      background-color: rgba(255,184,39,0.1);
     }
   }
   /deep/.finish{

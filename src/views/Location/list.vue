@@ -2,10 +2,10 @@
   <div class="container">
     <van-tabs v-model="active" type="card" :sticky="true" background="#F1F3F6" title-active-color="#333333" title-inactive-color="#808896" color="#ffffff">
       <van-tab title="员工列表">
-        <employee-list></employee-list>
+        <employee-list :data="locatonData.Normal"></employee-list>
       </van-tab>
       <van-tab title="异常定位列表">
-        <exception-locating-list></exception-locating-list>
+        <exception-locating-list :data="locatonData.Error"></exception-locating-list>
       </van-tab>
     </van-tabs>
   </div>
@@ -19,6 +19,14 @@
     data(){
       return{
         active:0
+      }
+    },
+    mounted() {
+      console.info('locatonData',this.locatonData)
+    },
+    computed:{
+      locatonData(){
+        return this.$store.getters.locationData
       }
     }
   }

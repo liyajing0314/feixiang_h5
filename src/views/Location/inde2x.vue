@@ -5,9 +5,9 @@
       <img src="@/assets/images/icon_change.png" class="icon-change"/>
     </div>
     <!-- :style="{height:contentHeight+'px'}" -->
-    <div style="position: relative;width:100%;height:100%;" ref="wrap">
-      <img ref="bacImg" :src="imgSrc" style="width:100%;height:100%;" />
-      <canvas id="canvas" class="canvas"></canvas>
+    <div style="position: relative;width:100%;height:100%;" ref="wrap" >
+      <img ref="bacImg" :src="imgSrc"  :style="imgstyle"/>
+      <canvas id="canvas" class="canvas"  :width="canvasWidth" :height="canvasHeight" :style="canvasstyle"></canvas>
     </div>
     <div class="bottom-fixed" @click="toList">
       <img src="@/assets/images/location/icon_location_list.png" class="icon-location-list" srcset='../../assets/images/location/icon_location_list.png 1x,
@@ -40,7 +40,12 @@
         imgY: 0,
         imgScale: 1,
         project:{},
-        data:{}
+        customRwidth: '',    //原图与展示图片的宽度比
+        customRheight: '',   //原图与展示图片的高度比
+        imgstyle: '',        //根据图片大小自适应样式
+        canvasstyle: '',     //根据图片大小canvas自适应样式 居中显示
+        canvasWidth: '',     //根据图片大小自适应canvas宽
+        canvasHeight: '',    //根据图片大小自适应canvas高
       }
     },
     mounted() {
@@ -48,7 +53,6 @@
     },
     methods: {
       toList() {
-        this.$store.commit('SET_LOCATION_DATA',this.data)
         this.$router.push('/locationList')
       },
       switchItems() {
@@ -64,7 +68,6 @@
         }
         location_now_fx(param).then(res=>{
           if(res.code === 200){
-            this.data = res.data
             this.locationList = res.data.Normal
             this.canvasInit()
           }
@@ -90,6 +93,9 @@
         let bacImg = this.$refs.bacImg
         let imgWidth = bacImg.offsetWidth
         let imgHeight = bacImg.clientHeight
+        let wrap = this.$refs.wrap
+        let wrapWidth = wrap.clientWidth
+        let wrapHeight = wrap.clientHeight
 
         this.contentHeight = imgHeight
 
@@ -97,20 +103,43 @@
 
         let this_ = this;
         this.$nextTick(() => {
-          let wrap = this_.$refs.wrap
-          // this.canvas.width = wrap.offsetWidth
-          // this.canvas.height = wrap.offsetHeight
-          this.canvas.width = imgWidth
-          this.canvas.height = imgHeight
-          this.canvasWidth = this.canvas.width;
-          this.canvasHeight = this.canvas.height;
-          console.info('data===>', this.canvasWidth, this.canvasHeight)
+
+          // this.canvas.width = imgWidth
+          // this.canvas.height = imgHeight
+          // this.canvasWidth = this.canvas.width;
+          // this.canvasHeight = this.canvas.height;
 
           this.img = new Image();
           this.img.onload = function() {
             this_.imgIsLoaded = true;
             let naturalWidth = this_.img.width //图片真实宽度
             let naturalHeight = this_.img.height //图片正式高度
+
+            let canvasleft = 0;
+            let canvastop = 0;
+            let WrH = naturalWidth / naturalHeight;             //图片宽高比
+            let RWrH = wrapWidth / wrapHeight;    //放置图片DIV的宽高比
+            let aa = 0;
+
+            // 根据宽高比大小判断确定自适应的宽和高
+            if (RWrH > WrH) {
+              aa = wrapHeight / naturalHeight;
+              this_.canvasHeight = wrapHeight;
+              this_.canvasWidth = naturalWidth * aa;
+              canvasleft = (wrapWidth - this_.canvasWidth) / 2
+            } else {
+              aa = wrapWidth / naturalWidth;
+              this_.canvasHeight =naturalHeight * aa;
+              this_.canvasWidth = wrapWidth;
+              canvastop = (wrapHeight - this_.canvasHeight) / 2
+            }
+            this_.imgstyle = ' position: relative;  width:' + this_.canvasWidth
+              + ' px; height:' + this_.canvasHeight + 'px'; //img浮动定位居中显示
+            this_.customRwidth = this_.canvasWidth / naturalWidth; //原图与展示图片的宽高比
+            this_.customRheight = this_.canvasHeight / naturalHeight;
+
+            this_.canvasstyle = 'position: absolute;left: ' + canvasleft
+              + '; top: ' + canvastop + ';' //canvas浮动定位
 
             this_.ratioImgCanvas = naturalWidth / this_.canvasWidth; // 图片的宽度/canvas画布宽度
             this_.ratioImgCanvas1 = naturalHeight / this_.canvasHeight; // 图片的高度/canvas画布高度

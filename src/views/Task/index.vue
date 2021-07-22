@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <div class="project">
+    <div class="project" @click="switchItems">
       <span>{{param.pName}}</span>
-      <img src="@/assets/images/icon_change.png" class="icon-change" @click="switchItems" />
+      <img src="@/assets/images/icon_change.png" class="icon-change"  />
     </div>
     <div class="task-num">
       <div>
@@ -27,9 +27,9 @@
               </div>
             </div>
             <div>
-              <div class="progress" :class="{'status1':item.tbTaskDayInfoVo.status == 3,'status2':item.tbTaskDayInfoVo.status == 4}">
+              <div class="progress" :class="selStatus(item)">
                 <span>{{item.tbTaskDayInfoVo.percent}}</span>
-                <span class="progress-line" style="width:100%"></span>
+                <span class="progress-line" :style="{width:item.tbTaskDayInfoVo.percent}"></span>
               </div>
               <van-popover v-model="item.showPopover" trigger="click" placement="bottom-end" :actions="item.actions" @select="onSelect">
                 <template #reference>
@@ -186,6 +186,20 @@
       toDetail(item) {
         this.$store.commit('SET_PLAN_DATA',item)
         this.$router.push('/taskDetail')
+      },
+      selStatus(item){
+        if(item.tbTaskDayInfoVo.status == 3){
+          return 'status1'
+        }else if(item.tbTaskDayInfoVo.status == 4){
+          let percent = item.tbTaskDayInfoVo.percent
+          percent = percent.substring(0,percent.indexOf('%'))
+          let per = parseFloat(percent)
+          if(per >60){
+            return 'status2'
+          }else{
+            return 'status3'
+          }
+        }
       }
 
     }
@@ -203,11 +217,16 @@
     color: #000508;
     font-weight: 600;
     font-size: 20px;
-
+    display: flex;
+    align-items: center;
+    >span {
+      @include textoverflow()
+    }
     .icon-change {
       width: 16px;
       height: 16px;
       margin-left: 4px;
+      vertical-align: middle;
     }
   }
 
@@ -328,7 +347,7 @@
       }
     }
 
-    .status2 {
+    .status3 {
       color: #ed4f2a;
       border: 1px solid rgba(237, 79, 42, 0.10);
 
