@@ -162,3 +162,47 @@ export function toChineseNum(num){
     }
     return tmpnewchar
 }
+
+export function  formatterStatus(status){
+	//(0, “未打卡”), (1, “正常”), (2, “迟到”) , (3, “早退”) , (4, “旷工”) , (5, “病假”), (6, “事假”), (7, “外出”) , (8, “调休”) , (9, “休息”) , (10, “加班”)
+	let text = ''
+	switch (status){
+	  case 0:
+		text = '未打卡'
+		break;
+	  case 1:
+		text = '正常'
+		break;
+	  case 2:
+		text = '迟到'
+		break;
+	  case 3:
+		text = '早退'
+		break;
+	  case 4:
+		text = '旷工'
+		break;
+	  case 5:
+		text = '病假'
+		break;
+	  case 6:
+		text = '事假'
+		break;
+	  case 7:
+		text = '外出'
+		break;
+	  case 8:
+		text = '调休'
+		break;
+	  case 9:
+		text = '休息'
+		break;
+	  case 9:
+		text = '加班'
+		break;
+	  default:
+		text = ''
+		break;
+	}
+	return text
+}

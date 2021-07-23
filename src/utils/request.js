@@ -3,6 +3,9 @@ import store from '@/store'
 import { Toast } from 'vant'
 // 根据环境不同引入不同api地址
 import { baseApi } from '@/config'
+import {ACCESS_TOKEN} from '@/store/mutation-types'
+import router from '../router'
+import { Dialog } from 'vant';
 // create an axios instance
 const service = axios.create({
   baseURL: baseApi, // url = base api url + request url
@@ -20,9 +23,9 @@ service.interceptors.request.use(
         forbidClick: true
       })
     }
-    let ACCESS_TOKEN = localStorage.getItem('token')
-    if (ACCESS_TOKEN) {
-      config.headers['Authorization'] = ACCESS_TOKEN
+    let token = localStorage.getItem(ACCESS_TOKEN)
+    if (token) {
+      config.headers['Authorization'] = token
     }
     return config
   },
@@ -41,7 +44,7 @@ service.interceptors.response.use(
     if (res.status && res.status !== 200) {
       // 登录超时,重新登录
       if (res.status === 401) {
-        store.dispatch('FedLogOut').then(() => {
+        store.dispatch('Logout').then(() => {
           location.reload()
         })
       }
@@ -52,8 +55,20 @@ service.interceptors.response.use(
   },
   error => {
     Toast.clear()
+    const {response} = error;
+    console.info('错误===》',response)
     console.log('err' + error) // for debug
-    
+    // 403 token过期
+    // 清除token并跳转登录页
+    if(response.status === 403){
+      localStorage.removeItem(ACCESS_TOKEN);
+      Dialog.alert({
+        message: '登录过期，请重新登录',
+      }).then(() => {
+        location.reload()
+      });
+    }
+
     return Promise.reject(error)
   }
 )

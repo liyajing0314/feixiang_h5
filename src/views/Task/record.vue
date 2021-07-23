@@ -19,7 +19,7 @@
       </div>
       <div class="sub-tab-content" v-if="tabActive === 1 && subTabList.length >0">
         <div class="sub-tab-box">
-          <span class="sub-tab" :calss="{'active':subTabActive.id === item.id}" v-for="item in subTabList" :key="item.id">{{item.roomname || item.name}}</span>
+          <span class="sub-tab" :class="{'active':subTabActive.id === item.id}" v-for="item in subTabList" :key="item.id">{{item.roomname || item.name}}</span>
         </div>
         <div class="sub-items">
           <img src="@/assets/images/task/icon_search@2x.png" class="icon-search"/>

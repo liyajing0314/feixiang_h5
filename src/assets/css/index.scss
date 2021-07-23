@@ -35,3 +35,7 @@ body .app {
 .btn-ok {
   background-color: $theme-color;
 }
+
+.van-dialog__confirm, .van-dialog__confirm:active {
+  color:$theme-color;
+}

@@ -26,6 +26,7 @@
 </template>
 
 <script>
+  import {ACCESS_TOKEN} from '@/store/mutation-types'
   import {login} from '@/api/user'
   export default {
     data() {
@@ -43,7 +44,8 @@
         login(param).then(res=>{
           if(res.code === 200){
             let tokenId = res.data.tokenId
-            localStorage.setItem('token',tokenId)
+            localStorage.setItem(ACCESS_TOKEN,tokenId)
+            console.info('222')
             this.$router.push('/kanban')
           }else{
             this.$toast(res.msg || '登录失败')
