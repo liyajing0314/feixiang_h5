@@ -1,16 +1,15 @@
 <template>
   <div class="container">
     <div class="project">
-      <span>万达影城</span>
+      <span>{{project.name}}</span>
       <img src="@/assets/images/icon_change.png"
         srcset='../../assets/images/icon_change.png 1x,
                  ../../assets/images/icon_change@2x.png 2x' class="icon-change" @click="switchItems"/>
-      <!--<van-button type="primary" size="mini" @click="kaoqin">考勤</van-button> -->
     </div>
     <div class="profile">
       <div class="profile-item">
         <div>
-          <p class="nums">800</p>
+          <p class="nums">{{profileData.roomNum}}</p>
           <p class="desc">房间数</p>
         </div>
         <div class="icon-boxs boxs1">
@@ -21,7 +20,7 @@
       </div>
       <div class="profile-item">
         <div>
-          <p class="nums">800</p>
+          <p class="nums">{{profileData.cardNum}}</p>
           <p class="desc">工牌数</p>
         </div>
         <div class="icon-boxs boxs2">
@@ -32,7 +31,7 @@
       </div>
       <div class="profile-item">
         <div>
-          <p class="nums">800</p>
+          <p class="nums">{{profileData.beaconNum}}</p>
           <p class="desc">信标数</p>
         </div>
         <div class="icon-boxs boxs3">
@@ -43,7 +42,7 @@
       </div>
       <div class="profile-item">
         <div>
-          <p class="nums">800</p>
+          <p class="nums">{{profileData.empNum}}</p>
           <p class="desc">劳动者总数</p>
         </div>
         <div class="icon-boxs boxs4">
@@ -54,15 +53,15 @@
       </div>
       <div class="profile-list">
         <div>
-          <p class="nums">8963</p>
+          <p class="nums">{{profileData.TodayPersonNum}}</p>
           <p class="desc">昨日出勤人数</p>
         </div>
         <div>
-          <p class="nums">8963</p>
+          <p class="nums">{{profileData.TodayWorkTime}}</p>
           <p class="desc">昨日累计工时</p>
         </div>
         <div>
-          <p class="nums">8963</p>
+          <p class="nums">{{profileData.errorkaoqin}}</p>
           <p class="desc">本月异常考勤</p>
         </div>
       </div>
@@ -72,13 +71,13 @@
     <fjsj></fjsj>
     <rwwcqk></rwwcqk>
     <fwzlzs></fwzlzs>
-    <select-options ref="SelectOptions"></select-options>
-    <time-popup ref="TimePopup"></time-popup>
+    <select-options ref="SelectOptions" @selProject="selProject"></select-options>
   </div>
 </template>
 
 <script>
-  import TimePopup from '@/components/TimePopup'
+  import {toThousands} from '@/utils/index'
+  import {projectDataCount} from '@/api/kanban'
   import SelectOptions from '@/components/SelectOptions'
   import fwzlzs from './components/fwzlzs'
   import rwwcqk from './components/rwwcqk'
@@ -86,46 +85,49 @@
   import lskq from './components/lskq'
   import jrkq from './components/jrkq'
   export default {
-    components:{jrkq,lskq,fjsj,rwwcqk,fwzlzs,SelectOptions,TimePopup},
+    components:{jrkq,lskq,fjsj,rwwcqk,fwzlzs,SelectOptions},
     data(){
       return {
-        profileData:[ //概况数据
-          {
-            label:'房间数',
-            count:8959
-          },
-          {
-            label:'工牌数',
-            count:8959
-          },
-          {
-            label:'信标数',
-            count:8959
-          },
-          {
-            label:'劳动者数',
-            count:8959
-          },
-          {
-            label:'昨日出勤人数',
-            count:8959
-          },
-          {
-            label:'昨日累计工时',
-            count:8959
-          },
-          {
-            label:'本月异常考勤',
-            count:8959
-          }
-        ],
+        profileData:{},
       }
     },
+    computed: {
+      ...mapGetters([
+        'getProjectData',
+      ]),
+      project:{
+        get(){
+          return this.$store.getters.getSelProject
+        },
+        set(data){
+          this.$store.commit('SET_SEL_PROJECT',data)
+        }
+      }
+    },
+    mounted() {
+
+    },
     methods:{
+      projectDataCount(){
+        projectDataCount({id:this.project.id}).then(res=>{
+          if(res.code === 200){
+            let data = res.data
+            let newData = {}
+            for(let key in data) {
+              newData[key] = toThousands(data[key])
+            }
+            this.profileData = newData
+          }else{
+            this.profileData = {}
+          }
+        })
+      },
       switchItems(){
-        console.info(this.$refs)
         this.$refs.SelectOptions.showAction()
-        // this.$router.push('/switchItems')
+      },
+      selProject(val){
+        this.project = val
+        this.projectDataCount()
       },
       switchTime(){
         this.$refs.SelPicker.showPopup()

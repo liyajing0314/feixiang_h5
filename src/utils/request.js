@@ -60,14 +60,17 @@ service.interceptors.response.use(
     console.log('err' + error) // for debug
     // 403 token过期
     // 清除token并跳转登录页
-    if(response.status === 403){
-      localStorage.removeItem(ACCESS_TOKEN);
-      Dialog.alert({
-        message: '登录过期，请重新登录',
-      }).then(() => {
-        location.reload()
-      });
+    if(response){
+      if(response.status === 403){
+        localStorage.removeItem(ACCESS_TOKEN);
+        Dialog.alert({
+          message: '登录过期，请重新登录',
+        }).then(() => {
+          location.reload()
+        });
+      }
     }
+  
 
     return Promise.reject(error)
   }

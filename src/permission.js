@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import router from './router'
 import {ACCESS_TOKEN} from '@/store/mutation-types'
-const whiteList = ['/login']
+const whiteList = ['/login','/viewReport']
 
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title

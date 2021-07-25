@@ -51,6 +51,12 @@ export const constantRouterMap = [
     meta: { title: '定位列表', keepAlive: false }
   },
   {
+    path: '/viewReport',
+    name: 'ViewReport',
+    component: () => import('@/views/Kanban/viewReport'),
+    meta: { title: '历史考勤报表', keepAlive: false }
+  },
+  {
     path: '/taskDetail',
     name: 'TaskDetail',
     component: () => import('@/views/Task/detail'),

@@ -206,3 +206,26 @@ export function  formatterStatus(status){
 	}
 	return text
 }
+/**
+ * 千位符
+ * @param {Object} num
+ */
+export function toThousands(num) {
+    return (num || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+}
+
+/**
+ * @param {Function} fn 防抖函数
+ * @param {Number} delay 延迟时间
+ */
+export function debounce(fn, delay) {
+  var timer;
+  return function () {
+    var context = this;
+    var args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      fn.apply(context, args);
+    }, delay);
+  };
+}

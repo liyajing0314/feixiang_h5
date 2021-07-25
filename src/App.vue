@@ -5,7 +5,10 @@
 </template>
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  mounted() {
+    this.$store.dispatch('getProjectData')
+  }
 }
 </script>
 <style lang="scss"></style>

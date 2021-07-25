@@ -1,9 +1,12 @@
-import {PLAN_DATA,LOCATION_DATA,ACCESS_TOKEN} from '@/store/mutation-types'
+import {PLAN_DATA,LOCATION_DATA,ACCESS_TOKEN,PROJECT_DATA,SEL_PROJECT} from '@/store/mutation-types'
 import {logout} from '@/api/user'
+import {projectList} from '@/api/common'
 const state = {
   userName: '',
   planData:{},
-  locationData:{}
+  locationData:{}, //选中的定位数据
+  projectData:[], //项目列表
+  selProject:{},//选中的项目
 }
 const mutations = {
   SET_USER_NAME(state, name) {
@@ -16,6 +19,14 @@ const mutations = {
   SET_LOCATION_DATA(state,data){
     localStorage.setItem(LOCATION_DATA,JSON.stringify(data))
     state.locationData = data
+  },
+  SET_PROJECT_DATA(state,data){
+    localStorage.setItem(PROJECT_DATA,JSON.stringify(data))
+    state.projectData = data
+  },
+  SET_SEL_PROJECT(state,data){
+    localStorage.setItem(SEL_PROJECT,JSON.stringify(data))
+    state.selProject = data
   }
 }
 const actions = {
@@ -31,6 +42,21 @@ const actions = {
         resolve()
       }).catch(() => {
         resolve()
+      })
+    })
+  },
+  //获取项目列表
+  getProjectData({commit,state}){
+    return new Promise((resolve,reject)=>{
+      projectList().then(res=>{
+        let list= res.rows
+        commit('SET_PROJECT_DATA',list)
+        if(state.selProject === ''){
+          commit('SET_SEL_PROJECT',list[0])
+        }
+        resolve()
+      }).catch(error=>{
+        reject()
       })
     })
   }
