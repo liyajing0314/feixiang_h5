@@ -52,6 +52,7 @@
     getYesterdayTaskInfo,
     taskList
   } from '@/api/task'
+  import {mapGetters } from 'vuex'
   export default {
     components:{SelectOptions},
     data() {
@@ -60,7 +61,7 @@
         finish: 0,
         notFinish: 0,
         param: {
-          projectid: 22,
+          projectid: '',
           pName:'',
           pageNum: 1,
           pageSize: 10
@@ -81,7 +82,23 @@
         }],
       }
     },
+    computed: {
+      ...mapGetters([
+        'getProjectData',
+      ]),
+      project:{
+        get(){
+          return this.$store.getters.getSelProject
+        },
+        set(data){
+          this.$store.commit('SET_SEL_PROJECT',data)
+        }
+      }
+    },
     mounted() {
+      this.param.projectid = this.project.id
+      this.param.pName = this.project.name
+
       this.getYesterdayTaskUserNum()
       this.getYesterdayTaskInfo()
     },
@@ -160,6 +177,7 @@
         this.$refs.SelectOptions.showAction()
       },
       selProject(val){
+        this.project = val
         this.param.projectid = val.id
         this.param.pName = val.name
         this.getYesterdayTaskUserNum()
@@ -370,7 +388,12 @@
     }
   }
 
-  /deep/.van-popover__action-icon {
-    font-size: 16px;
+</style>
+<style>
+  .van-icon__image{
+    width:16px;
+    height:16px;
+    margin-top: -10px;
+    vertical-align: middle;
   }
 </style>

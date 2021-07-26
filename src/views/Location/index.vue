@@ -21,6 +21,7 @@
 <script>
   import SelectOptions from '@/components/SelectOptions'
   import {location_now_fx} from '@/api/location'
+  import {mapGetters } from 'vuex'
   export default {
     components:{SelectOptions},
     data() {
@@ -39,12 +40,24 @@
         imgX: 0,
         imgY: 0,
         imgScale: 1,
-        project:{},
         data:{}
       }
     },
+    computed: {
+      ...mapGetters([
+        'getProjectData',
+      ]),
+      project:{
+        get(){
+          return this.$store.getters.getSelProject
+        },
+        set(data){
+          this.$store.commit('SET_SEL_PROJECT',data)
+        }
+      }
+    },
     mounted() {
-      // this.getData()
+      this.getData()
     },
     methods: {
       toList() {

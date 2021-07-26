@@ -9,11 +9,12 @@
       </div>
 
       <div>
-        <div class="month-arrow">
-          <img src="~@/assets/images/console/icon_left.png" class="icon-arrow"/>
+        <!-- <div class="month-arrow">
+          <img src="~@/assets/images/console/icon_left.png" class="icon-arrow" @click="changMonth('minus')"/>
           <span>2021年七月</span>
-          <img src="~@/assets/images/console/icon_right.png" class="icon-arrow"/>
-        </div>
+          <img src="~@/assets/images/console/icon_right.png" class="icon-arrow" @click="changMonth('add')"/>
+        </div> -->
+        <month-arrow></month-arrow>
         <calendar-record :month="month" :data="calendarList" @selCalendar="selCalendar"></calendar-record>
       </div>
       <div class="bottom-box" v-if="JSON.stringify(calendarActive) != '{}'">
@@ -55,13 +56,14 @@
 </template>
 
 <script>
-  import {formatterStatus,toChineseNum} from '@/utils/index'
+  import MonthArrow from '@/components/MonthArrow'
+  import {formatterStatus,toChineseNum,parseTime} from '@/utils/index'
   import {getOnOffDuty,getMonthSchedulerecordInfo} from '@/api/user'
   import {employeeList} from '@/api/common'
   import RollTabBox from '@/components/RollTabBox'
   import CalendarRecord from '@/components/CalendarRecord'
   export default {
-    components:{RollTabBox,CalendarRecord},
+    components:{RollTabBox,CalendarRecord,MonthArrow},
     data(){
       return {
         color:'#1989fa',
@@ -70,7 +72,7 @@
         tabList:[],
         workTime:{},
         id:22,
-        month:'2021-07',
+        month:'',
         calendarList:[],
         calendarActive:{},
         formatterStatus:formatterStatus,
@@ -97,6 +99,10 @@
       }
     },
     mounted() {
+      let time = new Date().getTime()
+      let nowDate = parseTime(time,'{y}-{m}')
+      this.month = nowDate
+
       this.getEmployeeList()
     },
     methods:{
@@ -164,6 +170,9 @@
         }
       },
       chineseNum(val){
+        if(!val){
+          return ''
+        }
         let date = val.split('-')
         let month = date[1]
         let data = month >= 10 ? month :(month.length > 1 ? month.split('')[1] : month)
@@ -179,6 +188,13 @@
       },
       changeStatus(item){
         this.selStatus = item.status
+      },
+      changMonth(type){
+        if(type === 'minus'){ //减月份
+
+        }else{
+
+        }
       }
     }
   }

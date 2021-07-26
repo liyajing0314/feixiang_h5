@@ -2,7 +2,10 @@
   <div class="pannel">
     <p class="pannel-head">
       <span>今日考勤</span>
-      <span>查看报表</span>
+      <span class="report-btn" @click="toReport">
+        <img src="@/assets/images/kanban/icon_report@2x.png" class="icon-report"/>
+        查看报表
+      </span>
     </p>
     <div class="pannel-body">
       <div ref="jrgk" class="charts"></div>
@@ -154,6 +157,9 @@
 
         this.chart.setOption(this.options, true)
         this.chart.hideLoading();
+      },
+      toReport(){
+        this.$router.push('/viewReport')
       }
     }
   }
@@ -162,6 +168,27 @@
 <style scoped lang="scss">
   .pannel-body {
     display: flex;
+  }
+  .pannel-head {
+    @include flexbox();
+    .report-btn {
+      display: inline-block;
+      height: 24px;
+      line-height: 22px;
+      background: rgba(37,116,240,0.1);
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-size: 12px;
+      color: #2574f0;
+      cursor: pointer;
+    }
+    .icon-report {
+      width:16px;
+      height:16px;
+      margin-right: 4px;
+      vertical-align: middle;
+      margin-top: -3px;
+    }
   }
 
   .charts {

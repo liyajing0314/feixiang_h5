@@ -48,7 +48,7 @@
 
 <script>
 
-  import {toChineseNum} from '@/utils/index.js'
+  import {toChineseNum,parseTime} from '@/utils/index.js'
   import SelPicker from '@/components/SelPicker'
   import {roomList,employeeList,groupList} from '@/api/common'
   import {getMonthProjectTaskInfoByTask,getMonthProjectTaskInfo,getErrorList} from '@/api/task'
@@ -64,7 +64,7 @@
         },
         planname:'',
         id:'',
-        month:"2021-07",
+        month:"",
         calendarList:[],
         subTabList:[],
         errorList:[]
@@ -73,6 +73,11 @@
     mounted() {
       this.id = this.$route.query.id
       this.planname = this.$route.query.planname
+
+      let time = new Date().getTime()
+      let nowDate = parseTime(time,'{y}-{m}')
+      this.month = nowDate
+
       this.getData()
 
       var u = navigator.userAgent;
@@ -122,7 +127,8 @@
       },
       getRoomList(){
         let param = {
-          projectid:this.id
+          projectid:this.id,
+          
         }
         roomList(param).then(res=>{
           if(res.code === 200){
@@ -221,7 +227,7 @@
         this.tabActive = tab
       },
       selCalendar(val){
-        if(val.taskrecordIdList.length >0){
+        if(val.taskrecordIdList && val.taskrecordIdList.length >0){
           this.getErrorList(val.taskrecordIdList)
         }
       },
@@ -235,6 +241,11 @@
         })
       },
       chineseNum(val){
+        console.info('val',val)
+        if(!val){
+          return ''
+        }
+
         let month = val.split('-')[1]
         let data = month >= 10 ? month :(month.length > 1 ? month.split('')[1] : month)
         return toChineseNum(data)
