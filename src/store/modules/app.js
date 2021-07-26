@@ -51,7 +51,9 @@ const actions = {
       projectList().then(res=>{
         let list= res.rows
         commit('SET_PROJECT_DATA',list)
-        if(state.selProject === ''){
+        let selProject = state.selProject
+        console.info('selProject',selProject,JSON.stringify(selProject))
+        if(!selProject || JSON.stringify(selProject) === '{}'){
           commit('SET_SEL_PROJECT',list[0])
         }
         resolve()

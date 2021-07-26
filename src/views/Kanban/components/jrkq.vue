@@ -1,16 +1,19 @@
 <template>
   <div class="pannel">
-    <p class="pannel-head">今日考勤</p>
+    <p class="pannel-head">
+      <span>今日考勤</span>
+      <span>查看报表</span>
+    </p>
     <div class="pannel-body">
       <div ref="jrgk" class="charts"></div>
       <div class="right-item">
         <div class="items">
           <span><img src="@/assets/images/kanban/icon_yd.png" class="icon" />应到人数</span>
-          <span class="nums">215636</span>
+          <span class="nums">{{data.shouldComeNum}}</span>
         </div>
         <div class="items items-yd">
           <span><img src="@/assets/images/kanban/icon_sd.png" class="icon" />实到人数</span>
-          <span class="nums">215636</span>
+          <span class="nums">{{data.haveArrivedNum}}</span>
         </div>
       </div>
     </div>
@@ -20,6 +23,7 @@
 
 <script>
   export default {
+    props:['data'],
     data() {
       return {
         chart: null,
@@ -46,9 +50,13 @@
           textColor: 'white'
         });
 
+        let haveArrivedNum = this.data.haveArrivedNum //实到人数
+        let shouldComeNum = this.data.shouldComeNum //应到人数
+        let per = parseInt(haveArrivedNum / shouldComeNum) || 0
+
         this.options = {
           title: [{
-            text: '95%',
+            text: per+'%',
             textStyle: {
               color: '#333333',
               fontSize: 24
@@ -101,7 +109,7 @@
               type: 'bar',
               z: 10,
               name: "完成度",
-              data: [80],
+              data: [haveArrivedNum],
               showBackground: false,
               backgroundStyle: {
                 borderWidth: 10,

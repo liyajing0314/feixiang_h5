@@ -11,6 +11,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vue/compiler-sfc": "^3.1.5",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "echarts": "^5.1.2",

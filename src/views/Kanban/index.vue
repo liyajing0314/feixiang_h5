@@ -66,7 +66,7 @@
         </div>
       </div>
     </div>
-    <jrkq></jrkq>
+    <jrkq :data="nowData"></jrkq>
     <!-- <lskq></lskq> -->
     <fjsj></fjsj>
     <rwwcqk></rwwcqk>
@@ -76,19 +76,23 @@
 </template>
 
 <script>
-  import {toThousands} from '@/utils/index'
-  import {projectDataCount} from '@/api/kanban'
+  import {toThousands,parseTime} from '@/utils/index'
+  import {projectDataCount,attendanceNum} from '@/api/kanban'
   import SelectOptions from '@/components/SelectOptions'
   import fwzlzs from './components/fwzlzs'
   import rwwcqk from './components/rwwcqk'
   import fjsj from './components/fjsj'
   import lskq from './components/lskq'
   import jrkq from './components/jrkq'
+  import {mapGetters } from 'vuex'
   export default {
     components:{jrkq,lskq,fjsj,rwwcqk,fwzlzs,SelectOptions},
     data(){
       return {
         profileData:{},
+        month:'2021-07-26',
+        nowDate:'',
+        nowData:{}
       }
     },
     computed: {
@@ -105,7 +109,11 @@
       }
     },
     mounted() {
+      let time = new Date().getTime()
+      this.nowDate = parseTime(time,'{y}-{m}-{d}')
 
+      this.projectDataCount()
+      this.attendanceNum()
     },
     methods:{
       projectDataCount(){
@@ -119,6 +127,17 @@
             this.profileData = newData
           }else{
             this.profileData = {}
+          }
+        })
+      },
+      attendanceNum(){
+        let param = {
+          pid:this.project.id,
+          recordDate:this.nowDate
+        }
+        attendanceNum(param).then(res=>{
+          if(res.code === 200){
+            this.nowData = res.data
           }
         })
       },

@@ -7,7 +7,8 @@
 export default {
   name: 'App',
   mounted() {
-    this.$store.dispatch('getProjectData')
+    console.info(this.$route)
+    // this.$store.dispatch('getProjectData')
   }
 }
 </script>

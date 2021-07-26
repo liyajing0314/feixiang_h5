@@ -46,6 +46,7 @@
             let tokenId = res.data.tokenId
             localStorage.setItem(ACCESS_TOKEN,tokenId)
             console.info('222')
+            this.$store.dispatch('getProjectData')
             this.$router.push('/kanban')
           }else{
             this.$toast(res.msg || '登录失败')
