@@ -185,6 +185,7 @@
         });
       },
       update(param){
+        
         return new Promise((resolve, reject)=>{
           updateDaySchedulerecord(param).then(res=>{
             if(res.code === 200){
