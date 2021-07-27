@@ -90,7 +90,6 @@
     data(){
       return {
         profileData:{},
-        month:'2021-07-26',
         nowDate:'',
         nowData:{}
       }
@@ -116,6 +115,7 @@
       this.attendanceNum()
     },
     methods:{
+      //查询项目统计数据
       projectDataCount(){
         projectDataCount({id:this.project.id}).then(res=>{
           if(res.code === 200){
@@ -130,6 +130,7 @@
           }
         })
       },
+      //今日考勤
       attendanceNum(){
         let param = {
           pid:this.project.id,

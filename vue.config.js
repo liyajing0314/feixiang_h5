@@ -54,7 +54,7 @@ module.exports = {
     proxy: {
       //配置跨域
       '/flying-elephant-h5': {
-          target: "http://apitest.fx.58qf.com/",
+          target: "http://apitest.fx.58qf.com",
           ws:false,
           changOrigin:true,
       }

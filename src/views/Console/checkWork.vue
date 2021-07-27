@@ -14,7 +14,7 @@
           <span>2021年七月</span>
           <img src="~@/assets/images/console/icon_right.png" class="icon-arrow" @click="changMonth('add')"/>
         </div> -->
-        <month-arrow></month-arrow>
+        <month-arrow :month="month" @changeMonth="changeMonth"></month-arrow>
         <calendar-record :month="month" :data="calendarList" @selCalendar="selCalendar"></calendar-record>
       </div>
       <div class="bottom-box" v-if="JSON.stringify(calendarActive) != '{}'">
@@ -66,12 +66,8 @@
     components:{RollTabBox,CalendarRecord,MonthArrow},
     data(){
       return {
-        color:'#1989fa',
-        minDate: new Date(2010, 0, 1),
-        maxDate: new Date(2010, 0, 31),
         tabList:[],
         workTime:{},
-        id:22,
         month:'',
         calendarList:[],
         calendarActive:{},
@@ -96,9 +92,18 @@
         ],
         statusCopyList:[],
         selStatus:0,
+        selEmployeeName:'',//选中的人员
+      }
+    },
+    computed: {
+      project:{
+        get(){
+          return this.$store.getters.getSelProject
+        }
       }
     },
     mounted() {
+
       let time = new Date().getTime()
       let nowDate = parseTime(time,'{y}-{m}')
       this.month = nowDate
@@ -106,17 +111,20 @@
       this.getEmployeeList()
     },
     methods:{
-      changeRollTab(val){
+      changeRollTab(val){ //切换人员
+        let name = val.name
+        this.selEmployeeName = name
         this.getOnOffDuty(val.id)
-        this.getMonthSchedulerecordInfo(val.name)
+        this.getMonthSchedulerecordInfo()
       },
       selCalendar(val){
         this.calendarActive = val
       },
-      getMonthSchedulerecordInfo(employeeName){
+      //查看某人某月考勤
+      getMonthSchedulerecordInfo(){
         let param = {
-          projectid:this.id,
-          employeeName:employeeName,
+          projectid:this.project.id,
+          employeeName:this.selEmployeeName,
           month:this.month,
           type:1, //1考勤2班次
         }
@@ -130,7 +138,7 @@
       },
       getEmployeeList(){ //获取人员列表
         let param = {
-          projectid:this.id
+          projectid:this.project.id
         }
         employeeList(param).then(res=>{
           if(res.code === 200){
@@ -139,8 +147,9 @@
             if(rows.length >0){
               let employeeId = rows[0].id
               let employeeName = rows[0].name
+              this.selEmployeeName = employeeName
               this.getOnOffDuty(employeeId)
-              this.getMonthSchedulerecordInfo(employeeName)
+              this.getMonthSchedulerecordInfo()
             }
 
           }else{
@@ -151,7 +160,7 @@
       getOnOffDuty(employeeId){ //考勤上下班时间
         let param = {
           employeeId:employeeId,
-          projectid:this.id
+          projectid:this.project.id
         }
         getOnOffDuty(param).then(res=>{
           if(res.code === 200){
@@ -189,12 +198,10 @@
       changeStatus(item){
         this.selStatus = item.status
       },
-      changMonth(type){
-        if(type === 'minus'){ //减月份
-
-        }else{
-
-        }
+      changeMonth(val){//切换月份
+        console.info('月份',val)
+        this.month = val
+        this.getMonthSchedulerecordInfo()
       }
     }
   }

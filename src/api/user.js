@@ -41,3 +41,25 @@ export function getMonthSchedulerecordInfo(params) {
     params
   })
 }
+/**
+ * 获根据项目ID和人员 ID 取班次-人员记录详细信息
+ * @param {Object} params
+ */
+export function getAll(params) {
+  return request({
+    url: '/attendanceManage/employee/getAll',
+    method: 'get',
+    params
+  })
+}
+/**
+ *  修改某日班次 
+ * @param {Object} params
+ */
+export function updateDaySchedulerecord(params) {
+  return request({
+    url: '/attendanceManage/schedulerecord/updateDaySchedulerecord',
+    method: 'post',
+    data:params
+  })
+}

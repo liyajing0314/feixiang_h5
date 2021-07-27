@@ -2,32 +2,19 @@
 <template>
   <div class="container">
     <roll-tab-box :tabList="tabList" @changeRollTab="changeRollTab"></roll-tab-box>
-    <div>
-      <div class="month-arrow">
-        <img src="~@/assets/images/console/icon_left.png" class="icon-arrow"/>
-        <span>2021年七月</span>
-        <img src="~@/assets/images/console/icon_right.png" class="icon-arrow"/>
-      </div>
-      <calendar-record :month="month" :data="calendarList" @selCalendar="selCalendar"></calendar-record>
-    </div>
     <div class="content">
-      <div class="items active">
+      <month-arrow :month="month" @changeMonth="changeMonth"></month-arrow>
+      <div class="items" :class="{'active':activeItem(item) > -1}" :style="{backgroundColor:hexToRgba(item.color,0.1).rgba}" v-for="item in list" :key="item.id" @click="selItem(item)">
         <span>
-          <span class="month">七月1日</span>
-          <span class="item-satus">早班(8h)</span>
-        </span>
-      </div>
-      <div class="items">
-        <span>
-          <span class="month">七月1日</span>
-          <span class="item-satus">早班(8h)</span>
+          <span class="month">{{chineseNum(item.data)}}</span>
+          <span class="item-satus" :style="{color:item.color}">{{item.scheduleplanName}}</span>
         </span>
       </div>
     </div>
-    <div  class="bottom-box">
-      <span>已选<span>1</span>个班次</span>
-      <span>
-        <img src=""/>
+    <div class="bottom-box" v-show="active.length >0">
+      <span>已选<span class="activeColor">{{active.length}}</span>个班次</span>
+      <span class="update" @click="showPopup">
+        <img src="~@/assets/images/console/icon_update@2x.png" class="icon-update"/>
         修改班次
       </span>
     </div>
@@ -36,15 +23,19 @@
       <div class="popup-content">
         <div class="title">
           <span>
-            将<span>2</span>个班次修改为
+            将<span class="activeColor">{{active.length}}</span>个班次修改为
           </span>
         </div>
-        <div>
-
+        <div class="class-list">
+          <div class="class-item" :class="{'active':classActive == item.id}" v-for="item in classList" :key="item.id" @click="selClassActive(item)">
+            <span>
+              <span style="flex:2;">{{item.schedulename}}</span>
+            </span>
+          </div>
         </div>
-        <div>
+        <div class="popup-bottom">
           <van-button type="primary" class="btn btn-cancel">取消</van-button>
-          <van-button type="primary" class="btn btn-ok">确认</van-button>
+          <van-button type="primary" class="btn btn-ok" @click="submit">确认</van-button>
         </div>
       </div>
     </van-popup>
@@ -52,42 +43,162 @@
 </template>
 
 <script>
+  import MonthArrow from '@/components/MonthArrow'
   import RollTabBox from '@/components/RollTabBox'
+  import {employeeList} from '@/api/common'
+  import {getMonthSchedulerecordInfo,updateDaySchedulerecord,getAll} from '@/api/user'
+  import {formatterStatus,toChineseNum,parseTime,hexToRgba} from '@/utils/index'
   export default {
-    components:{RollTabBox},
+    components:{RollTabBox,MonthArrow},
     data(){
       return {
         tabList:[],
-        popupShow:false
+        popupShow:false,
+        month:'',
+        selEmployee:{},
+        list:[],
+        classList:[],
+        active:[],
+        hexToRgba:hexToRgba,
+        classActive:''
+      }
+    },
+    computed: {
+      project:{
+        get(){
+          return this.$store.getters.getSelProject
+        }
       }
     },
     mounted() {
+      let time = new Date().getTime()
+      let nowDate = parseTime(time,'{y}-{m}')
+      this.month = nowDate
+
       this.getEmployeeList()
     },
     methods:{
       changeRollTab(val){
-
+        this.selEmployee = val
+        this.active = []
+        this.getMonthSchedulerecordInfo()
+        this.getAll()
       },
       getEmployeeList(){ //获取人员列表
         let param = {
-          projectid:this.id
+          projectid:this.project.id
         }
         employeeList(param).then(res=>{
           if(res.code === 200){
             let rows = res.rows
             this.tabList = rows
             if(rows.length >0){
-              let employeeId = rows[0].id
-              let employeeName = rows[0].name
-              this.getOnOffDuty(employeeId)
-              this.getMonthSchedulerecordInfo(employeeName)
+              this.selEmployee = rows[0]
+              this.getMonthSchedulerecordInfo()
+              this.getAll()
             }
-
           }else{
             this.tabList = []
           }
         })
       },
+      getMonthSchedulerecordInfo(){
+        let param = {
+          projectid:this.project.id,
+          employeeName:this.selEmployee.name,
+          month:this.month,
+          type:2, //1考勤2班次
+        }
+        getMonthSchedulerecordInfo(param).then(res=>{
+          if(res.code === 200){
+            this.list = res.data
+          }else{
+            this.list = []
+          }
+        })
+      },
+      getAll(){
+        let param = {
+          projectid:this.project.id,
+          employeeid:this.selEmployee.id
+        }
+        getAll(param).then(res=>{
+          if(res.code === 200){
+            this.classList = res.data
+          }else{
+            this.classList = []
+          }
+        })
+      },
+      selItem(item){
+        let index = this.active.findIndex(ite=>{
+          return ite.data == item.data
+        })
+        if(index > -1){
+          this.active.splice(index,1)
+        }else{
+          this.active.push(item)
+        }
+      },
+      activeItem(item){
+        let index = this.active.findIndex(ite=>{
+          return ite.data == item.data
+        })
+        return index
+      },
+      changeMonth(val){ //切换月份
+        this.month = val
+        this.getMonthSchedulerecordInfo()
+      },
+      chineseNum(val){
+        if(!val){
+          return ''
+        }
+        let date = val.split('-')
+        let month = date[1]
+        let data = month >= 10 ? month :(month.length > 1 ? month.split('')[1] : month)
+        return toChineseNum(data) + '月'+date[2]+'日'
+      },
+      selClassActive(item){
+        this.classActive = item.id
+      },
+      showPopup(){
+        this.popupShow = true
+      },
+      submit(){ //修改班次
+        let promise = []
+        this.active.map((item,index)=>{
+          let param = {
+            projectid:this.project.id,
+            schedulerecordId:item.id,
+            employeeId:this.selEmployee.id,
+            scheduleplanId:this.classActive,
+            recordDate:item.date
+          }
+          promise[index] = this.update(param)
+        })
+
+        Promise.all(promise).then(function(results){
+          console.info('results',results)
+        }).catch(function(err){
+            console.log(err);
+        });
+      },
+      update(param){
+        return new Promise((resolve, reject)=>{
+          updateDaySchedulerecord(param).then(res=>{
+            if(res.code === 200){
+              resolve()
+              // this.active = []
+              // this.getMonthSchedulerecordInfo()
+            }else{
+              reject()
+            }
+          }).catch(error=>{
+            reject()
+          })
+        })
+      }
     }
   }
 </script>
@@ -108,11 +219,11 @@
   }
 }
 .content {
-  padding:12px;
+  padding:20px 12px 60px;
 }
 .items {
   height: 36px;
-  background: rgba(84,176,117,0.1);
+  background: rgba(102,102,102,0.1);
   border-radius: 6px;
   font-size: 14px;
   font-weight: 400;
@@ -120,104 +231,40 @@
   margin-bottom: 4px;
   >span {
     @include flexbox();
-    padding: 12px;
-    display: block;
-    width: 100%;
-    height: 100%;
+    padding:0 12px;
+    width:99%;
+    height:94%;
+    top:1px;
   }
   &.active {
-    background: #2574f0;
+    background: #2574f0 !important;
     color:#ffffff;
     >span {
-      width:95%;
-      height:95%;
+      width:99%;
+      height:94%;
       margin: 0 auto;
-      border:#ffffff;
+      border:1px solid #ffffff;
       border-radius: 6px;
       position: relative;
       .month {
-        :before {
+        padding-left: 16px;
+        &:before {
           content:'';
           width:12px;
           height:12px;
-          background: url('~@/assets/images/task/icon_dui_bai.png') no-repeat center center / cover;
+          background: url('~@/assets/images/task/icon_dui_bai@2x.png') no-repeat center center / cover;
           position: absolute;
           left:12px;
+          top: 10px;
         }
       }
     }
     .item-satus {
-      color:#ffffff;
+      color:#ffffff !important;
     }
   }
 }
 
-.status0 {
-  background-color: rgba(191,197,206,0.1);
-  .item-satus {
-    color: #bfc5ce;
-  }
-}
-.status1 {
-  background-color: rgba(101,200,184,0.1);
-  .item-satus {
-    color: #65c8b8;
-  }
-}
-.status2 {
-  background-color: rgba(255,160,66,0.10);
-  .item-satus {
-    color: #a2ab2c;
-  }
-}
-.status3 {
-  background-color: rgba(162,171,44,0.1);
-  .item-satus {
-    color: #ffa042;
-  }
-}
-.status4 {
-  background-color:rgba(237,79,42,0.10);
-  .item-satus {
-    color: #f05d4f;
-  }
-}
-.status5 {
-  background-color:rgba(142,83,208,0.1);
-  .item-satus {
-    color: #8e53d0;
-  }
-}
-.status6 {
-  background-color: rgba(0,132,255,0.1);
-  .item-satus {
-    color: #0084ff;
-  }
-}
-.status7 {
-  background-color: rgba(83,126,176,0.1);
-  .item-satus {
-    color: #537eb0;
-  }
-}
-.status8 {
-  background-color: rgba(153,153,153,0.1);
-  .item-satus {
-    color: #999999;
-  }
-}
-.status9 {
-  background-color: rgba(153,153,153,0.1);
-  .item-satus {
-    color: #bfc5ce;
-  }
-}
-.status10 {
-  background-color:rgba(186,79,21,0.1);
-  .item-satus {
-    color: #ba4f15;
-  }
-}
 
 .bottom-box {
   position: fixed;
@@ -239,6 +286,78 @@
     font-weight: 400;
     color: #2574f0;
     cursor: pointer;
+  }
+  .icon-update {
+    width:16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+}
+.activeColor {
+  color: #2574f0;
+  display: inline-block;
+  padding: 0 4px;
+}
+.popup-content {
+  padding: 24px 16px 4px;
+  .title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 20px;
+  }
+  .class-list {
+    @include flexbox();
+    flex-wrap: wrap;
+    max-height: 360px;
+    overflow: auto;
+    padding-bottom: 84px;
+  }
+  .class-item {
+    width:170px;
+    height:36px;
+    background: rgba(102,102,102,0.1);
+    border-radius: 6px;
+    margin-bottom: 9px;
+    text-align: center;
+    font-size: 14px;
+    >span {
+      @include flexbox();
+      width: 100%;
+      height:100%;
+      position: relative;
+      top: 1px;
+    }
+    &.active {
+      background: #2574f0;
+      color:#ffffff;
+      >span {
+        width:99%;
+        height:94%;
+        margin: 0 auto;
+        border:1px solid #ffffff;
+        border-radius: 6px;
+      }
+    }
+  }
+  .popup-bottom {
+    position: absolute;
+    width:100%;
+    bottom:0;
+    left:0;
+    padding: 6px 16px;
+    background-color: rgba(255,255,255,0.8);
+  }
+}
+.btn {
+  border:none;
+  width:160px;
+  height:44px;
+  border-radius: 6px;
+  margin-bottom: 38px;
+  &:first-of-type {
+    margin-right: 23px;
   }
 }
 </style>

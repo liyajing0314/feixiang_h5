@@ -3,7 +3,7 @@
     <p class="pannel-head">
       <span>房间数据</span>
       <span @click="switchTime">
-        <span class="sel-data">.七月</span>
+        <span class="sel-data">.{{chineseNum(month)}}月</span>
         <img src="@/assets/images/icon_change.png" class="icon-change" />
       </span>
       <span class="btn-sel" @click="switchRoom">
@@ -18,32 +18,58 @@
 </template>
 
 <script>
+  import {selectRoomhourList} from '@/api/kanban'
+  import {toChineseNum,parseTime} from '@/utils/index.js'
   import SelectRoom from '@/components/selectRoom'
   import SelPicker from '@/components/SelPicker'
   export default {
     components:{SelPicker,SelectRoom},
     data() {
       return {
-
+        month:'',
       }
     },
     mounted() {
       let that = this
+      let time = new Date().getTime()
+      this.month = parseTime(time,'{y}-{m}')
+
+      this.getData()
+
       window.addEventListener("resize", function() {
         setTimeout(() => {
           that.chart.resize()
         }, 100)
       });
-      this.getChart()
+    },
+    computed: {
+      project:{
+        get(){
+          return this.$store.getters.getSelProject
+        }
+      },
     },
     methods: {
+      getData(){
+        let param = {
+          pid:this.project.id,
+          month:this.month
+        }
+        selectRoomhourList(param).then(res=>{
+          if(res.code === 200){
+            let data = res.data
+            this.getChart(data)
+          }
+        })
+      },
       switchRoom(){
         this.$refs.SelRoom.showPopup()
       },
       switchTime(){
         this.$refs.SelPicker.showPopup()
       },
-      getChart() {
+      getChart(data) {
+
         let that = this
         this.chart = this.$echarts.init(that.$refs.fjsj)
         this.chart.showLoading({
@@ -81,7 +107,7 @@
               width: 30,
               overflow: 'breakAll'
             },
-            data: ['5#2F- 杂物间 超出', '5#2F- 杂物间', '5#2F 走廊', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+            data: data.name
           },
           yAxis: {
             type: 'value',
@@ -115,13 +141,22 @@
               color:'rgba(153,153,153,1)',
               position:'top'
             },
-            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+            data: data.value,
           }]
         }
 
         this.chart.setOption(this.options, true)
         this.chart.hideLoading();
-      }
+      },
+      chineseNum(val){
+        if(!val){
+          return ''
+        }
+
+        let month = val.split('-')[1]
+        let data = month >= 10 ? month :(month.length > 1 ? month.split('')[1] : month)
+        return toChineseNum(data)
+      },
     }
   }
 </script>

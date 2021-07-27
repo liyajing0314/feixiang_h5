@@ -229,3 +229,73 @@ export function debounce(fn, delay) {
     }, delay);
   };
 }
+/**
+ * 补位
+ */
+function complement(val){
+  return val >= 10 ? val : ('0'+val)
+}
+/**
+ * 获取上个月日期
+ */
+export function  getLastMonth(val){
+  if(!val){
+    return val
+  }
+  let year = val.split('-')[0]
+  let m = val.split('-')[1]
+  let month = m >= 10 ? m :(m.length > 1 ? m.split('')[1] : m)
+  let lastMonth = parseInt(month) - 1
+  if(lastMonth >0){
+    return year + '-' + complement(lastMonth)
+  }else{
+    let lastYear = parseInt(year) - 1
+    let lMonth = 12
+    return lastYear +'-'+ complement(lMonth)
+  }
+}
+/**
+ * 获取下个月日期
+ */
+export function getNextMonth(val){
+  if(!val){
+    return val
+  }
+  let year = val.split('-')[0]
+  let m = val.split('-')[1]
+  let month = m >= 10 ? m :(m.length > 1 ? m.split('')[1] : m)
+  let nextMonth = parseInt(month) + 1
+  if(nextMonth > 12){
+    let nextYear = parseInt(year) + 1
+    let nMonth = 1
+    return nextYear + '-' + complement(nMonth)
+  }else{
+    return year + '-' + complement(nextMonth)
+  }
+}
+/**
+ * 将hex颜色转成rgb
+ * @param {Object} number
+ */
+export function hexToRgba(hex,opacity) {
+  var RGBA = "rgba(" + parseInt("0x" + hex.slice(1, 3)) + "," + parseInt("0x" + hex.slice(3, 5)) + "," + parseInt( "0x" + hex.slice(5, 7)) + "," + opacity + ")";
+  return {
+      red: parseInt("0x" + hex.slice(1, 3)),
+      green: parseInt("0x" + hex.slice(3, 5)),
+      blue: parseInt("0x" + hex.slice(5, 7)),
+      rgba: RGBA
+  }
+}
+/**
+ * 将rgb颜色转成hex
+ * @param {Object} color
+ */
+function colorRGB2Hex(color) {
+    var rgb = color.split(',');
+    var r = parseInt(rgb[0].split('(')[1]);
+    var g = parseInt(rgb[1]);
+    var b = parseInt(rgb[2].split(')')[0]);
+
+    var hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    return hex;
+}
