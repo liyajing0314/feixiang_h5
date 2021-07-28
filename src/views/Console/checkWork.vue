@@ -40,7 +40,7 @@
           placeholder="请输入备注"
           class="form-field"
         />
-        <van-uploader v-model="fileList" :max-count="1"/>
+        <van-uploader v-model="fileList" :max-count="1" :before-read="beforeRead"/>
         <div>
           <van-button type="primary" class="btn btn-cancel">取消</van-button>
           <van-button type="primary" class="btn btn-ok" @click="submit">确认</van-button>
@@ -171,6 +171,8 @@
             this.recordDetail = data
             if(data.imageurl != ''){
               this.fileList = [{url: data.imageurl}]
+            }else{
+              this.fileList = []
             }
             this.remark = data.remark
           }else{
@@ -214,7 +216,19 @@
       popupClose(){
         this.fileList = []
         this.remark = ''
-        
+      },
+      beforeRead(file){
+        let flag = file.type === 'image/jpeg' || file.type === 'image/png'
+        if(!flag) {
+          this.$toast('请上传 jpg 格式图片');
+          return false;
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+          this.$toast('上传图片大小不得超过2MB');
+          return false;
+        }
+        return true;
       },
       submit:debounce(function(){ //修改考勤
         let that = this

@@ -1,17 +1,22 @@
 <template>
-  <div class="tab-content">
-    <div class="tab-box">
-      <span class="tab" :class="{'active':tabActive.id === item.id}" v-for="item in tabList" :key="item.id" @click="changeTab(item)">{{item.name}}</span>
+  <div>
+    <div class="tab-content">
+      <div class="tab-box" ref="tabBox">
+        <span :ref="'tab'+index" class="tab" :class="{'active':tabActive.id === item.id}" v-for="(item,index) in tabList" :key="item.id" @click="changeTab(item)">{{item.name}}</span>
+      </div>
+      <div class="items" @click="showPopup">
+        <img src="@/assets/images/task/icon_search@2x.png" class="icon-search"/>
+      </div>
     </div>
-    <div class="items">
-      <img src="@/assets/images/task/icon_search@2x.png" class="icon-search"/>
-    </div>
+    <select-people-single ref="selectPeople" :list="tabList" @selPeople="selPeople"></select-people-single>
   </div>
 </template>
 
 <script>
+  import SelectPeopleSingle from '@/components/SelectPeopleSingle'
   export default {
     props:['tabList'],
+    components:{SelectPeopleSingle},
     data(){
       return {
         tabActive:{}
@@ -30,6 +35,18 @@
       changeTab(item){
         this.tabActive = item
         this.$emit('changeRollTab',item)
+      },
+      showPopup(){
+        this.$refs.selectPeople.showPopup('global')
+      },
+      selPeople(item,index){
+        this.changeTab(item)
+        let clientWidth = this.$refs['tab'+index][0].clientWidth
+        let left = (clientWidth + 10) * index
+        this.$refs.tabBox.scrollTo({
+          left: left,
+          behavior: "smooth" // 平滑滚动
+        })
       }
     }
   }

@@ -54,6 +54,8 @@
     watch:{
       project: {
         handler(newName, oldName) {
+          let time = new Date().getTime()
+          this.month = parseTime(time,'{y}-{m}')
           this.getData()
         },
         immediate: true

@@ -5,15 +5,12 @@
       <div ref="lskq" class="charts"></div>
     </div>
 
-    <select-people ref="selectPeople"></select-people>
   </div>
 </template>
 
 <script>
-  import SelectPeople from '../selectPeople'
   export default {
     components: {
-      SelectPeople
     },
     data() {
       return {

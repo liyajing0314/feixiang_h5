@@ -1,25 +1,25 @@
-<!-- 选择人员 -->
+<!-- 选择房间 -->
 <template>
   <van-popup v-model="show" position="right" :style="{ height: '100%',width:'80%' }">
     <div class="container">
-      <p class="title">选择人员</p>
+      <p class="title">选择房间</p>
       <div class="search-container">
         <img src="@/assets/images/icon_search.png" class="icon-search"/>
-        <input type="text" v-model="searchValue" placeholder="搜索劳动者" class="search-input" @keyup.enter="onSearch" @input="changeWord"/>
+        <input type="text" v-model="searchValue" placeholder="搜索房间名" class="search-input"  @keyup.enter="onSearch" @input="changeWord"/>
         <span @click="onSearch" class="search">搜索</span>
       </div>
       <span class="record" v-show="searchFlag && searchValue">共<span class="num">{{result.length}}</span>条搜索记录</span>
       <div ref="content" class="content">
-        <div :ref="'items'+index" class="items" :class="{'active':activeItem.id === item.id}"
-          v-for="(item,index) in dataList" :key="item.id" @click="selItem(item,index)" v-if="type === 'global'">
-          <span v-html="item.name"></span>
+        <div :ref="'items'+index" class="items" :class="{'active':activeItem.id === item.id}" @click="selItem(item,index)"
+         v-for="(item,index) in dataList" v-if="type === 'global'">
+          <span v-html="item.roomName"></span>
         </div>
-        <div :ref="'items'+index" class="items" :class="{'active':activeItem === item}"
-          v-for="(item,index) in dataList" :key="item" @click="selItem(item,index)" v-if="type === 'task'">
+
+        <div :ref="'items'+index" class="items" :class="{'active':activeItem === item}" @click="selItem(item,index)"
+         v-for="(item,index) in dataList" v-if="type === 'task'">
           <span v-html="item"></span>
         </div>
       </div>
-
     </div>
   </van-popup>
 </template>
@@ -30,19 +30,19 @@
     data() {
       return {
         show: false,
+        dataList:[],
+        type:'' , //global 全局  task 仅应用于task模块
         searchValue: '',
         activeItem:'',
         result:[],
         searchFlag:false,
-        dataList:[],
-        type:'' , //global 全局  task 仅应用于task模块
       }
     },
     mounted() {
 
     },
     methods: {
-      showPopup(type=global) {
+      showPopup(type){
         this.type = type
         this.searchValue = ''
         this.result = []
@@ -60,16 +60,16 @@
         let result = []
         let patt1 = new RegExp(searchValue);
         let list = JSON.parse(JSON.stringify(this.list))
-        let index = ''
+        let index = -1
 
         if(this.type === 'global'){
           index = list.findIndex(item=>{
-            return item.name.indexOf(searchValue) >-1
+            return item.roomName.indexOf(searchValue) >-1
           })
           this.dataList = list.map(item=>{
-            if(item.name.indexOf(searchValue) >-1){
+            if(item.roomName.indexOf(searchValue) >-1){
               result.push(item)
-              item.name = item.name.replace(patt1,`<span style='color: #ff6326;'>${searchValue}</span>`)
+              item.roomName = item.roomName.replace(patt1,`<span style='color: #ff6326;'>${searchValue}</span>`)
             }
             return item
           })
@@ -84,20 +84,22 @@
             }
             return item
           })
+
+
         }
 
         this.result = result
-
         let items = this.$refs['items' + index][0]
         let top = items.offsetTop
         this.$refs.content.scrollTo({
           top: top ,
           behavior: "smooth" // 平滑滚动
         })
+
       },
-      selItem(item,index){ //选择人员
+      selItem(item,index){ //选择房间
         this.activeItem = item
-        this.$emit('selPeople',item,index)
+        this.$emit('selRoom',item,index)
         this.show = false
       },
     }
@@ -148,16 +150,12 @@
     }
   }
   .content {
-    max-height: calc(100vh - 170px);
+    height: calc(100vh - 170px);
     margin:8px 0 0 ;
     overflow: auto;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    padding-bottom: 80px;
     .items {
       height: 32px;
-      width: 130px;
-      text-align: center;
       background: #f7f7f8;
       border-radius: 6px;
       color: #333333;
@@ -184,18 +182,13 @@
       }
     }
     /deep/.van-checkbox {
-      // width:100%;
+      width:100%;
     }
     /deep/.van-checkbox__icon {
-      // width:100%;
+      width:100%;
       height:auto;
     }
-    /deep/.van-checkbox-group {
-      @include flexbox();
-      flex-wrap: wrap;
-    }
   }
-
   .record {
     color: #808896;
     font-size: 12px;

@@ -39,12 +39,6 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/switchItems',
-    name: 'SwitchItems',
-    component: () => import('@/views/Kanban/switchItems'),
-    meta: { title: '切换项目', keepAlive: false }
-  },
-  {
     path: '/locationList',
     name: 'LocationList',
     component: () => import('@/views/Location/list'),

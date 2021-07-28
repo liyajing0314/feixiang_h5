@@ -18,10 +18,10 @@
         </div>
       </div>
       <div class="sub-tab-content" v-if="tabActive !== 0 && subTabList.length >0">
-        <div class="sub-tab-box">
-          <span class="sub-tab" :class="{'active':subTabActive === item}" v-for="item in subTabList" :key="item" @click="changeSubTab(item)">{{item}}</span>
+        <div class="sub-tab-box" ref="tabBox">
+          <span :ref="'tab'+index" class="sub-tab" :class="{'active':subTabActive === item}" v-for="(item,index) in subTabList" :key="item" @click="changeSubTab(item)">{{item}}</span>
         </div>
-        <div class="sub-items">
+        <div class="sub-items" @click="showSelect">
           <img src="@/assets/images/task/icon_search@2x.png" class="icon-search"/>
         </div>
       </div>
@@ -49,18 +49,23 @@
       </div>
     </div>
     <sel-picker ref="SelPicker" @selPicker="selPicker"></sel-picker>
+    <select-people-single ref="selectPeople" :list="subTabList" @selPeople="selSubTab"></select-people-single>
+    <select-room-single ref="selectRoom" :list="subTabList" @selRoom="selSubTab"></select-room-single>
+    <select-group-single ref="selectGroup" :list="subTabList" @selGroup="selSubTab" ></select-group-single>
   </div>
 </template>
 
 <script>
-
+  import SelectGroupSingle from '@/components/SelectGroupSingle'
+  import SelectRoomSingle from '@/components/SelectRoomSingle'
+  import SelectPeopleSingle from '@/components/SelectPeopleSingle'
   import {toChineseNum,parseTime} from '@/utils/index.js'
   import SelPicker from '@/components/SelPicker'
   import {roomList,employeeList,groupList} from '@/api/common'
   import {getMonthProjectTaskInfoByTask,getMonthProjectTaskInfo,getErrorTaskInfo} from '@/api/task'
   import CalendarSingle from '@/components/CalendarSingle'
   export default {
-    components:{CalendarSingle,SelPicker},
+    components:{CalendarSingle,SelPicker,SelectPeopleSingle,SelectRoomSingle,SelectGroupSingle},
     data(){
       return {
         tabActive:0,
@@ -184,8 +189,26 @@
       selCalendar(val){
         this.getErrorTaskInfo(val)
       },
+      showSelect(){
+        console.info('this.tabActive',this.tabActive)
+        if(this.tabActive === 1){ //房间
+          this.$refs.selectRoom.showPopup('task')
+        }else if(this.tabActive === 2){ //人员
+          this.$refs.selectPeople.showPopup('task')
+        }else if(this.tabActive === 3){ //分组
+          this.$refs.selectGroup.showPopup('task')
+        }
+      },
+      selSubTab(item,index){ //筛选房间 /人员 /分组
+        this.changeSubTab(item)
+        let clientWidth = this.$refs['tab'+index][0].clientWidth
+        let left = (clientWidth + 10) * index
+        this.$refs.tabBox.scrollTo({
+          left: left,
+          behavior: "smooth" // 平滑滚动
+        })
+      },
       getErrorTaskInfo(val){
-        console.info('val',val)
         let name = ''
         if(this.tabActive !== 0){
           name = this.subTabActive
@@ -201,14 +224,12 @@
         getErrorTaskInfo(param).then(res=>{
           if(res.code === 200){
             this.errorList = res.data
-            console.info('this.errorList‘',this.errorList)
           }else{
             this.errorList = []
           }
         })
       },
       chineseNum(val){
-        console.info('val',val)
         if(!val){
           return ''
         }
