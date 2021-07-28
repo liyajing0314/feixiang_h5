@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <van-popup v-model="popupShow" round closeable position="bottom">
+    <van-popup v-model="popupShow" round closeable position="bottom" @close="popupClose">
       <div class="popup-content">
         <div class="title">
           <span><span class="popupStatus" :class="'status'+calendarActive.status">{{formatterStatus(calendarActive.status)}}</span>修改为</span>
@@ -210,6 +210,11 @@
         this.calendarActive = {}
         this.month = val
         this.getMonthSchedulerecordInfo()
+      },
+      popupClose(){
+        this.fileList = []
+        this.remark = ''
+        
       },
       submit:debounce(function(){ //修改考勤
         let that = this
