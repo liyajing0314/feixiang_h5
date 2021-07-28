@@ -69,15 +69,15 @@
     <jrkq :data="nowData"></jrkq>
     <!-- <lskq></lskq> -->
     <fjsj></fjsj>
-    <rwwcqk></rwwcqk>
-    <fwzlzs></fwzlzs>
+    <rwwcqk :dateList="dateList"></rwwcqk>
+    <fwzlzs :dateList="dateList"></fwzlzs>
     <select-options ref="SelectOptions" @selProject="selProject"></select-options>
   </div>
 </template>
 
 <script>
   import {toThousands,parseTime} from '@/utils/index'
-  import {projectDataCount,attendanceNum} from '@/api/kanban'
+  import {projectDataCount,attendanceNum,getDateList} from '@/api/kanban'
   import SelectOptions from '@/components/SelectOptions'
   import fwzlzs from './components/fwzlzs'
   import rwwcqk from './components/rwwcqk'
@@ -91,7 +91,8 @@
       return {
         profileData:{},
         nowDate:'',
-        nowData:{}
+        nowData:{},
+        dateList:[]
       }
     },
     computed: {
@@ -113,6 +114,7 @@
 
       this.projectDataCount()
       this.attendanceNum()
+      this.getDateList()
     },
     methods:{
       //查询项目统计数据
@@ -142,12 +144,26 @@
           }
         })
       },
+      getDateList(){
+        let param = {
+          pid:this.project.id
+        }
+        getDateList(param).then(res=>{
+          if(res.code === 200){
+            this.dateList = res.data
+          }else{
+            this.dateList = []
+          }
+        })
+      },
       switchItems(){
         this.$refs.SelectOptions.showAction()
       },
       selProject(val){
         this.project = val
         this.projectDataCount()
+        this.attendanceNum()
+        this.getDateList()
       },
       switchTime(){
         this.$refs.SelPicker.showPopup()

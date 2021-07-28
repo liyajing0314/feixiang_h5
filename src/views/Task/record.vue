@@ -13,13 +13,13 @@
         <div class="tab-box" ref="tab_box">
           <span class="tab" :class="{'active':tabActive===0}" @click="changeTab(0)">任务总览</span>
           <span class="tab" :class="{'active':tabActive===1}" @click="changeTab(1)">房间视图</span>
-          <span class="tab" :class="{'active':tabActive===2}" @click="changeTab(2)">人员视图</span>
-          <span class="tab" :class="{'active':tabActive===3}" @click="changeTab(3)">分组视图</span>
+          <span class="tab" :class="{'active':tabActive===2}" @click="changeTab(2)" v-if="taskData.usertype === 1">人员视图</span>
+          <span class="tab" :class="{'active':tabActive===3}" @click="changeTab(3)" v-if="taskData.usertype === 2">分组视图</span>
         </div>
       </div>
-      <div class="sub-tab-content" v-if="tabActive === 1 && subTabList.length >0">
+      <div class="sub-tab-content" v-if="tabActive !== 0 && subTabList.length >0">
         <div class="sub-tab-box">
-          <span class="sub-tab" :class="{'active':subTabActive.id === item.id}" v-for="item in subTabList" :key="item.id">{{item.roomname || item.name}}</span>
+          <span class="sub-tab" :class="{'active':subTabActive === item}" v-for="item in subTabList" :key="item" @click="changeSubTab(item)">{{item}}</span>
         </div>
         <div class="sub-items">
           <img src="@/assets/images/task/icon_search@2x.png" class="icon-search"/>
@@ -27,17 +27,23 @@
       </div>
       <div class="calendar-box">
         <calendar-single :month="month" :data="calendarList" @selCalendar="selCalendar"></calendar-single>
-        <div class="abnormal-box" v-if="errorList.lenght >0">
+        <div class="abnormal-box" v-if="errorList.length >0">
           <div class="title">异常情况</div>
           <div class="abnormal-item" v-for="item in errorList" :key="item.id">
-            <div class="abnormal-left">
-              <div class="head">{{item.taskplanname}}</div>
-              <div>{{item.employeename}}</div>
+            <div class="head">{{item.pname}}</div>
+            <div class="abnormal-item-content">
+              <div class="abnormal-left">
+                <img src="@/assets/images/task/icon_daka@2x.png" class="icon-daka"/>
+                <span>打卡次数</span>
+                <span class="num">{{item.cts}}</span>
+              </div>
+              <div>
+                <img src="@/assets/images/task/icon_shichang@2x.png" class="icon-daka"/>
+                <span>停留时长</span>
+                <span class="num">{{item.time}}</span>
+              </div>
             </div>
-            <div>
-              <div class="status">{{item.info}}</div>
-              <div>{{splitTime(item.starttime)}} - {{splitTime(item.endtime)}}</div>
-            </div>
+
           </div>
         </div>
       </div>
@@ -51,23 +57,34 @@
   import {toChineseNum,parseTime} from '@/utils/index.js'
   import SelPicker from '@/components/SelPicker'
   import {roomList,employeeList,groupList} from '@/api/common'
-  import {getMonthProjectTaskInfoByTask,getMonthProjectTaskInfo,getErrorList} from '@/api/task'
+  import {getMonthProjectTaskInfoByTask,getMonthProjectTaskInfo,getErrorTaskInfo} from '@/api/task'
   import CalendarSingle from '@/components/CalendarSingle'
   export default {
     components:{CalendarSingle,SelPicker},
     data(){
       return {
         tabActive:0,
-        subTabActive:{
-          id:'',
-          name:''
-        },
+        subTabActive:'',
         planname:'',
         id:'',
         month:"",
         calendarList:[],
         subTabList:[],
         errorList:[]
+      }
+    },
+    computed: {
+      project:{
+        get(){
+          return this.$store.getters.getSelProject
+        }
+      },
+      taskData(){
+        let planData = this.$store.getters.planData
+        planData.daylist = planData.daylist.toString()
+        planData.usernamelist = eval(planData.usernamelist)
+        planData.roomnamelist = eval(planData.roomnamelist)
+        return planData
       }
     },
     mounted() {
@@ -100,7 +117,8 @@
       getData(){
         let param = {
           month:this.month,
-          taskplanid:this.id
+          taskplanid:this.id,
+          projectid:this.project.id
         }
         getMonthProjectTaskInfoByTask(param).then(res=>{
           if(res.code === 200){
@@ -114,87 +132,15 @@
         let param = {
           month:this.month,
           taskplanid:this.id,
-          name:this.subTabActive.name,
-          type:this.tabActive
+          name:this.subTabActive,
+          type:this.tabActive,
+          projectid:this.project.id
         }
-        getMonthProjectTaskInfo().then(res=>{
+        getMonthProjectTaskInfo(param).then(res=>{
           if(res.code === 200){
             this.calendarList = res.data
           }else{
             this.calendarList = []
-          }
-        })
-      },
-      getRoomList(){
-        let param = {
-          projectid:this.id,
-          
-        }
-        roomList(param).then(res=>{
-          if(res.code === 200){
-            let rows = res.rows
-            this.subTabList = rows
-            if(rows.length >0){
-              this.subTabActive.id = rows[0].id
-              this.subTabActive.name = rows[0].roomname
-              this.getOtherData()
-            }else{
-              this.calendarList = []
-            }
-          }else{
-            this.subTabList = []
-            this.subTabActive = {
-              id:'',
-              name:''
-            }
-          }
-        })
-      },
-      getEmployeeList(){
-        let param = {
-          projectid:this.id
-        }
-        employeeList(param).then(res=>{
-          if(res.code === 200){
-            let rows = res.rows
-            this.subTabList = rows
-            if(rows.length >0){
-              this.subTabActive.id = rows[0].id
-              this.subTabActive.name = rows[0].name
-              this.getOtherData()
-            }else{
-              this.calendarList = []
-            }
-          }else{
-            this.subTabList = []
-            this.subTabActive = {
-              id:'',
-              name:''
-            }
-          }
-        })
-      },
-      getGroupList(){
-        let param = {
-          projectid:this.id
-        }
-        groupList(param).then(res=>{
-          if(res.code === 200){
-            let rows = res.rows
-            this.subTabList = rows
-            if(rows.length >0){
-              this.subTabActive.id = rows[0].id
-              this.subTabActive.name = rows[0].name
-              this.getOtherData()
-            }else{
-              this.calendarList = []
-            }
-          }else{
-            this.subTabList = []
-            this.subTabActive = {
-              id:'',
-              name:''
-            }
           }
         })
       },
@@ -203,6 +149,7 @@
       },
       selPicker(val){
         this.month = val
+        this.errorList = []
         if(this.tabActive === 0){
           this.getData()
         }else {
@@ -211,30 +158,50 @@
       },
       changeTab(tab){
         // 0任务 1房间  2人员  3分组
+        this.tabActive = tab
         if(tab === 0){
           this.getData()
         }else{
           if(tab === 1){
-            this.getRoomList()
+            let roomnamelist = this.taskData.roomnamelist
+            this.subTabList = roomnamelist
           }else if(tab === 2){
-            this.getEmployeeList()
+            let usernamelist = this.taskData.usernamelist
+            this.subTabList = usernamelist
           }else if(tab === 3){
-            this.getGroupList()
+            let usernamelist = this.taskData.usernamelist
+            this.subTabList = usernamelist
           }
-          // this.getOtherData()
+          this.subTabActive = this.subTabList[0]
+          this.getOtherData()
         }
         this.errorList = []
-        this.tabActive = tab
+      },
+      changeSubTab(subTab){
+        this.subTabActive = subTab
+        this.getOtherData()
       },
       selCalendar(val){
-        if(val.taskrecordIdList && val.taskrecordIdList.length >0){
-          this.getErrorList(val.taskrecordIdList)
-        }
+        this.getErrorTaskInfo(val)
       },
-      getErrorList(taskrecordIdList){
-        getErrorList(taskrecordIdList.toString()).then(res=>{
+      getErrorTaskInfo(val){
+        console.info('val',val)
+        let name = ''
+        if(this.tabActive !== 0){
+          name = this.subTabActive
+        }
+
+        let param = {
+          data:val.data,
+          name:name,
+          projectid:this.project.id ,
+          taskrecordId:val.taskrecordId ,
+          type:this.tabActive + 1 //1 按任务 2 按房间 3 按人员 4按分组
+        }
+        getErrorTaskInfo(param).then(res=>{
           if(res.code === 200){
             this.errorList = res.data
+            console.info('this.errorList‘',this.errorList)
           }else{
             this.errorList = []
           }
@@ -249,11 +216,6 @@
         let month = val.split('-')[1]
         let data = month >= 10 ? month :(month.length > 1 ? month.split('')[1] : month)
         return toChineseNum(data)
-      },
-      splitTime(time){
-        let data = time.split(' ')[1]
-        let data2= data.split(':')
-        return data2[0] + ':' + data2[1]
       }
     }
   }
@@ -382,10 +344,13 @@
     background: #f7f7f8;
     border-radius: 6px;
     padding:12px;
-    display: flex;
-    justify-content: space-between;
     font-size: 14px;
     margin-bottom: 8px;
+  }
+  .abnormal-item-content {
+    display: flex;
+    justify-content: space-between;
+    color: #808896;
   }
   .abnormal-left {
     flex: 2;
@@ -403,6 +368,17 @@
     color: #ed4f2a;
     margin-bottom: 12px;
     text-align: right;
+  }
+  .icon-daka,.icon-shichang {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .num {
+    color:#333333;
+    display: inline-block;
+    margin-left: 4px;
   }
 }
 </style>

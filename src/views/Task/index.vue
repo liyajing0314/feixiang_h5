@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="project" @click="switchItems">
-      <span>{{param.pName}}</span>
+      <span>{{project.name}}</span>
       <img src="@/assets/images/icon_change.png" class="icon-change"  />
     </div>
     <div class="task-num">
@@ -10,8 +10,21 @@
         <p class="desc">昨日任务人数</p>
       </div>
       <div>
-        <div class="task-box"><span>昨日完成人数</span><span class="num">{{finish || 0}}</span></div>
-        <div class="task-box"><span>昨日未完成人数</span><span class="num">{{notFinish}}</span></div>
+        <div class="task-box">
+          <span>
+            <img src="@/assets/images/task/icon_wc@2x.png" class="icon-wc"/>
+            <span>昨日完成人数</span>
+          </span>
+          <span class="num">{{finish || 0}}</span>
+        </div>
+        <div class="task-box">
+          <span>
+            <img src="@/assets/images/task/icon_wwc@2x.png" class="icon-wc"/>
+            <span>昨日未完成人数</span>
+          </span>
+
+          <span class="num">{{notFinish}}</span>
+        </div>
       </div>
     </div>
     <div>
@@ -62,7 +75,6 @@
         notFinish: 0,
         param: {
           projectid: '',
-          pName:'',
           pageNum: 1,
           pageSize: 10
         },
@@ -97,7 +109,6 @@
     },
     mounted() {
       this.param.projectid = this.project.id
-      this.param.pName = this.project.name
 
       this.getYesterdayTaskUserNum()
       this.getYesterdayTaskInfo()
@@ -185,8 +196,14 @@
         this.onRefresh()
       },
       onSelect(action) {
+        console.info('action',action)
         let id = action.id
         if (id === 1) { //查看报表
+          let item = this.list.find(item=>{
+            return item.id == action.id
+          })
+          this.$store.commit('SET_PLAN_DATA',item)
+        
           this.$router.push({ path: '/taskRecord',query:{id:action.pid,planname:action.planname}})
         } else {
           this.$dialog.confirm({
@@ -282,6 +299,15 @@
       border-radius: 4px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+    }
+    .icon-wc {
+      width:16px;
+      height:16px;
+      margin-right: 6px;
+      vertical-align: middle;
+      position: relative;
+      top:-2px;
     }
 
     .num {

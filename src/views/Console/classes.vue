@@ -4,7 +4,7 @@
     <roll-tab-box :tabList="tabList" @changeRollTab="changeRollTab"></roll-tab-box>
     <div class="content">
       <month-arrow :month="month" @changeMonth="changeMonth"></month-arrow>
-      <div class="items" :class="{'active':activeItem(item) > -1}" :style="{backgroundColor:hexToRgba(item.color,0.1).rgba}" v-for="item in list" :key="item.id" @click="selItem(item)">
+      <div class="items" :class="{'active':activeItem(item) > -1}" :style="{backgroundColor:hexToRgba(item.color,0.1) ? hexToRgba(item.color,0.1).rgba : ''}" v-for="item in list" :key="item.id" @click="selItem(item)">
         <span>
           <span class="month">{{chineseNum(item.data)}}</span>
           <span class="item-satus" :style="{color:item.color}">{{item.scheduleplanName}}</span>
@@ -27,7 +27,7 @@
           </span>
         </div>
         <div class="class-list">
-          <div class="class-item" :class="{'active':classActive == item.id}" v-for="item in classList" :key="item.id" @click="selClassActive(item)">
+          <div class="class-item" :class="{'active':classActive == item.id}" :style="{backgroundColor:hexToRgba(item.color,0.1) ? hexToRgba(item.color,0.1).rgba : '',color:item.color}" v-for="item in classList" :key="item.id" @click="selClassActive(item)">
             <span>
               <span style="flex:2;">{{item.schedulename}}</span>
             </span>
@@ -47,7 +47,7 @@
   import RollTabBox from '@/components/RollTabBox'
   import {employeeList} from '@/api/common'
   import {getMonthSchedulerecordInfo,updateDaySchedulerecord,getAll} from '@/api/user'
-  import {formatterStatus,toChineseNum,parseTime,hexToRgba} from '@/utils/index'
+  import {formatterStatus,toChineseNum,parseTime,hexToRgba,debounce} from '@/utils/index'
   export default {
     components:{RollTabBox,MonthArrow},
     data(){
@@ -165,33 +165,39 @@
       showPopup(){
         this.popupShow = true
       },
-      submit(){ //修改班次
+      submit:debounce(function(){ //修改班次
+        let that = this
+        let classobj = this.classList.find(item=>{
+          return item.id == this.classActive
+        })
+
         let promise = []
         this.active.map((item,index)=>{
           let param = {
             projectid:this.project.id,
-            schedulerecordId:item.id,
+            schedulerecordId:item.id || '',
             employeeId:this.selEmployee.id,
-            scheduleplanId:this.classActive,
-            recordDate:item.date
+            scheduleplanId:classobj.scheduleid,
+            recordDate:item.data
           }
           promise[index] = this.update(param)
         })
 
         Promise.all(promise).then(function(results){
-          console.info('results',results)
+          that.active = []
+          that.classActive = ''
+          that.popupShow = false
+          that.getMonthSchedulerecordInfo()
         }).catch(function(err){
             console.log(err);
         });
-      },
+      },500),
       update(param){
-        
+
         return new Promise((resolve, reject)=>{
           updateDaySchedulerecord(param).then(res=>{
             if(res.code === 200){
               resolve()
-              // this.active = []
-              // this.getMonthSchedulerecordInfo()
             }else{
               reject()
             }
@@ -331,8 +337,8 @@
       top: 1px;
     }
     &.active {
-      background: #2574f0;
-      color:#ffffff;
+      background: #2574f0 !important;
+      color:#ffffff !important;
       >span {
         width:99%;
         height:94%;

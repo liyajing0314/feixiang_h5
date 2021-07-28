@@ -5,7 +5,7 @@
       srcset='../../assets/images/console/bac.png 1x,
              ../../assets/images/console/bac@2x.png 2x'/>
       <div class="head-content">
-        <p class="name">你好，张三丰</p>
+        <p class="name">你好，{{userInfo && userInfo.name}}</p>
         <p class="desc">欢迎使用新物业劳动力管理智能化云平台</p>
         <div class="grid">
           <div @click="$router.push('/checkWork')">
@@ -31,11 +31,17 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
   export default {
     data(){
       return {
 
       }
+    },
+    computed: {
+      ...mapGetters([
+        'userInfo',
+      ]),
     },
     methods:{
       loginOut(){

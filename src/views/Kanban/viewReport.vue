@@ -1,12 +1,12 @@
 <template>
-  <div class="container">
-    <div class="head" @click="changeTime">2021年6月
+  <div class="container" ref="container">
+    <div class="head" @click="changeTime">{{month}}
       <img src="@/assets/images/icon_change.png"
         srcset='../../assets/images/icon_change.png 1x,
                  ../../assets/images/icon_change@2x.png 2x' class="icon-change"/>
     </div>
     <div ref="content">
-      <table class="reort-table" >
+      <table class="reort-table" ref="reortTable">
         <thead>
           <tr>
             <th><div class="search-box" @click="changePeople"> <img src="@/assets/images/task/icon_search@2x.png" class="icon-search"/>查找人</div></th>
@@ -19,46 +19,66 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item,index) in 50" :class="{'active':index=== 2}">
-            <td><span class="name">盖玲{{index}}</span></td>
-            <td>25</td>
-            <td>0</td>
-            <td>1</td>
-            <td>2</td>
-            <td>2</td>
-            <td>2</td>
+          <tr v-for="(item,index) in list" :class="{'active':active === index}" :key="index" :ref="'anchor'+index">
+            <td><span class="name">{{item.name}}</span></td>
+            <td>{{item.shouldDayNum}}</td>
+            <td>{{item.actuallyDayNum}}</td>
+            <td>{{item.lateNum}}</td>
+            <td>{{item.eaveEarlyNum}}</td>
+            <td>{{item.absenteeismNum}}</td>
+            <td>{{item.leaveNum}}</td>
           </tr>
         </tbody>
       </table>
     </div>
     <div class="bottom-box">
-      <van-button type="primary" class="btn"  @click="createImg">保存为图片至相册</van-button>
+      <van-button type="primary" class="btn"  @click="createImg"><img src="~@/assets/images/kanban/icon_pic@2x.png" class="icon-pic"/>保存为图片至相册</van-button>
     </div>
     <sel-picker ref="selPicker" @selPicker="selPicker"></sel-picker>
-    <select-people ref="selectPeople"></select-people>
+    <select-people-single ref="selectPeople" :list="list" @selPeople="selPeople"></select-people-single>
   </div>
 </template>
 
 <script>
-  import SelectPeople from '@/components/SelectPeople'
+  import {parseTime} from '@/utils/index'
+  // import SelectPeople from '@/components/SelectPeople'
+  import SelectPeopleSingle from '@/components/SelectPeopleSingle'
   import SelPicker from '@/components/SelPicker'
   import {attendanceReport} from '@/api/kanban'
   import html2canvas from 'html2canvas'
   export default {
-    components:{SelPicker,SelectPeople},
+    components:{SelPicker,SelectPeopleSingle},
     data(){
       return{
-        month:'2017-07',
-        list:[]
+        month:'',
+        list:[],
+        active:''
       }
     },
     mounted() {
-      // this.getData()
+      let time = new Date().getTime()
+      this.month = parseTime(time,'{y}-{m}')
+
+      this.getData()
+      window.addEventListener('scroll', ()=>{
+         let scrollTop = document.body.scrollTop
+         console.info('scrollTop',scrollTop)
+      });
+    },
+    computed: {
+      project:{
+        get(){
+          return this.$store.getters.getSelProject
+        },
+        set(data){
+          this.$store.commit('SET_SEL_PROJECT',data)
+        }
+      }
     },
     methods:{
       getData(){
         let param ={
-          pid:22,
+          pid:this.project.id,
           recordDate:this.month
         }
 
@@ -80,9 +100,22 @@
       changePeople(){
         this.$refs.selectPeople.showPopup()
       },
+      selPeople(item,index){
+        this.active = index
+        let top = 40 * index
+        console.info(this.$refs.content.scrollTop)
+        console.info('this.$refs',this.$refs,top)
+
+
+        this.$refs.content.scrollTo({
+          top: top,
+          behavior: "smooth" // 平滑滚动
+        })
+
+      },
       createImg(){
         let content = this.$refs.content
-        let scrollHeight = content.scrollHeight
+        let scrollHeight = content.scrollHeight + 200
         let scrollWidth = content.scrollWidth
         html2canvas(content,{
             scale: window.devicePixelRatio*2,
@@ -103,8 +136,41 @@
             link.style.display = "none"; //a标签隐藏
             document.body.appendChild(link);
             link.click();
+            this.savePicture(dataURL)
           })
+      },
+      saveImage(dataURL){
+        console.info('dataURL',dataURL)
+        console.info(window.plus)
+          if(!window.plus) return;
+          plus.gallery.save(dataURL, function () {
+      			plus.nativeUI.alert("保存图片到相册成功");
+      		},function(){
+      			plus.nativeUI.alert("保存失败");
+      		});
+      },
+      savePicture(imgurl){
+        var that = this;
+        var b = new plus.nativeObj.Bitmap("bitblmap");
+        console.log("☆☆☆☆☆☆ 保存图片到相册中");
+        console.log(b);
+        b.loadBase64Data(imgurl,function() {
+          console.log("图片创建成功");
+          var fileName = "_doc/img1.png";
+          b.save(fileName,{ overwrite: true },object => {
+            plus.gallery.save(fileName,() => {
+              console.log("保存图片到相册成功");
+            },() => {
+             console.log("保存图片到相册失败");
+            });
+          },() => {
+          console.log("保存失败");
+          });
+        },function() {
+          console.log("图片创建失败");
+        });
       }
+
     }
   }
 </script>
@@ -127,6 +193,8 @@
       width:16px;
       height:16px;
       margin-left: 4px;
+      position: relative;
+      top: 2px;
     }
   }
   .reort-table {
@@ -134,10 +202,11 @@
     border-collapse: collapse;
     border-spacing: 0;
     text-align: center;
-    margin-bottom: 80px;
+    margin-bottom: 90px;
     td ,th {
       padding: 8px 10px;
       font-weight: 400;
+      min-width: 48px;
     }
     thead {
       position: sticky;
@@ -189,6 +258,14 @@
       border:none;
       margin: 0 auto;
       display: block;
+    }
+    .icon-pic {
+      width:16px;
+      height:16px;
+      margin-right: 4px;
+      vertical-align: middle;
+      position: relative;
+      top:-2px;
     }
   }
   .yd {

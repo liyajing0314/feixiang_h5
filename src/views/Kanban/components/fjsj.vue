@@ -8,17 +8,17 @@
       </span>
       <span class="btn-sel" @click="switchRoom">
         <span>选择房间</span>
-        <span class="num">15</span>
+        <span class="num">{{chartData.length}}</span>
       </span>
     </p>
     <div ref="fjsj" class="charts"></div>
-    <sel-picker ref="SelPicker"></sel-picker>
-    <select-room ref="SelRoom"></select-room>
+    <sel-picker ref="SelPicker"  @selPicker="selPicker"></sel-picker>
+    <select-room ref="SelRoom" :list="dataList" @selRoomData="selRoomData"></select-room>
   </div>
 </template>
 
 <script>
-  import {selectRoomhourList} from '@/api/kanban'
+  import {selectRoomhourListNew} from '@/api/kanban'
   import {toChineseNum,parseTime} from '@/utils/index.js'
   import SelectRoom from '@/components/selectRoom'
   import SelPicker from '@/components/SelPicker'
@@ -27,6 +27,8 @@
     data() {
       return {
         month:'',
+        dataList:[],
+        chartData:[]
       }
     },
     mounted() {
@@ -34,7 +36,7 @@
       let time = new Date().getTime()
       this.month = parseTime(time,'{y}-{m}')
 
-      this.getData()
+      // this.getData()
 
       window.addEventListener("resize", function() {
         setTimeout(() => {
@@ -49,18 +51,37 @@
         }
       },
     },
+    watch:{
+      project: {
+        handler(newName, oldName) {
+          this.getData()
+        },
+        immediate: true
+      }
+    },
     methods: {
       getData(){
         let param = {
           pid:this.project.id,
           month:this.month
         }
-        selectRoomhourList(param).then(res=>{
+        selectRoomhourListNew(param).then(res=>{
           if(res.code === 200){
             let data = res.data
-            this.getChart(data)
+            this.dataList = data
+
+            this.chartData = data.slice(0,15)
+            this.getChart(this.chartData)
+          }else{
+            this.dataList = []
+            this.chartData = []
+            this.getChart(this.chartData)
           }
         })
+      },
+      selRoomData(val){
+        this.chartData = val
+        this.getChart(this.chartData)
       },
       switchRoom(){
         this.$refs.SelRoom.showPopup()
@@ -68,7 +89,18 @@
       switchTime(){
         this.$refs.SelPicker.showPopup()
       },
+      selPicker(val){
+        this.month = val
+        this.getData()
+      },
       getChart(data) {
+        let value=[],xAxis=[]
+        if(data.length > 0){
+          data.map(item=>{
+            value.push(item.roomHours)
+            xAxis.push(item.roomName)
+          })
+        }
 
         let that = this
         this.chart = this.$echarts.init(that.$refs.fjsj)
@@ -107,7 +139,7 @@
               width: 30,
               overflow: 'breakAll'
             },
-            data: data.name
+            data: xAxis
           },
           yAxis: {
             type: 'value',
@@ -141,7 +173,7 @@
               color:'rgba(153,153,153,1)',
               position:'top'
             },
-            data: data.value,
+            data: value,
           }]
         }
 

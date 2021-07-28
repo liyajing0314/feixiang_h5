@@ -6,22 +6,52 @@
 </template>
 
 <script>
+  import {getX_tasklist} from '@/api/kanban'
   export default {
+    props:['dateList'],
     data() {
       return {
-
+        chartData:{}
+      }
+    },
+    watch:{
+      project: {
+        handler(newName, oldName) {
+          this.getData()
+        },
+        immediate: true
       }
     },
     mounted() {
       let that = this
+
       window.addEventListener("resize", function() {
         setTimeout(() => {
           that.chart.resize()
         }, 100)
       });
-      this.getChart()
+    },
+    computed: {
+      project:{
+        get(){
+          return this.$store.getters.getSelProject
+        }
+      }
     },
     methods: {
+      getData(){
+        let param = {
+          pid:this.project.id
+        }
+        getX_tasklist(param).then(res=>{
+          if(res.code == 200){
+            this.chartData = res.data
+            this.getChart()
+          }else{
+            this.chartData = {}
+          }
+        })
+      },
       getChart() {
         let that = this
         this.chart = this.$echarts.init(that.$refs.rwwcqk)
@@ -64,7 +94,7 @@
               width: 30,
               overflow: 'breakAll'
             },
-            data: ['01', '02', '03', '04', '05', '06', '07']
+            data: this.dateList
           },
           yAxis: {
             type: 'value',
@@ -76,15 +106,17 @@
             }
           },
           series: [{
-              data: [820, 932, 901, 934, 1290, 1330, 1320],
+              data: this.chartData.list2,
               type: 'line',
               smooth: true,
+              showSymbol:false,
               name:'总任务数'
             },
             {
-              data: [800, 902, 901, 904, 290, 130, 320],
+              data: this.chartData.list1,
               type: 'line',
               smooth: true,
+              showSymbol:false,
               name:'已完成任务数'
             },
             ]

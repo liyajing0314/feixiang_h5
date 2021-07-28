@@ -218,7 +218,7 @@ export function toThousands(num) {
  * @param {Function} fn 防抖函数
  * @param {Number} delay 延迟时间
  */
-export function debounce(fn, delay) {
+export function debounce(fn, delay=500) {
   var timer;
   return function () {
     var context = this;
@@ -278,6 +278,9 @@ export function getNextMonth(val){
  * @param {Object} number
  */
 export function hexToRgba(hex,opacity) {
+  if(!hex){
+    hex = '#666666'
+  }
   var RGBA = "rgba(" + parseInt("0x" + hex.slice(1, 3)) + "," + parseInt("0x" + hex.slice(3, 5)) + "," + parseInt( "0x" + hex.slice(5, 7)) + "," + opacity + ")";
   return {
       red: parseInt("0x" + hex.slice(1, 3)),

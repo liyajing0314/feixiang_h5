@@ -33,6 +33,7 @@
 
 <script>
   export default {
+    props:['list'],
     data() {
       return {
         show: false,

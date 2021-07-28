@@ -11,6 +11,17 @@ export function selectRoomhourList(params) {
     params
   })
 }
+/**
+ * 各房间工时--新
+ * @param {Object} params
+ */
+export function selectRoomhourListNew(params) {
+  return request({
+    url: '/workData/roomsummary/selectRoomhourListNew',
+    method: 'get',
+    params
+  })
+}
 
 /**
  * 考勤报表
@@ -64,6 +75,17 @@ export function getX_tasklist(params) {
 export function serviceQualityTrend(params) {
   return request({
     url: '/taskManage/taskRecord/serviceQualityTrend',
+    method: 'get',
+    params
+  })
+}
+/**
+ * 时间列表
+ * @param {Object} params
+ */
+export function getDateList(params) {
+  return request({
+    url: '/taskManage/taskRecord/getDateList',
     method: 'get',
     params
   })

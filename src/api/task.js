@@ -74,11 +74,10 @@ export function getMonthProjectTaskInfo(params) {
  * 获取异常列表
  * @param {Object} params
  */
-export function getErrorList(params) {
+export function getErrorTaskInfo(params) {
   return request({
-    url:`/taskManage/taskLog/getErrorList/${params}`,
+    url:`/taskManage/taskPlan/getErrorTaskInfo`,
     method: 'get',
+    params
   })
 }
-
-

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <img src="@/assets/images/login/logo.png" class="logo"/>
+    <img src="@/assets/images/login/logo@2x.png" class="logo"/>
     <p class="title">
       新物业劳动力管理<br> 智能化云平台
     </p>
@@ -45,7 +45,7 @@
           if(res.code === 200){
             let tokenId = res.data.tokenId
             localStorage.setItem(ACCESS_TOKEN,tokenId)
-            console.info('222')
+            this.$store.commit('SET_USER_INFO',res.data)
             this.$store.dispatch('getProjectData')
             this.$router.push('/kanban')
           }else{

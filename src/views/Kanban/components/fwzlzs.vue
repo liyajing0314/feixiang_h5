@@ -6,14 +6,17 @@
 </template>
 
 <script>
+  import {serviceQualityTrend} from '@/api/kanban'
   export default {
+    props:['dateList'],
     data() {
       return {
-
+        chartData:{}
       }
     },
     mounted() {
       let that = this
+      this.getData()
       window.addEventListener("resize", function() {
         setTimeout(() => {
           that.chart.resize()
@@ -21,7 +24,27 @@
       });
       this.getChart()
     },
+    computed: {
+      project:{
+        get(){
+          return this.$store.getters.getSelProject
+        }
+      }
+    },
     methods: {
+      getData(){
+        let param = {
+          pid:this.project.id
+        }
+        serviceQualityTrend(param).then(res=>{
+          if(res.code == 200){
+            this.chartData = res.data
+            this.getChart()
+          }else{
+            this.chartData = {}
+          }
+        })
+      },
       getChart() {
         let that = this
         this.chart = this.$echarts.init(that.$refs.fwzlzs)
@@ -60,7 +83,7 @@
               width: 30,
               overflow: 'breakAll'
             },
-            data: ['01', '02', '03', '04', '05', '06', '07']
+            data: this.dateList
           },
           yAxis: {
             type: 'value',
@@ -72,10 +95,11 @@
             }
           },
           series: [{
-              data: [820, 932, 901, 934, 1290, 1330, 1320],
+              data: this.chartData.percentageComplete,
               type: 'line',
-              smooth: true
-            },
+              smooth: true,
+              showSymbol:false,
+            }
             ]
           }
 

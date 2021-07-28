@@ -9,11 +9,6 @@
       </div>
 
       <div>
-        <!-- <div class="month-arrow">
-          <img src="~@/assets/images/console/icon_left.png" class="icon-arrow" @click="changMonth('minus')"/>
-          <span>2021年七月</span>
-          <img src="~@/assets/images/console/icon_right.png" class="icon-arrow" @click="changMonth('add')"/>
-        </div> -->
         <month-arrow :month="month" @changeMonth="changeMonth"></month-arrow>
         <calendar-record :month="month" :data="calendarList" @selCalendar="selCalendar"></calendar-record>
       </div>
@@ -38,17 +33,17 @@
           @click="changeStatus(item)"><span>{{item.label}}</span></span>
         </div>
         <van-field
-          v-model="form.remark"
+          v-model="remark"
           rows="2"
           autosize
           type="textarea"
           placeholder="请输入备注"
           class="form-field"
         />
-        <van-uploader v-model="fileList" multiple />
+        <van-uploader v-model="fileList" :max-count="1"/>
         <div>
           <van-button type="primary" class="btn btn-cancel">取消</van-button>
-          <van-button type="primary" class="btn btn-ok">确认</van-button>
+          <van-button type="primary" class="btn btn-ok" @click="submit">确认</van-button>
         </div>
       </div>
     </van-popup>
@@ -57,8 +52,8 @@
 
 <script>
   import MonthArrow from '@/components/MonthArrow'
-  import {formatterStatus,toChineseNum,parseTime} from '@/utils/index'
-  import {getOnOffDuty,getMonthSchedulerecordInfo} from '@/api/user'
+  import {formatterStatus,toChineseNum,parseTime,debounce} from '@/utils/index'
+  import {getOnOffDuty,getMonthSchedulerecordInfo,updateSchedulerecordStatus,getRecord} from '@/api/user'
   import {employeeList} from '@/api/common'
   import RollTabBox from '@/components/RollTabBox'
   import CalendarRecord from '@/components/CalendarRecord'
@@ -73,9 +68,7 @@
         calendarActive:{},
         formatterStatus:formatterStatus,
         popupShow:false,
-        form:{
-          remark:''
-        },
+        remark:'',
         fileList:[],
         statusList:[
           {label:'未打卡',status:0},
@@ -92,7 +85,8 @@
         ],
         statusCopyList:[],
         selStatus:0,
-        selEmployeeName:'',//选中的人员
+        selEmployee:{},//选中的人员对象
+        recordDetail:{}
       }
     },
     computed: {
@@ -113,18 +107,20 @@
     methods:{
       changeRollTab(val){ //切换人员
         let name = val.name
-        this.selEmployeeName = name
+        this.selEmployee = val
         this.getOnOffDuty(val.id)
         this.getMonthSchedulerecordInfo()
       },
       selCalendar(val){
+        console.info('val',val)
         this.calendarActive = val
+        this.getRecord(val.id)
       },
       //查看某人某月考勤
       getMonthSchedulerecordInfo(){
         let param = {
           projectid:this.project.id,
-          employeeName:this.selEmployeeName,
+          employeeName:this.selEmployee.name,
           month:this.month,
           type:1, //1考勤2班次
         }
@@ -145,10 +141,8 @@
             let rows = res.rows
             this.tabList = rows
             if(rows.length >0){
-              let employeeId = rows[0].id
-              let employeeName = rows[0].name
-              this.selEmployeeName = employeeName
-              this.getOnOffDuty(employeeId)
+              this.selEmployee = rows[0]
+              this.getOnOffDuty()
               this.getMonthSchedulerecordInfo()
             }
 
@@ -159,7 +153,7 @@
       },
       getOnOffDuty(employeeId){ //考勤上下班时间
         let param = {
-          employeeId:employeeId,
+          employeeId:this.selEmployee.id,
           projectid:this.project.id
         }
         getOnOffDuty(param).then(res=>{
@@ -167,6 +161,20 @@
             this.workTime = res.data
           }else{
             this.workTime = {}
+          }
+        })
+      },
+      getRecord(id){
+        getRecord(id).then(res=>{
+          if(res.code === 200){
+            let data = res.data
+            this.recordDetail = data
+            if(data.imageurl != ''){
+              this.fileList = [{url: data.imageurl}]
+            }
+            this.remark = data.remark
+          }else{
+            this.recordDetail = {}
           }
         })
       },
@@ -199,10 +207,36 @@
         this.selStatus = item.status
       },
       changeMonth(val){//切换月份
-        console.info('月份',val)
+        this.calendarActive = {}
         this.month = val
         this.getMonthSchedulerecordInfo()
-      }
+      },
+      submit:debounce(function(){ //修改考勤
+        let that = this
+
+        let file = this.fileList.length >0 ? this.fileList[0].file : ''
+
+        let formData = new FormData()
+        formData.append('projectid',this.project.id)
+        formData.append('recordID',this.calendarActive.id || '')
+        formData.append('status',this.selStatus)
+        formData.append('file',file)
+        formData.append('remark',this.remark)
+        formData.append('employeeId',this.selEmployee.id)
+        formData.append('recordDate',this.calendarActive.data)
+
+        console.info('param',formData)
+
+        updateSchedulerecordStatus(formData).then(res=>{
+          if(res.code === 200){
+            that.popupShow = false
+            that.selStatus = 0
+            that.getMonthSchedulerecordInfo()
+          }else{
+            that.$toast(res.msg || '修改失败！')
+          }
+        })
+      },500)
     }
   }
 </script>

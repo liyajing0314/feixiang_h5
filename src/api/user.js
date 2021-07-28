@@ -53,13 +53,34 @@ export function getAll(params) {
   })
 }
 /**
- *  修改某日班次 
+ *  修改某日班次
  * @param {Object} params
  */
 export function updateDaySchedulerecord(params) {
   return request({
     url: '/attendanceManage/schedulerecord/updateDaySchedulerecord',
     method: 'post',
+    params
+  })
+}
+/**
+ * 修改考勤状态
+ * @param {Object} params
+ */
+export function updateSchedulerecordStatus(params) {
+  return request({
+    url: '/attendanceManage/schedulerecord/updateSchedulerecordStatus',
+    method: 'post',
     data:params
+  })
+}
+/**
+ * 获取考勤记录明细
+ * @param {Object} params
+ */
+export function getRecord(params) {
+  return request({
+    url: `/attendanceManage/schedulerecord/${params}`,
+    method: 'get',
   })
 }

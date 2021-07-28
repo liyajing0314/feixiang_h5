@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="container-bottom">
-      <div class="bottom-pannel">
+      <div class="bottom-pannel" v-if="data.usertype === 1 ">
         <div class="pannel-head">
           <img src="@/assets/images/task/icon_relation_ry.png"
           srcset='../../assets/images/task/icon_relation_ry.png 1x,
@@ -39,7 +39,7 @@
           <span class="tag tag1" v-for="(item,index) in data.usernamelist">{{item}}</span>
         </div>
       </div>
-      <div class="bottom-pannel">
+      <div class="bottom-pannel" v-if="data.usertype === 2">
         <div class="pannel-head">
           <img src="@/assets/images/task/icon_relation_fz.png"
           srcset='../../assets/images/task/icon_relation_fz.png 1x,
@@ -47,7 +47,7 @@
           <span>关联分组</span>
         </div>
         <div class="pannel-body">
-          <span class="tag tag2" v-for="(item,index) in data.userlist" :key="index">{{item.jobs}}</span>
+          <span class="tag tag2" v-for="(item,index) in data.usernamelist" :key="index">{{item}}</span>
         </div>
       </div>
       <div class="bottom-pannel">
@@ -70,6 +70,7 @@
   export default {
     data(){
       return{
+
       }
     },
     mounted() {
@@ -79,7 +80,6 @@
         let planData = this.$store.getters.planData
         planData.daylist = planData.daylist.toString()
         planData.usernamelist = eval(planData.usernamelist)
-        planData.userlist = eval(planData.userlist)
         planData.roomnamelist = eval(planData.roomnamelist)
         return planData
       }

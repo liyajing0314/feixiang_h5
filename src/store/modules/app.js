@@ -1,7 +1,8 @@
-import {PLAN_DATA,LOCATION_DATA,ACCESS_TOKEN,PROJECT_DATA,SEL_PROJECT} from '@/store/mutation-types'
+import {PLAN_DATA,LOCATION_DATA,ACCESS_TOKEN,PROJECT_DATA,SEL_PROJECT,USER_INFO} from '@/store/mutation-types'
 import {logout} from '@/api/user'
 import {projectList} from '@/api/common'
 const state = {
+  userInfo:{}, //用户信息
   userName: '',
   planData:{},
   locationData:{}, //选中的定位数据
@@ -11,6 +12,10 @@ const state = {
 const mutations = {
   SET_USER_NAME(state, name) {
     state.userName = name
+  },
+  SET_USER_INFO(state,data){
+    localStorage.setItem(USER_INFO,JSON.stringify(data))
+    state.userInfo = data
   },
   SET_PLAN_DATA(state,data){
     localStorage.setItem(PLAN_DATA,JSON.stringify(data))
