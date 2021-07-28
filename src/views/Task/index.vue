@@ -194,6 +194,7 @@
         this.getYesterdayTaskUserNum()
         this.getYesterdayTaskInfo()
         this.onRefresh()
+        
       },
       onSelect(action) {
         let id = action.id
