@@ -16,13 +16,11 @@
     },
     mounted() {
       let that = this
-      this.getData()
       window.addEventListener("resize", function() {
         setTimeout(() => {
           that.chart.resize()
         }, 100)
       });
-      this.getChart()
     },
     computed: {
       project:{
@@ -31,8 +29,25 @@
         }
       }
     },
+    watch:{
+      project: {
+        handler(newName, oldName) {
+          this.$nextTick(()=>{
+            this.getData()
+          })
+        },
+        immediate: true
+      }
+    },
     methods: {
       getData(){
+        this.chart = this.$echarts.init(this.$refs.fwzlzs)
+        this.chart.showLoading({
+          text: '正在加载数据',
+          maskColor: '#ffffff',
+          textColor: '#2574f0'
+        });
+        
         let param = {
           pid:this.project.id
         }
@@ -42,17 +57,12 @@
             this.getChart()
           }else{
             this.chartData = {}
+            this.chart.hideLoading();
           }
         })
       },
       getChart() {
         let that = this
-        this.chart = this.$echarts.init(that.$refs.fwzlzs)
-        this.chart.showLoading({
-          text: '正在加载数据',
-          maskColor: '#030D17',
-          textColor: 'white'
-        });
 
         this.options = {
           color:['rgba(255,112,128,1)'],

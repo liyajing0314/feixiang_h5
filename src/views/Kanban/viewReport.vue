@@ -4,13 +4,13 @@
       <div class="head" @click="changeTime">{{month}}
         <img src="@/assets/images/icon_change.png" srcset='../../assets/images/icon_change.png 1x,
                    ../../assets/images/icon_change@2x.png 2x'
-          class="icon-change" />
+          class="icon-change" v-show="!picFlag"/>
       </div>
       <table class="reort-table" ref="reortTable">
         <thead>
           <tr>
             <th>
-              <div class="search-box" @click="changePeople"> <img src="@/assets/images/task/icon_search@2x.png" class="icon-search" />查找人</div>
+              <div class="search-box" @click="changePeople" v-show="!picFlag"> <img src="@/assets/images/task/icon_search@2x.png" class="icon-search" />查找人</div>
             </th>
             <th class="yd">应到</th>
             <th class="sd">实到</th>
@@ -62,7 +62,8 @@
       return {
         month: '',
         list: [],
-        active: ''
+        active: '',
+        picFlag:false
       }
     },
     mounted() {
@@ -130,30 +131,36 @@
 
       },
       createImg() {
-        let content = this.$refs.content
-        let scrollHeight = content.scrollHeight + 200
-        let scrollWidth = content.scrollWidth
-        html2canvas(content, {
-          scale: window.devicePixelRatio * 2,
-          useCORS: true, //开启跨域配置，但和allowTaint不能共存
-          width: scrollWidth,
-          height: scrollHeight,
-          windowWidth: scrollWidth,
-          windowHeight: scrollHeight,
-          x: 0,
-          y: 0
-        }).then((canvas) => {
-          this.operType = 'edit'
-          let dataURL = canvas.toDataURL("image/jpg");
-          let link = document.createElement("a");
-          link.href = dataURL;
-          let filename = `${new Date().getTime()}.jpg`; //文件名称
-          link.setAttribute("download", filename);
-          link.style.display = "none"; //a标签隐藏
-          document.body.appendChild(link);
-          link.click();
-          this.savePicture(dataURL)
+        this.picFlag = true
+        this.$nextTick(()=>{
+          let content = this.$refs.content
+          let scrollHeight = content.scrollHeight + 200
+          let scrollWidth = content.scrollWidth
+          html2canvas(content, {
+            scale: window.devicePixelRatio * 2,
+            useCORS: true, //开启跨域配置，但和allowTaint不能共存
+            width: scrollWidth,
+            height: scrollHeight,
+            windowWidth: scrollWidth,
+            windowHeight: scrollHeight,
+            x: 0,
+            y: 0
+          }).then((canvas) => {
+            this.operType = 'edit'
+            let dataURL = canvas.toDataURL("image/jpg");
+            let link = document.createElement("a");
+            link.href = dataURL;
+            let filename = `${new Date().getTime()}.jpg`; //文件名称
+            link.setAttribute("download", filename);
+            link.style.display = "none"; //a标签隐藏
+            document.body.appendChild(link);
+            link.click();
+            this.picFlag = false
+            this.savePicture(dataURL)
+
+          })
         })
+
       },
       saveImage(dataURL) {
         console.info('dataURL', dataURL)

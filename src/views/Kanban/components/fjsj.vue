@@ -20,7 +20,7 @@
 <script>
   import {selectRoomhourListNew} from '@/api/kanban'
   import {toChineseNum,parseTime} from '@/utils/index.js'
-  import SelectRoom from '@/components/selectRoom'
+  import SelectRoom from '@/components/SelectRoom'
   import SelPicker from '@/components/SelPicker'
   export default {
     components:{SelPicker,SelectRoom},
@@ -56,13 +56,23 @@
         handler(newName, oldName) {
           let time = new Date().getTime()
           this.month = parseTime(time,'{y}-{m}')
-          this.getData()
+          this.$nextTick(()=>{
+            this.getData()
+          })
+
         },
         immediate: true
       }
     },
     methods: {
       getData(){
+        this.chart = this.$echarts.init(this.$refs.fjsj)
+        this.chart.showLoading({
+          text: '正在加载数据',
+          maskColor: '#ffffff',
+          textColor: '#2574f0'
+        });
+
         let param = {
           pid:this.project.id,
           month:this.month
@@ -78,6 +88,7 @@
             this.dataList = []
             this.chartData = []
             this.getChart(this.chartData)
+            this.chart.hideLoading();
           }
         })
       },
@@ -105,12 +116,7 @@
         }
 
         let that = this
-        this.chart = this.$echarts.init(that.$refs.fjsj)
-        this.chart.showLoading({
-          text: '正在加载数据',
-          maskColor: '#030D17',
-          textColor: 'white'
-        });
+
 
         this.options = {
           color: ['rgba(255,99,55,1)'],

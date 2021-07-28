@@ -5,16 +5,16 @@
       <p class="title">选择房间</p>
       <div class="search-container">
         <img src="@/assets/images/icon_search.png" class="icon-search"/>
-        <input type="text" v-model="value" placeholder="搜索房间名" class="search-input" @keyup="onSearch"/>
+        <input type="text" v-model="searchValue" placeholder="搜索房间名" class="search-input" @keyup.enter="onSearch" @input="changeWord"/>
         <span @click="onSearch" class="search">搜索</span>
       </div>
-      <span class="record">共<span class="num">5</span>条搜索记录</span>
+      <span class="record" v-show="searchFlag && searchValue">共<span class="num">{{searchResult.length}}</span>条搜索记录</span>
       <div ref="content" class="content">
         <van-checkbox-group v-model="result">
-            <van-checkbox :name="item" ref="checkboxes" v-for="(item,index) in list" >
+            <van-checkbox :name="item"  v-for="(item,index) in dataList" >
               <template #icon="props">
-                <div class="items" :class="{'active':props.checked}">
-                  <span>{{item.roomName}}</span>
+                <div class="items" :class="{'active':props.checked}" :ref="'items'+index">
+                  <span v-html="item.roomName"></span>
                 <img src="@/assets/images/icon_tick.png" class="icon-tick" v-show="props.checked" />
                 </div>
               </template>
@@ -37,31 +37,55 @@
     data() {
       return {
         show: false,
-        indexList: [],
-        value: '',
-        result: []
+        result: [],
+        searchResult:[],
+        dataList:[],
+        searchValue: '',
+        searchFlag:false,
       }
     },
     mounted() {
-      let num = 50
-      for (let i = 1; i <= num; i++) {
-        this.indexList.push(i)
-      }
+
     },
     methods: {
       showPopup(){
+        this.searchValue = ''
         this.result = []
+        this.searchFlag = false
+        this.searchResult = []
+        this.dataList = JSON.parse(JSON.stringify(this.list))
         this.show = true
       },
+      changeWord(){
+        this.searchFlag = false
+      },
       onSearch() {
-        console.info('搜索', this.$refs)
-        // this.$refs.IndexBar.scrollTo(11)
-        let index = 11
+        this.searchFlag = true
+        let searchValue = this.searchValue
+        let searchResult = []
+        let patt1 = new RegExp(searchValue);
+        let list = JSON.parse(JSON.stringify(this.list))
+        let index = -1
+        index = list.findIndex(item=>{
+          return item.roomName.indexOf(searchValue) >-1
+        })
+        this.dataList = list.map(item=>{
+          if(item.roomName.indexOf(searchValue) >-1){
+            searchResult.push(item)
+            item.roomName = item.roomName.replace(patt1,`<span style='color: #ff6326;'>${searchValue}</span>`)
+          }
+          return item
+        })
+
+        this.searchResult = searchResult
+        let items = this.$refs['items' + index][0]
+        let top = items.offsetTop - 140
 
         this.$refs.content.scrollTo({
-          top: this.$refs['anchor' + index].offsetTop - 60,
+          top: top ,
           behavior: "smooth" // 平滑滚动
         })
+
       },
       confirm() {
         if (this.result.length === 0) {
@@ -71,7 +95,6 @@
           this.$emit('selRoomData',this.result)
           this.show = false
         }
-
       }
     }
   }

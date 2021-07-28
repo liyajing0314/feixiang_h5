@@ -207,15 +207,15 @@
           this.$router.push({ path: '/taskRecord',query:{id:action.pid,planname:action.planname}})
         } else {
           this.$dialog.confirm({
-              title: '提示',
-              message: '确认要删除此任务吗？',
-            })
-            .then(() => {
-              // on confirm
-            })
-            .catch(() => {
-              // on cancel
-            });
+            title: '提示',
+            message: '确认要删除此任务吗？',
+          })
+          .then(() => {
+            // on confirm
+          })
+          .catch(() => {
+            // on cancel
+          });
         }
       },
       toDetail(item) {
