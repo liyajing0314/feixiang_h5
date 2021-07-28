@@ -196,14 +196,13 @@
         this.onRefresh()
       },
       onSelect(action) {
-        console.info('action',action)
         let id = action.id
         if (id === 1) { //查看报表
           let item = this.list.find(item=>{
-            return item.id == action.id
+            return item.id == action.pid
           })
           this.$store.commit('SET_PLAN_DATA',item)
-        
+
           this.$router.push({ path: '/taskRecord',query:{id:action.pid,planname:action.planname}})
         } else {
           this.$dialog.confirm({
