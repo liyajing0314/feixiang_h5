@@ -12,6 +12,7 @@
       </span>
     </p>
     <div ref="fjsj" class="charts"></div>
+    <div class="no-data" v-show="dataList.length === 0 && nodataFlag">暂无数据</div>
     <sel-picker ref="SelPicker"  @selPicker="selPicker"></sel-picker>
     <select-room ref="SelRoom" :list="dataList" @selRoomData="selRoomData"></select-room>
   </div>
@@ -28,7 +29,8 @@
       return {
         month:'',
         dataList:[],
-        chartData:[]
+        chartData:[],
+        nodataFlag:false
       }
     },
     mounted() {
@@ -36,7 +38,6 @@
       let time = new Date().getTime()
       this.month = parseTime(time,'{y}-{m}')
 
-      // this.getData()
 
       window.addEventListener("resize", function() {
         setTimeout(() => {
@@ -66,6 +67,7 @@
     },
     methods: {
       getData(){
+        this.nodataFlag = false
         this.chart = this.$echarts.init(this.$refs.fjsj)
         this.chart.showLoading({
           text: '正在加载数据',
@@ -81,7 +83,6 @@
           if(res.code === 200){
             let data = res.data
             this.dataList = data
-
             this.chartData = data.slice(0,15)
             this.getChart(this.chartData)
           }else{
@@ -89,6 +90,7 @@
             this.chartData = []
             this.getChart(this.chartData)
             this.chart.hideLoading();
+            this.nodataFlag = true
           }
         })
       },
@@ -122,7 +124,7 @@
           color: ['rgba(255,99,55,1)'],
           grid: {
             containLabel: true,
-            bottom: 20,
+            bottom: 22,
             top: 20,
             left: 10,
             right: 10
@@ -145,7 +147,8 @@
               show: true,
               color: 'rgba(191,197,206,1)',
               width: 30,
-              overflow: 'breakAll'
+              interval: 0,
+              overflow: 'breakAll',
             },
             data: xAxis
           },
@@ -161,13 +164,16 @@
           },
           dataZoom: [{
               show: false,
-              start: 0,
-              end: 50
+              // start: 0,
+              // end: 40,
+              startValue :0,
+              endValue:6
             },
             {
               type: 'inside',
               start: 0,
-              end: 30
+              end: 30,
+              zoomLock:true
             },
           ],
           series: [{

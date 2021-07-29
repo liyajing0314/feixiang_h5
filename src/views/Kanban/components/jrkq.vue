@@ -40,7 +40,17 @@
           that.chart.resize()
         }, 100)
       });
-      this.getChart()
+
+    },
+    watch:{
+      data: {
+        handler(newName, oldName) {
+          this.$nextTick(()=>{
+            this.getChart()
+          })
+        },
+        immediate: true
+      }
     },
     methods: {
       getChart() {
@@ -55,7 +65,7 @@
 
         let haveArrivedNum = this.data.haveArrivedNum //实到人数
         let shouldComeNum = this.data.shouldComeNum //应到人数
-        let per = parseInt(haveArrivedNum / shouldComeNum) || 0
+        let per = (parseInt(haveArrivedNum / shouldComeNum) || 0) * 100
 
         this.options = {
           title: [{
@@ -112,7 +122,7 @@
               type: 'bar',
               z: 10,
               name: "完成度",
-              data: [haveArrivedNum],
+              data: [per],
               showBackground: false,
               backgroundStyle: {
                 borderWidth: 10,

@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <van-form @submit="onSubmit">
-      <van-field v-model="username"  placeholder="请输入新密码"
+      <van-field v-model="newPassword"  placeholder="请输入新密码"
         :rules="[{ required: true, message: '请输入新密码' }]" >
         <template #left-icon>
           <img src="@/assets/images/login/icon_password.png" class="icon"/>
         </template>
       </van-field>
-      <van-field v-model="password" type="password" placeholder="请再次输入新密码"
-        :rules="[{ required: true, message: '请输入密码' }]" >
+      <van-field v-model="confirmPassword" type="password" placeholder="请再次输入新密码"
+        :rules="[{ required: true, message: '请输入密码' },{validator, message: '两次密码请保持一致' }]" >
         <template #left-icon>
           <img src="@/assets/images/login/icon_password2.png" class="icon"/>
         </template>
@@ -21,19 +21,35 @@
 </template>
 
 <script>
+  import {debounce} from '@/utils/index'
+  import {changePassword} from '@/api/user'
   export default {
     data() {
       return {
-        username: '',
-        password: '',
+        newPassword: '',
+        confirmPassword: '',
       }
     },
     methods: {
-      onSubmit(values) {
-        console.log('submit', values);
-        localStorage.setItem('token','123456')
-        this.$router.push('/kanban')
-      }
+       validator(val) {
+        return this.newPassword == this.confirmPassword;
+      },
+      onSubmit:debounce(function(values) {
+        let param = {
+          newPassword:this.newPassword,
+          confirmPassword:this.confirmPassword
+        }
+        changePassword(param).then(res=>{
+          if(res.code === 200){
+            this.newPassword = ''
+            this.confirmPassword = ''
+            this.$toast('修改成功')
+            this.$router.push('/console')
+          }else{
+            this.$toast(res.msg || '修改失败')
+          }
+        })
+      },500)
     }
   }
 </script>

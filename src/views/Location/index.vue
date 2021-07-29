@@ -85,7 +85,12 @@
           if(res.code === 200){
             this.data = res.data
             this.locationList = res.data.Normal
-            this.canvasInit()
+            this.$nextTick(()=>{
+              this.canvasInit()
+            })
+
+          }else{
+            this.$toast(res.msg || '请求失败')
           }
         })
       },
@@ -109,6 +114,8 @@
 
       },
       loadImg() {
+        this.initArr = []
+        this.iconArr = []
         let bacImg = this.$refs.bacImg
         let imgWidth = bacImg.offsetWidth
         let imgHeight = bacImg.clientHeight
@@ -118,7 +125,6 @@
 
         this.contentHeight = imgHeight
 
-        console.info('bacImg', this.$refs, imgWidth, imgHeight)
 
         let _this = this;
         this.$nextTick(() => {
@@ -169,10 +175,13 @@
               _this.iconArr[k].x = _this.initArr[k].x;
               _this.iconArr[k].y = _this.initArr[k].y;
             }
-            _this.drawImageCanvas();
+            setTimeout(()=>{
+              _this.drawImageCanvas();
+            },100)
+
 
           }
-
+          console.info('this.imgSrc',this.imgSrc)
           this.img.src = this.imgSrc;
 
 
@@ -180,15 +189,19 @@
           this.icon = new Image();
           this.icon.onload = function() {
             _this.iconIsLoaded = true;
-            _this.drawImageCanvas();
+            setTimeout(()=>{
+              _this.drawImageCanvas();
+            },100)
+
           }
           let location = require('@/assets/images/location/location@2x.png')
           this.icon.src = location;
-        },500)
+        })
 
       },
-      drawImageCanvas(x, y) {
-        console.log('执行次数', this.img.width, this.img.height, this.imgX, this.imgY,);
+      drawImageCanvas() {
+        console.log('执行次数',this.img, this.img.width, this.img.height, this.imgX, this.imgY, this.canvas
+          .width * this.imgScale, this.canvas.height * this.imgScale);
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height); // 清空背景
         // 画背景
         this.context.drawImage(this.img, 0, 0, this.img.width, this.img.height, this.imgX, this.imgY, this.canvas
@@ -428,7 +441,7 @@
         y = p2.pageY - p1.pageY;
         return Math.sqrt((x * x) + (y * y));
       },
-      windowToCanvas( x, y) {
+      windowToCanvas(x, y) {
         let bbox = this.canvas.getBoundingClientRect();
         console.info('this.canvas.height',this.canvas.height)
         return {
@@ -489,7 +502,9 @@
     // height: 100%;
     position: absolute;
     top: 0;
-    left: 0;
+    // left:0;
+    left: 50% !important;
+    transform: translateX(-50%);
   }
 
   .bottom-fixed {

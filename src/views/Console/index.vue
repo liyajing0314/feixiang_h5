@@ -31,6 +31,7 @@
 </template>
 
 <script>
+  import {ACCESS_TOKEN} from '@/store/mutation-types'
   import {mapGetters} from 'vuex'
   export default {
     data(){
@@ -48,14 +49,12 @@
         this.$dialog.confirm({
           title: '提示',
           message: '确认退出吗？',
-          theme: 'round-button',
         })
         .then(() => {
-          localStorage.removeItem('token')
+          localStorage.removeItem(ACCESS_TOKEN)
           this.$router.push('/login')
         })
         .catch(() => {
-          // on cancel
         });
       }
     }
@@ -102,9 +101,12 @@
   .grid {
     display: flex;
     justify-content: space-between;
+    margin: 0 -5px;
     >div {
-      width: 170px;
+      min-width: 170px;
       height: 80px;
+      flex:1;
+      margin: 0 5px;
       background-color: #ffffff;
       border: 1px solid rgba(37,116,240,0.10);
       border-radius: 12px;

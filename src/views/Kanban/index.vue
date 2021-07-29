@@ -1,10 +1,10 @@
 <template>
   <div class="container">
-    <div class="project">
+    <div class="project" @click="switchItems">
       <span>{{project.name}}</span>
       <img src="@/assets/images/icon_change.png"
         srcset='../../assets/images/icon_change.png 1x,
-                 ../../assets/images/icon_change@2x.png 2x' class="icon-change" @click="switchItems"/>
+                 ../../assets/images/icon_change@2x.png 2x' class="icon-change" />
     </div>
     <div class="profile">
       <div class="profile-item">
@@ -69,7 +69,7 @@
     <jrkq :data="nowData"></jrkq>
     <!-- <lskq></lskq> -->
     <fjsj></fjsj>
-    <rwwcqk :dateList="dateList"></rwwcqk>
+    <rwwcqk></rwwcqk>
     <fwzlzs :dateList="dateList"></fwzlzs>
     <select-options ref="SelectOptions" @selProject="selProject"></select-options>
   </div>
@@ -204,17 +204,20 @@
     justify-content: space-between;
     flex-wrap: wrap;
     margin-bottom: 10px;
+    margin: 0 -4px 10px;
     .profile-item {
-      width:171px;
+      min-width:170px;
       height:66px;
       background-color: #FFFFFF;
       padding:9px 12px;
       border-radius: 6px;
       box-sizing: border-box;
-      margin-bottom: 8px;
+      // margin-bottom: 8px;
+      margin: 0 4px 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex: 1;
     }
     .icon-boxs {
       width:42px;
@@ -253,15 +256,16 @@
     .profile-list {
       background-color: #ffffff;
       border-radius: 4px;
-      padding:12px;
+      // padding:12px;
       display: flex;
       justify-content: center;
       align-items: center;
       width:100%;
       height:72px;
       text-align: center;
+      margin: 0 4px;
       >div {
-        margin: 0 16px;
+        margin: 0 10px;
       }
     }
   }

@@ -20,6 +20,19 @@ export function logout(params) {
   })
 }
 /**
+ * 修改密码
+ * @param {Object} params
+ */
+export function changePassword(params) {
+  return request({
+    url: '/authManage/changePassword',
+    method: 'get',
+    params
+  })
+}
+
+
+/**
  * 考勤上下班时间
  * @param {Object} params
  */

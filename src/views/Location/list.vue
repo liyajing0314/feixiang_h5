@@ -2,10 +2,12 @@
   <div class="container">
     <van-tabs v-model="active" type="card" :sticky="true" background="#F1F3F6" title-active-color="#333333" title-inactive-color="#808896" color="#ffffff">
       <van-tab title="员工列表">
-        <employee-list :data="locatonData.Normal"></employee-list>
+        <employee-list :data="locatonData.Normal" v-if="locatonData.Normal.length"></employee-list>
+        <van-empty description="暂无数据" v-if="!locatonData.Normal.length"/>
       </van-tab>
       <van-tab title="异常定位列表">
-        <exception-locating-list :data="locatonData.Error"></exception-locating-list>
+        <exception-locating-list :data="locatonData.Error" v-if="locatonData.Error.length"></exception-locating-list>
+        <van-empty description="暂无数据" v-if="!locatonData.Error.length"/>
       </van-tab>
     </van-tabs>
   </div>

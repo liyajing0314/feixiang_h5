@@ -42,7 +42,7 @@
         />
         <van-uploader v-model="fileList" :max-count="1" :before-read="beforeRead"/>
         <div>
-          <van-button type="primary" class="btn btn-cancel">取消</van-button>
+          <van-button type="primary" class="btn btn-cancel" @click="popupClose">取消</van-button>
           <van-button type="primary" class="btn btn-ok" @click="submit">确认</van-button>
         </div>
       </div>
@@ -112,9 +112,8 @@
         this.getMonthSchedulerecordInfo()
       },
       selCalendar(val){
-        console.info('val',val)
         this.calendarActive = val
-        this.getRecord(val.id)
+        // this.getRecord(val.id)
       },
       //查看某人某月考勤
       getMonthSchedulerecordInfo(){
@@ -169,7 +168,7 @@
           if(res.code === 200){
             let data = res.data
             this.recordDetail = data
-            if(data.imageurl != ''){
+            if(data.imageurl && data.imageurl != ''){
               this.fileList = [{url: data.imageurl}]
             }else{
               this.fileList = []
@@ -216,6 +215,7 @@
       popupClose(){
         this.fileList = []
         this.remark = ''
+        this.popupShow = false
       },
       beforeRead(file){
         let flag = file.type === 'image/jpeg' || file.type === 'image/png'
@@ -223,9 +223,9 @@
           this.$toast('请上传 jpg 格式图片');
           return false;
         }
-        const isLt2M = file.size / 1024 / 1024 < 2;
+        const isLt2M = file.size / 1024 / 1024 < 5;
         if (!isLt2M) {
-          this.$toast('上传图片大小不得超过2MB');
+          this.$toast('上传图片大小不得超过5MB');
           return false;
         }
         return true;
@@ -244,7 +244,6 @@
         formData.append('employeeId',this.selEmployee.id)
         formData.append('recordDate',this.calendarActive.data)
 
-        console.info('param',formData)
 
         updateSchedulerecordStatus(formData).then(res=>{
           if(res.code === 200){

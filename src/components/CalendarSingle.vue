@@ -12,7 +12,6 @@
       :max-date="maxDate"
       :row-height="60"
       :color="color"
-      :style="{ height: '400px' }"
       :formatter="formatter"
       @select="select"
       v-if = "data.length >0"

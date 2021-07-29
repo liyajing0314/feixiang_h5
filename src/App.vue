@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view />
+    <router-view :key="key"/>
   </div>
 </template>
 <script>
@@ -9,6 +9,11 @@ export default {
   mounted() {
     console.info(this.$route)
     // this.$store.dispatch('getProjectData')
+  },
+  computed:{
+    key(){
+      return this.$route.name ?this.$route.name + + new Date():this.$route+ + new Date()
+    }
   }
 }
 </script>

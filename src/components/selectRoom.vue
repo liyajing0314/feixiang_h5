@@ -24,7 +24,7 @@
       </div>
 
       <div class="bottom">
-        <van-button type="primary" class="btn btn-cancel">清空</van-button>
+        <van-button type="primary" class="btn btn-cancel" @click="clear">清空</van-button>
         <van-button type="primary" class="btn btn-ok" @click="confirm">确定({{result.length}})</van-button>
       </div>
     </div>
@@ -90,11 +90,19 @@
       confirm() {
         if (this.result.length === 0) {
           this.$toast('请选择房间');
-        } else {
-          console.info('result',this.result)
+        }else if(this.result.length >15){
+          this.$toast('最多可选15个房间');
+        }else {
           this.$emit('selRoomData',this.result)
           this.show = false
         }
+      },
+      clear(){ //清空
+        this.searchValue = ''
+        this.result = []
+        this.searchFlag = false
+        this.searchResult = []
+        this.dataList = JSON.parse(JSON.stringify(this.list))
       }
     }
   }

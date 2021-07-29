@@ -354,6 +354,7 @@
   padding-top: 25px;
 }
 .abnormal-box {
+  margin-top: 24px;
   .title {
     font-size: 16px;
     font-weight: 600;

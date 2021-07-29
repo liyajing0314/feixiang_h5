@@ -40,7 +40,6 @@ service.interceptors.response.use(
   response => {
     Toast.clear()
     const res = response.data
-    console.info('res',res)
     if (res.status && res.status !== 200) {
       // 登录超时,重新登录
       if (res.status === 401) {

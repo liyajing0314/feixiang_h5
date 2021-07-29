@@ -30,8 +30,8 @@
     <div>
       <p class="t-title">任务列表</p>
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-        <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-          <div class="list-item" v-for="(item,index) in list" :key="item.id">
+        <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" >
+          <div class="list-item" v-for="(item,index) in list" :key="item.id" v-if="list.length">
             <div @click="toDetail(item)" style="flex:2">
               <p class="l-title">{{item.planname}}</p>
               <div>
@@ -41,8 +41,8 @@
             </div>
             <div>
               <div class="progress" :class="selStatus(item)">
-                <span>{{item.tbTaskDayInfoVo.percent}}</span>
-                <span class="progress-line" :style="{width:item.tbTaskDayInfoVo.percent}"></span>
+                <span>{{item.tbTaskDayInfoVo.percent || '0%'}}</span>
+                <span class="progress-line" :style="{width:item.tbTaskDayInfoVo.percent ||0}"></span>
               </div>
               <van-popover v-model="item.showPopover" trigger="click" placement="bottom-end" :actions="item.actions" @select="onSelect">
                 <template #reference>
@@ -51,7 +51,9 @@
               </van-popover>
             </div>
           </div>
+          <van-empty description="暂无数据" v-else/>
         </van-list>
+        
       </van-pull-refresh>
     </div>
     <select-options ref="SelectOptions" @selProject="selProject"></select-options>
@@ -63,7 +65,8 @@
   import {
     getYesterdayTaskUserNum,
     getYesterdayTaskInfo,
-    taskList
+    taskList,
+    deletePlan
   } from '@/api/task'
   import {mapGetters } from 'vuex'
   export default {
@@ -148,21 +151,22 @@
             let rows = res.rows
 
             if(rows.length >0){
-              let actions = this.actions
-              actions.map(item=>{
-                item.pid = rows[0].id
-                item.planname = rows[0].planname
-                return item
-              })
+
               rows.map(item=>{
+                let actions = JSON.parse(JSON.stringify(this.actions))
+                actions.map(action=>{
+                  action.pid = item.id
+                  action.planname = item.planname
+                  return action
+                })
                 item.showPopover = false
                 item.actions = actions
                 return item
               })
+              this.list = this.list.concat(rows)
             }
 
 
-            this.list = this.list.concat(rows)
             // 加载状态结束
             this.loading = false;
             if (this.list.length >= total) {
@@ -194,9 +198,10 @@
         this.getYesterdayTaskUserNum()
         this.getYesterdayTaskInfo()
         this.onRefresh()
-        
+
       },
       onSelect(action) {
+        console.info('action',action)
         let id = action.id
         if (id === 1) { //查看报表
           let item = this.list.find(item=>{
@@ -211,7 +216,18 @@
             message: '确认要删除此任务吗？',
           })
           .then(() => {
-            // on confirm
+            let pid = action.pid
+            deletePlan(pid).then(res=>{
+              if(res.code === 200){
+                this.$toast('操作成功')
+                let index = this.list.findIndex(item=>{
+                  return item.id == pid
+                })
+                this.list.splice(index,1)
+              }else{
+                this.$toast(res.msg || '删除失败')
+              }
+            })
           })
           .catch(() => {
             // on cancel
@@ -234,6 +250,8 @@
           }else{
             return 'status3'
           }
+        }else{
+          return 'status0'
         }
       }
 
@@ -398,6 +416,10 @@
       .progress-line {
         color: #ed4f2a;
       }
+    }
+    .status0 {
+      color: #bfc5ce;
+      border: 1px solid rgba(191,197,206,0.5);
     }
 
     .more {

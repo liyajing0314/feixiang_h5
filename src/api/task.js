@@ -81,3 +81,14 @@ export function getErrorTaskInfo(params) {
     params
   })
 }
+
+/**
+ * 删除任务计划
+ * @param {Object} params
+ */
+export function deletePlan(params) {
+  return request({
+    url:`/taskManage/taskPlan/${params}`,
+    method: 'delete',
+  })
+}

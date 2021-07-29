@@ -19,7 +19,7 @@
       </span>
     </div>
 
-    <van-popup v-model="popupShow" round closeable position="bottom">
+    <van-popup v-model="popupShow" round closeable position="bottom" @close="cancelPopup">
       <div class="popup-content">
         <div class="title">
           <span>
@@ -34,7 +34,7 @@
           </div>
         </div>
         <div class="popup-bottom">
-          <van-button type="primary" class="btn btn-cancel">取消</van-button>
+          <van-button type="primary" class="btn btn-cancel" @click="cancelPopup">取消</van-button>
           <van-button type="primary" class="btn btn-ok" @click="submit">确认</van-button>
         </div>
       </div>
@@ -164,6 +164,10 @@
       },
       showPopup(){
         this.popupShow = true
+      },
+      cancelPopup(){
+        this.classActive = ''
+        this.popupShow = false
       },
       submit:debounce(function(){ //修改班次
         let that = this
