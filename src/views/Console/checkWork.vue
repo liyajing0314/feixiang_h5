@@ -46,6 +46,7 @@
           <van-button type="primary" class="btn btn-ok" @click="submit">确认</van-button>
         </div>
       </div>
+      
     </van-popup>
   </div>
 </template>
