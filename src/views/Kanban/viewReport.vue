@@ -1,6 +1,6 @@
 <template>
   <div class="container" ref="container">
-    <div ref="content">
+    <div ref="content" id="content">
       <div class="head" @click="changeTime">{{month}}
         <!-- <img src="@/assets/images/icon_change.png" srcset='../../assets/images/icon_change.png 1x,
                    ../../assets/images/icon_change@2x.png 2x'
@@ -42,7 +42,7 @@
         <span>长按保存为图片至相册</span>
       </van-button>
     </div>
-    <img :src="picUrl" class="down-pic" @click="downImg" >
+    <img :src="picUrl" class="down-pic" @click="downImg" v-show="!btnFlag">
     <sel-picker ref="selPicker" @selPicker="selPicker"></sel-picker>
     <select-people-single ref="selectPeople" :list="list" @selPeople="selPeople"></select-people-single>
   </div>
@@ -65,7 +65,7 @@
         list: [],
         active: '',
         picFlag:false,
-        btnFlag:false,
+        btnFlag:true,
         picUrl:''
       }
     },
@@ -98,7 +98,7 @@
             })
             this.list = data
             this.$nextTick(()=>{
-              this.createImg()
+              // this.createImg()
             })
           } else {
             this.list = []
@@ -131,7 +131,8 @@
         this.$nextTick(()=>{
           this.picFlag = true
           this.btnFlag = true
-          let content = this.$refs.content
+          // let content = this.$refs.content
+          let content = document.getElementById("content");
           let tableBody = this.$refs.tableBody
           let scrollHeight = tableBody.scrollHeight + 100
           let scrollWidth = tableBody.scrollWidth
