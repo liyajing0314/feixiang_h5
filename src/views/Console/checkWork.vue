@@ -1,15 +1,17 @@
 <!-- 考勤管理 -->
 <template>
   <div class="container">
-    <roll-tab-box :tabList="tabList" @changeRollTab="changeRollTab"></roll-tab-box>
-    <div class="content">
+    <div class="fixed-box">
+      <roll-tab-box :tabList="tabList" @changeRollTab="changeRollTab"></roll-tab-box>
       <div class="box">
         <span><img src=""/>上班打卡：<span class="time">{{formatterTime(workTime.firstTime)}}</span></span>
         <span><img src=""/>下班打卡：<span class="time" :class="{'notime':formatterTime(workTime.lastTime) === '暂无'}">{{formatterTime(workTime.lastTime)}}</span></span>
       </div>
+      <month-arrow :month="month" @changeMonth="changeMonth"></month-arrow>
+    </div>
 
+    <div class="content">
       <div>
-        <month-arrow :month="month" @changeMonth="changeMonth"></month-arrow>
         <calendar-record :month="month" :data="calendarList" @selCalendar="selCalendar"></calendar-record>
       </div>
       <div class="bottom-box" v-if="JSON.stringify(calendarActive) != '{}'">
@@ -267,7 +269,15 @@
   min-height: 100vh;
 }
 .content {
-  padding:13px 16px 60px ;
+  padding:168px 16px 60px ;
+}
+.fixed-box {
+  width:100%;
+  position: fixed;
+  top:0;
+  left:0;
+  background-color: #FFFFFF;
+  z-index: 100;
 }
 .box {
   background: #f7f7f8;
@@ -277,7 +287,7 @@
   @include flexbox();
   font-size: 14px;
   color: #808896;
-  margin-bottom: 24px;
+  margin: 13px 16px 0;
   >span {
     flex: 1;
     padding-left: 16px;
@@ -293,17 +303,6 @@
   .notime {
     color: #bac2ce;
   }
-}
-.month-arrow {
-  @include flexbox();
-  margin-bottom: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  .icon-arrow {
-    width:24px;
-    height:24px;
-  }
-
 }
 .bottom-box {
   position: fixed;
@@ -427,17 +426,23 @@
     text-align: center;
     justify-content: center;
     >span {
-      display: inline-block;
-      width: 96%;
-      height: 95%;
-      border-radius: 6px;
-      line-height: 32px;
+      display: flex;
+      flex: 1;
+      width: calc(100% - 2px);
+      max-width: calc(100% - 2px);
+      min-width: calc(100% - 2px);
+      height: calc(100% - 2px);
+      border-radius: 4px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 1px solid transparent;
     }
     &.active {
       background: #2574f0;
       color:#ffffff;
       >span {
-        border: 1px solid #ffffff;
+        border-color: #ffffff;
       }
     }
   }
@@ -457,5 +462,8 @@
   &:first-of-type {
     margin-right: 23px;
   }
+}
+/deep/.van-cell::after {
+  border:none;
 }
 </style>

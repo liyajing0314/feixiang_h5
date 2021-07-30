@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 3</title>
+    <defs>
+        <path d="M16.6340656,27.4865178 C22.8780219,22.3666162 26,17.8711103 26,14 C26,8.4771525 21.5228475,4 16,4 C10.4771525,4 6,8.4771525 6,14 C6,17.8711059 9.12197105,22.366606 15.3659131,27.4865004 L15.3658991,27.4865175 C15.7345737,27.7888226 16.2653908,27.7888227 16.6340656,27.4865178 Z" id="path-1"></path>
+        <filter x="-17.5%" y="-10.4%" width="135.0%" height="128.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.0784313725   0 0 0 0 0.270588235   0 0 0 0 0.576470588  0 0 0 0.29029174 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <circle id="path-3" cx="16" cy="14" r="4"></circle>
+        <filter x="-37.5%" y="-37.5%" width="175.0%" height="175.0%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.738662348   0 0 0 0 0.893217641   0 0 0 0 1  0 0 0 0.557173295 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="2定位---1地图---1默认" transform="translate(-232.000000, -183.000000)">
+            <g id="编组-3" transform="translate(232.000000, 183.000000)">
+                <rect id="矩形" stroke="#979797" fill="#D8D8D8" opacity="0" x="0.5" y="0.5" width="31" height="31"></rect>
+                <ellipse id="椭圆形" fill="#C4D2E9" cx="16" cy="27.5" rx="3" ry="1.5"></ellipse>
+                <g id="椭圆形">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#2574F0" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <g id="椭圆形" opacity="0.800000012">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-3"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

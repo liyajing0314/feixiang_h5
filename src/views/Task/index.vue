@@ -49,7 +49,8 @@
               </div>
               <van-popover v-model="item.showPopover" trigger="click" placement="bottom-end" :actions="item.actions" @select="onSelect">
                 <template #reference>
-                  <span class="more"></span>
+                  <!-- <span class="more"></span> -->
+                  <svg-icon icon-class="icon_more" class-name="icon-more"></svg-icon>
                 </template>
               </van-popover>
             </div>
@@ -92,11 +93,11 @@
         actions: [{
           id: 1,
           text: '查看报表',
-          icon: require('@/assets/images/task/icon_record.png')
+          icon: require('@/assets/images/task/icon_record@2x.png')
         }, {
           id: 2,
           text: '删除',
-          icon: require('@/assets/images/task/icon_delete.png')
+          icon: require('@/assets/images/task/icon_delete@2x.png')
         }],
       }
     },
@@ -425,17 +426,12 @@
       border: 1px solid rgba(191,197,206,0.5);
     }
 
-    .more {
+    .icon-more {
       width: 24px;
       height: 24px;
       display: block;
-      background: url('~@/assets/images/task/more.png') no-repeat center center / cover;
       margin: 6px 0 0 35px;
       cursor: pointer;
-
-      &:hover {
-        background-image: url('~@/assets/images/task/more_active.png');
-      }
     }
   }
 
@@ -444,7 +440,6 @@
   .van-icon__image{
     width:16px;
     height:16px;
-    margin-top: -10px;
-    vertical-align: middle;
+    vertical-align: 2px;
   }
 </style>

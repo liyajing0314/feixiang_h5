@@ -1,8 +1,12 @@
 <template>
   <div class="month-arrow">
-    <img src="~@/assets/images/console/icon_left.png" class="icon-arrow" @click="changMonth('minus')"/>
+    <span @click="changMonth('minus')">
+       <svg-icon icon-class="icon_left" class-name="icon-arrow"  ></svg-icon>
+    </span>
     <span>{{chineseNum(month)}}</span>
-    <img src="~@/assets/images/console/icon_right.png" class="icon-arrow" @click="changMonth('add')"/>
+    <span @click="changMonth('add')">
+       <svg-icon icon-class="icon_right" class-name="icon-arrow"  ></svg-icon>
+    </span>
   </div>
 </template>
 
@@ -41,7 +45,8 @@
 <style scoped lang="scss">
 .month-arrow {
   @include flexbox();
-  margin-bottom: 18px;
+  // margin-bottom: 18px;
+  padding:18px 12px;
   font-size: 16px;
   font-weight: 600;
   .icon-arrow {

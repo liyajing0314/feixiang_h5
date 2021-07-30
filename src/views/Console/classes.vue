@@ -1,9 +1,13 @@
 <!-- 班次管理 -->
 <template>
   <div class="container">
-    <roll-tab-box :tabList="tabList" @changeRollTab="changeRollTab"></roll-tab-box>
-    <div class="content">
+    <div class="fixed-box">
+      <roll-tab-box :tabList="tabList" @changeRollTab="changeRollTab"></roll-tab-box>
       <month-arrow :month="month" @changeMonth="changeMonth"></month-arrow>
+    </div>
+
+    <div class="content">
+
       <div class="items" :class="{'active':activeItem(item) > -1}" :style="{backgroundColor:hexToRgba(item.color,0.1) ? hexToRgba(item.color,0.1).rgba : ''}" v-for="item in list" :key="item.id" @click="selItem(item)">
         <span>
           <span class="month">{{chineseNum(item.data)}}</span>
@@ -220,18 +224,16 @@
   background-color: #ffffff;
   min-height: 100vh;
 }
-.month-arrow {
-  @include flexbox();
-  margin-bottom: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  .icon-arrow {
-    width:24px;
-    height:24px;
-  }
-}
 .content {
-  padding:20px 12px 60px;
+  padding:110px 12px 60px;
+}
+.fixed-box {
+  width:100%;
+  position: fixed;
+  top:0;
+  left:0;
+  background-color: #FFFFFF;
+  z-index: 100;
 }
 .items {
   height: 36px;
@@ -244,16 +246,16 @@
   >span {
     @include flexbox();
     padding:0 12px;
-    width:99%;
-    height:94%;
+    width:calc(100% - 2px);
+    height:calc(100% - 2px);
     top:1px;
   }
   &.active {
     background: #2574f0 !important;
     color:#ffffff;
     >span {
-      width:99%;
-      height:94%;
+      width:calc(100% - 2px);
+      height:calc(100% - 2px);
       margin: 0 auto;
       border:1px solid #ffffff;
       border-radius: 6px;
@@ -336,8 +338,8 @@
     font-size: 14px;
     >span {
       @include flexbox();
-      width: 100%;
-      height:100%;
+      width: calc(100% - 2px);
+      height:calc(100% - 2px);
       position: relative;
       top: 1px;
     }
@@ -345,8 +347,8 @@
       background: #2574f0 !important;
       color:#ffffff !important;
       >span {
-        width:99%;
-        height:94%;
+        width:calc(100% - 2px);
+        height:calc(100% - 2px);
         margin: 0 auto;
         border:1px solid #ffffff;
         border-radius: 6px;

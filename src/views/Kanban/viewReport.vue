@@ -233,7 +233,7 @@
   }
   .table-head {
     position: fixed;
-    top:52px;
+    top:50px;
     width:100%;
     background-color: #FFFFFF;
     font-size: 14px;

@@ -166,7 +166,7 @@
       padding: 6px 12px;
       margin-bottom: 8px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       position: relative;
       >span {
         overflow: hidden;

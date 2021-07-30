@@ -6,7 +6,7 @@
       <div class="search-container">
         <!-- <img src="@/assets/images/icon_search.png" class="icon-search"/> -->
         <svg-icon icon-class="icon_input_search" class-name="icon-search"></svg-icon>
-        
+
         <input type="text" v-model="searchValue" placeholder="搜索房间名" class="search-input" @keyup.enter="onSearch" @input="changeWord"/>
         <span @click="onSearch" class="search">搜索</span>
       </div>
@@ -95,7 +95,16 @@
         }else if(this.result.length >15){
           this.$toast('最多可选15个房间');
         }else {
-          this.$emit('selRoomData',this.result)
+          let result = JSON.parse(JSON.stringify(this.result))
+          result.map(item=>{
+            let patt1 = new RegExp("<span style='color: #ff6326;'>");
+            let patt2 = new RegExp("</span>");
+            item.roomName = item.roomName.replace(patt1,``)
+            item.roomName = item.roomName.replace(patt2,``)
+            return item
+          })
+
+          this.$emit('selRoomData',result)
           this.show = false
         }
       },

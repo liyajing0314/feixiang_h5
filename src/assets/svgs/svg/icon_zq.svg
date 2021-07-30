@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="3任务---2任务详情" transform="translate(-28.000000, -200.000000)">
+            <g id="编组-5" transform="translate(16.000000, 142.000000)">
+                <g id="编组-2" transform="translate(12.000000, 54.000000)">
+                    <g id="编组" transform="translate(0.000000, 4.000000)">
+                        <rect id="矩形" stroke="#979797" fill="#D8D8D8" opacity="0" x="0.5" y="0.5" width="15" height="15"></rect>
+                        <line x1="2.66666667" y1="1.33333333" x2="13.3333333" y2="1.33333333" id="路径" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></line>
+                        <line x1="2.66666667" y1="14.6666667" x2="13.3333333" y2="14.6666667" id="路径" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></line>
+                        <polygon id="矩形" fill="#2574F0" points="4 11 12 12 12 14 4 14"></polygon>
+                        <polyline id="路径" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="4 1.33333333 4 5.33333333 7 8.66666667"></polyline>
+                        <polyline id="路径" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="12 14.6666667 12 9.83333333 9 7"></polyline>
+                        <polyline id="路径" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="4 14.6666667 4 10 6.16666667 7.83333333"></polyline>
+                        <polyline id="路径" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="12 1.33333333 12 5.33333333 9.83333333 7.83333333"></polyline>
+                        <line x1="6.5" y1="4" x2="9.5" y2="4" id="路径" stroke="#2574F0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,14 +1,11 @@
 <template>
   <div class="container">
-    <div class="title">{{planname}}</div>
-    <div class="line"></div>
-    <div class="content">
+    <div class="fixed-box">
+      <div class="title">{{planname}}</div>
+      <div class="line"></div>
       <div class="tab-content">
         <div class="items" @click="switchTime">
           <span>{{chineseNum(month)}}月</span>
-          <!-- <img src="@/assets/images/icon_change.png"
-            srcset='../../assets/images/icon_change.png 1x,
-                     ../../assets/images/icon_change@2x.png 2x' class="icon-change"/> -->
           <svg-icon icon-class="icon_change" class-name="icon-change"></svg-icon>
         </div>
         <div class="tab-box" ref="tab_box">
@@ -18,12 +15,15 @@
           <span class="tab" :class="{'active':tabActive===3}" @click="changeTab(3)" v-if="taskData.usertype === 2">分组视图</span>
         </div>
       </div>
+    </div>
+
+    <div class="content">
       <div class="sub-tab-content" v-if="tabActive !== 0 && subTabList.length >0">
         <div class="sub-tab-box" ref="tabBox">
           <span :ref="'tab'+index" class="sub-tab" :class="{'active':subTabActive === item}" v-for="(item,index) in subTabList" :key="item" @click="changeSubTab(item)">{{item}}</span>
         </div>
         <div class="sub-items" @click="showSelect">
-          <img src="@/assets/images/task/icon_search@2x.png" class="icon-search"/>
+          <svg-icon icon-class="icon_search" class-name="icon-search"></svg-icon>
         </div>
       </div>
       <div class="calendar-box">
@@ -34,12 +34,14 @@
             <div class="head">{{item.pname}}</div>
             <div class="abnormal-item-content">
               <div class="abnormal-left">
-                <img src="@/assets/images/task/icon_daka@2x.png" class="icon-daka"/>
+                <!-- <img src="@/assets/images/task/icon_daka@2x.png" class="icon-daka"/> -->
+                <svg-icon icon-class="icon_daka" class-name="icon-daka"></svg-icon>
                 <span>打卡次数</span>
                 <span class="num">{{item.cts}}</span>
               </div>
               <div>
-                <img src="@/assets/images/task/icon_shichang@2x.png" class="icon-daka"/>
+                <!-- <img src="@/assets/images/task/icon_shichang@2x.png" class="icon-daka"/> -->
+                <svg-icon icon-class="icon_shichang" class-name="icon-daka"></svg-icon>
                 <span>停留时长</span>
                 <span class="num">{{item.time}}</span>
               </div>
@@ -259,10 +261,21 @@
   border-top: 1px solid #eaedf1;
 }
 .content {
-  padding: 11px 0;
+  padding: 80px 0 11px;
+}
+.fixed-box {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  background-color: #ffffff;
+  z-index: 100;
+  padding: 16px 16px 0;
 }
 .tab-content {
   display: flex;
+  align-items: center;
+  padding: 11px 0;
   .items {
     width:64px;
     min-width: 64px;

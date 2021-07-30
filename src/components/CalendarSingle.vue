@@ -126,7 +126,7 @@
     bottom:0;
     height:100%;
     width:100%;
-    border-radius:6px;
+    border-radius:4px;
   }
   /deep/.van-calendar__selected-day {
     width: 100% !important;
@@ -137,14 +137,14 @@
     padding-top: 8px;
     background-color: rgb(37, 116, 240) !important;
     .van-calendar__bottom-info  {
-      width: 96% !important;
-      height: 96% !important;
+      width: calc(100% - 2px) !important;
+      height: calc(100% - 2px) !important;
       left:0;
       right:0;
       margin: 0 auto;
       top:50%;
       transform: translateY(-50%);
-      border:2px solid #ffffff !important;
+      border:1px solid #ffffff !important;
     }
     .bottomInfo {
       color:#FFFFFF !important;

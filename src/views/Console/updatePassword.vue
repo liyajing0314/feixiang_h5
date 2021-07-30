@@ -1,16 +1,18 @@
 <template>
   <div class="container">
     <van-form @submit="onSubmit">
-      <van-field v-model="newPassword"  placeholder="请输入新密码"
+      <van-field v-model="newPassword"  placeholder="请输入新密码" :error="false"
         :rules="[{ required: true, message: '请输入新密码' }]" >
         <template #left-icon>
-          <img src="@/assets/images/login/icon_password.png" class="icon"/>
+          <!-- <img src="@/assets/images/login/icon_password.png" class="icon"/> -->
+          <svg-icon icon-class="icon_password" class-name="icon"></svg-icon>
         </template>
       </van-field>
-      <van-field v-model="confirmPassword" type="password" placeholder="请再次输入新密码"
-        :rules="[{ required: true, message: '请输入密码' },{validator, message: '两次密码请保持一致' }]" >
+      <van-field v-model="confirmPassword" type="password" placeholder="请再次输入新密码" :error="false"
+        :rules="[{ required: true, message: '请输入密码' },{validator, message: '两次密码请保持一致' }]" class="field-top">
         <template #left-icon>
-          <img src="@/assets/images/login/icon_password2.png" class="icon"/>
+          <!-- <img src="@/assets/images/login/icon_password2.png" class="icon"/> -->
+          <svg-icon icon-class="icon_password2" class-name="icon"></svg-icon>
         </template>
       </van-field>
       <div style="margin: 16px;">
@@ -78,6 +80,19 @@
       height: 48px;
       margin-top: 120px;
       font-size: 16px;
+    }
+  }
+  .field-top {
+    margin-top: 24px;
+  }
+  /deep/.van-form {
+    position: relative;
+    z-index: 2;
+    .van-field__control {
+      font-size: 16px;
+    }
+    .van-cell {
+      background-color: transparent;
     }
   }
 </style>

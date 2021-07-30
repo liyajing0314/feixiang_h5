@@ -107,7 +107,7 @@
           xAxis: [{
             type: 'category',
             // interval: 0,
-            boundaryGap :true,
+            boundaryGap :false,
             axisTick: {
               show: false,
             },
@@ -156,6 +156,7 @@
             data: dateList
           },{
             type: 'category',
+            boundaryGap :false,
             axisTick: {
               show: false,
             },

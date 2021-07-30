@@ -114,7 +114,7 @@
           xAxis: {
             type: 'category',
             // interval: 0,
-            boundaryGap: true,
+            boundaryGap :false,
             axisTick: {
               show: false,
             },
