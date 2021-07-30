@@ -121,6 +121,19 @@ module.exports = {
         return options
       })
       .end()
+    config.module.rules.delete('svg')
+    config.module
+      .rule('svg-smart')
+      .test(/\.svg$/)
+      .include
+      .add(resolve('src/assets/svgs'))
+      .end()
+      .use('svg-sprite-loader')
+      .loader('svg-sprite-loader')
+      .options({
+        symbolId: 'icon-[name]'
+      })
+      
     /**
      * 打包分析
      */

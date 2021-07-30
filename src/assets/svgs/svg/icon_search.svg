@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1看板---4查看报表备份" transform="translate(-12.000000, -154.000000)">
+            <g id="标签" transform="translate(0.000000, 142.000000)">
+                <g id="编组-10" transform="translate(6.000000, 6.000000)">
+                    <g id="编组" transform="translate(6.000000, 6.000000)">
+                        <rect id="矩形" fill-opacity="0.01" fill="#FFFFFF" fill-rule="nonzero" x="0" y="0" width="12" height="12"></rect>
+                        <line x1="1" y1="1.75003" x2="11" y2="1.75003" id="路径" stroke="#333333" stroke-width="1.5" stroke-linecap="round"></line>
+                        <line x1="1" y1="5.750025" x2="3.75" y2="5.750025" id="路径" stroke="#2574F0" stroke-width="1.5" stroke-linecap="round"></line>
+                        <line x1="1" y1="9.750025" x2="3.75" y2="9.750025" id="路径" stroke="#2574F0" stroke-width="1.5" stroke-linecap="round"></line>
+                        <path d="M7.875,8.500025 C9.0486,8.500025 10,7.548625 10,6.375025 C10,5.201425 9.0486,4.250025 7.875,4.250025 C6.7014,4.250025 5.75,5.201425 5.75,6.375025 C5.75,7.548625 6.7014,8.500025 7.875,8.500025 Z" id="路径" stroke="#333333" stroke-width="1.5" fill="#2574F0"></path>
+                        <line x1="9.25" y1="8.000025" x2="11" y2="9.76265" id="路径" stroke="#333333" stroke-width="1.5" stroke-linecap="round"></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

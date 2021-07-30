@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1看板---1看板" transform="translate(-277.000000, -391.000000)">
+            <g id="今日考勤" transform="translate(12.000000, 376.000000)">
+                <g id="编组-11" transform="translate(259.000000, 11.000000)">
+                    <g id="编组" transform="translate(6.000000, 4.000000)">
+                        <rect id="矩形" stroke="#979797" fill="#D8D8D8" opacity="0" x="0.5" y="0.5" width="15" height="15"></rect>
+                        <path d="M3.23809524,5.19047619 L3.23809524,2.19047619 C3.23809524,1.82228619 3.5365719,1.52380952 3.9047619,1.52380952 L13.2380952,1.52380952 C13.6062952,1.52380952 13.9047619,1.82228619 13.9047619,2.19047619 L13.9047619,14.1904762 C13.9047619,14.5586762 13.6062952,14.8571429 13.2380952,14.8571429 L3.9047619,14.8571429 C3.5365719,14.8571429 3.23809524,14.5586762 3.23809524,14.1904762 L3.23809524,11.1904762" id="路径" stroke="#2574F0"></path>
+                        <line x1="10.9047619" y1="5.19047619" x2="11.9047619" y2="5.19047619" id="路径" stroke="#2574F0" stroke-linecap="round"></line>
+                        <line x1="9.9047619" y1="7.85714286" x2="11.9047619" y2="7.85714286" id="路径" stroke="#2574F0" stroke-linecap="round"></line>
+                        <line x1="9.9047619" y1="10.5238095" x2="11.9047619" y2="10.5238095" id="路径" stroke="#2574F0" stroke-linecap="round"></line>
+                        <rect id="矩形" stroke="#2574F0" fill="#2574F0" fill-rule="nonzero" x="1.9047619" y="5.19047619" width="6" height="6"></rect>
+                        <line x1="3.9047619" y1="7.19047619" x2="5.9047619" y2="9.19047619" id="路径" stroke="#FFFFFF" stroke-linecap="round"></line>
+                        <line x1="5.9047619" y1="7.19047619" x2="3.9047619" y2="9.19047619" id="路径" stroke="#FFFFFF" stroke-linecap="round"></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

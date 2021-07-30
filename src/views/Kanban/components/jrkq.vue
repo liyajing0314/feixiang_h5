@@ -3,7 +3,8 @@
     <p class="pannel-head">
       <span>今日考勤</span>
       <span class="report-btn" @click="toReport">
-        <img src="@/assets/images/kanban/icon_report@2x.png" class="icon-report"/>
+        <!-- <img src="@/assets/images/kanban/icon_report@2x.png" class="icon-report"/> -->
+        <svg-icon icon-class="icon_report" class-name="icon-report"></svg-icon>
         查看报表
       </span>
     </p>
@@ -11,11 +12,17 @@
       <div ref="jrgk" class="charts"></div>
       <div class="right-item">
         <div class="items">
-          <span><img src="@/assets/images/kanban/icon_yd.png" class="icon" />应到人数</span>
+          <span>
+            <!-- <img src="@/assets/images/kanban/icon_yd.png" class="icon" /> -->
+          <svg-icon icon-class="icon_yd" class-name="icon"></svg-icon>
+          应到人数</span>
           <span class="nums">{{data.shouldComeNum}}</span>
         </div>
         <div class="items items-yd">
-          <span><img src="@/assets/images/kanban/icon_sd.png" class="icon" />实到人数</span>
+          <span>
+            <!-- <img src="@/assets/images/kanban/icon_sd.png" class="icon" /> -->
+          <svg-icon icon-class="icon_sd" class-name="icon"></svg-icon>
+          实到人数</span>
           <span class="nums">{{data.haveArrivedNum}}</span>
         </div>
       </div>

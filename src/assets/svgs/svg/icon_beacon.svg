@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1看板---1看板" transform="translate(-138.000000, -243.000000)">
+            <g id="编组-5" transform="translate(12.000000, 148.000000)">
+                <g id="数据备份-2" transform="translate(0.000000, 74.000000)">
+                    <g id="编组-2" transform="translate(117.000000, 12.000000)">
+                        <g id="编组" transform="translate(9.000000, 9.000000)">
+                            <rect id="矩形" stroke="#979797" fill="#D8D8D8" opacity="0" x="0.5" y="0.5" width="23" height="23"></rect>
+                            <line x1="12" y1="2.5" x2="12" y2="6.5" id="路径" stroke="#075947" stroke-linecap="round" stroke-linejoin="round"></line>
+                            <line x1="12" y1="2.5" x2="12" y2="6.5" id="路径" stroke="#075947" stroke-linecap="round" stroke-linejoin="round"></line>
+                            <line x1="12" y1="18.5" x2="12" y2="22.5" id="路径备份-4" stroke="#075947" stroke-linecap="round" stroke-linejoin="round"></line>
+                            <line x1="19.07105" y1="5.428975" x2="16.24265" y2="8.2574" id="路径" stroke="#075947" stroke-linecap="round" stroke-linejoin="round"></line>
+                            <line x1="4.928935" y1="19.57105" x2="7.75735" y2="16.7426" id="路径" stroke="#075947" stroke-linecap="round" stroke-linejoin="round"></line>
+                            <line x1="2" y1="12.5" x2="6" y2="12.5" id="路径" stroke="#075947" stroke-linecap="round" stroke-linejoin="round"></line>
+                            <line x1="18" y1="12.5" x2="22" y2="12.5" id="路径备份-5" stroke="#075947" stroke-linecap="round" stroke-linejoin="round"></line>
+                            <line x1="4.928915" y1="5.428935" x2="7.75735" y2="8.25735" id="路径" stroke="#075947" stroke-linecap="round" stroke-linejoin="round"></line>
+                            <line x1="16.928915" y1="17.428935" x2="19.75735" y2="20.25735" id="路径备份-6" stroke="#075947" stroke-linecap="round" stroke-linejoin="round"></line>
+                            <path d="M12.000015,20.5 C16.420015,20.5 20.000015,16.91999 20.000015,12.49999 C20.000015,8.07999 16.420015,4.5 12.000015,4.5 C7.580015,4.5 4,8.07999 4,12.49999 C4,16.91999 7.580015,20.5 12.000015,20.5 Z" id="路径" stroke="#075947" fill="#8AD865" fill-rule="nonzero" stroke-linejoin="round"></path>
+                            <path d="M12.000015,16.49999 C14.210015,16.49999 16.000015,14.70999 16.000015,12.49999 C16.000015,10.28999 14.210015,8.49999 12.000015,8.49999 C9.790015,8.49999 8.000015,10.28999 8.000015,12.49999 C8.000015,14.70999 9.790015,16.49999 12.000015,16.49999 Z" id="路径" stroke="#075947" fill="#FFFFFF" fill-rule="nonzero" stroke-linejoin="round"></path>
+                            <path d="M12.000015,13.49999 C12.550015,13.49999 13.000015,13.04999 13.000015,12.49999 C13.000015,11.94999 12.550015,11.49999 12.000015,11.49999 C11.450015,11.49999 11.000015,11.94999 11.000015,12.49999 C11.000015,13.04999 11.450015,13.49999 12.000015,13.49999 Z" id="路径" fill="#252B93" fill-rule="nonzero"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

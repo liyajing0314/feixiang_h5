@@ -4,7 +4,9 @@
     <div class="container">
       <p class="title">选择房间</p>
       <div class="search-container">
-        <img src="@/assets/images/icon_search.png" class="icon-search"/>
+        <!-- <img src="@/assets/images/icon_search.png" class="icon-search"/> -->
+        <svg-icon icon-class="icon_input_search" class-name="icon-search"></svg-icon>
+        
         <input type="text" v-model="searchValue" placeholder="搜索房间名" class="search-input" @keyup.enter="onSearch" @input="changeWord"/>
         <span @click="onSearch" class="search">搜索</span>
       </div>
@@ -19,7 +21,7 @@
                 </div>
               </template>
             </van-checkbox>
-
+            <van-empty description="此项目暂无房间工时数据" v-if="!dataList.length"/>
         </van-checkbox-group>
       </div>
 
@@ -218,5 +220,8 @@
       border-radius: 6px;
       border:none;
     }
+  }
+  /deep/.van-empty__description {
+    padding:0 20px;
   }
 </style>

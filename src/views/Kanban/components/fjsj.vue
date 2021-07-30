@@ -4,7 +4,8 @@
       <span>房间数据</span>
       <span @click="switchTime">
         <span class="sel-data">.{{chineseNum(month)}}月</span>
-        <img src="@/assets/images/icon_change.png" class="icon-change" />
+        <!-- <img src="@/assets/images/icon_change.png" class="icon-change" /> -->
+        <svg-icon icon-class="icon_change" class-name="icon-change"></svg-icon>
       </span>
       <span class="btn-sel" @click="switchRoom">
         <span>选择房间</span>
@@ -30,7 +31,8 @@
         month:'',
         dataList:[],
         chartData:[],
-        nodataFlag:false
+        nodataFlag:false,
+        selRoomFlag:true
       }
     },
     mounted() {
@@ -67,6 +69,7 @@
     },
     methods: {
       getData(){
+        this.selRoomFlag = false
         this.nodataFlag = false
         this.chart = this.$echarts.init(this.$refs.fjsj)
         this.chart.showLoading({
@@ -92,6 +95,7 @@
             this.chart.hideLoading();
             this.nodataFlag = true
           }
+          this.selRoomFlag = true
         })
       },
       selRoomData(val){
@@ -99,6 +103,9 @@
         this.getChart(this.chartData)
       },
       switchRoom(){
+        if(!this.selRoomFlag){
+          return
+        }
         this.$refs.SelRoom.showPopup()
       },
       switchTime(){

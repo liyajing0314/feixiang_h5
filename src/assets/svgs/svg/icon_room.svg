@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1看板---1看板" transform="translate(-138.000000, -169.000000)">
+            <g id="编组-5" transform="translate(12.000000, 148.000000)">
+                <g id="编组" transform="translate(126.000000, 21.000000)">
+                    <rect id="矩形" stroke="#979797" fill="#D8D8D8" opacity="0" x="0.5" y="0.5" width="23" height="23"></rect>
+                    <line x1="2" y1="2.25" x2="22" y2="2.25" id="路径" stroke="#254393" stroke-linecap="round" stroke-linejoin="round"></line>
+                    <rect id="矩形" stroke="#254393" fill="#39CFFF" fill-rule="nonzero" stroke-linejoin="round" x="4" y="2.25" width="16" height="20"></rect>
+                    <polygon id="路径" stroke="#254393" fill="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" points="10 16.25 14 16.25 14 22.25 10 22.25"></polygon>
+                    <line x1="7.5" y1="6.25" x2="8.5" y2="6.25" id="路径" stroke="#254393" stroke-linecap="round"></line>
+                    <line x1="7.5" y1="9.25" x2="8.5" y2="9.25" id="路径" stroke="#254393" stroke-linecap="round"></line>
+                    <line x1="11.5" y1="6.25" x2="12.5" y2="6.25" id="路径" stroke="#254393" stroke-linecap="round"></line>
+                    <line x1="11.5" y1="9.25" x2="12.5" y2="9.25" id="路径" stroke="#254393" stroke-linecap="round"></line>
+                    <line x1="15.5" y1="6.25" x2="16.5" y2="6.25" id="路径" stroke="#254393" stroke-linecap="round"></line>
+                    <line x1="15.5" y1="9.25" x2="16.5" y2="9.25" id="路径" stroke="#254393" stroke-linecap="round"></line>
+                    <line x1="2" y1="22.25" x2="22" y2="22.25" id="路径" stroke="#254393" stroke-linecap="round" stroke-linejoin="round"></line>
+                    <path d="M14,16.25 L15,16.25 C15.27615,16.25 15.5049,16.024 15.4522,15.7529 C15.17585,14.33265 13.73545,13.25 12,13.25 C10.26455,13.25 8.82415,14.33265 8.5478,15.7529 C8.4951,16.024 8.72385,16.25 9,16.25 L10,16.25" id="路径" stroke="#254393" stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

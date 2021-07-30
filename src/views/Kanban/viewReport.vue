@@ -2,14 +2,18 @@
   <div class="container" ref="container">
     <div ref="content">
       <div class="head" @click="changeTime">{{month}}
-        <img src="@/assets/images/icon_change.png" srcset='../../assets/images/icon_change.png 1x,
+        <!-- <img src="@/assets/images/icon_change.png" srcset='../../assets/images/icon_change.png 1x,
                    ../../assets/images/icon_change@2x.png 2x'
-          class="icon-change" v-show="!picFlag"/>
+          class="icon-change" v-show="!picFlag"/> -->
+        <svg-icon icon-class="icon_change" class-name="icon-change" v-show="!picFlag"></svg-icon>
       </div>
       <div>
         <div class="table-row table-head">
           <div class="table-col table-col-1">
-            <div class="search-box" @click="changePeople" v-show="!picFlag"> <img src="@/assets/images/task/icon_search@2x.png" class="icon-search" />查找人</div>
+            <div class="search-box" @click="changePeople" v-show="!picFlag">
+            <!-- <img src="@/assets/images/task/icon_search@2x.png" class="icon-search" /> -->
+            <svg-icon icon-class="icon_search" class-name="icon-search"></svg-icon>
+            查找人</div>
           </div>
           <div class="yd table-col">应到</div>
           <div class="sd table-col">实到</div>
@@ -31,13 +35,14 @@
         </div>
       </div>
     </div>
-    <div class="bottom-box" @click="downImg">
+    <div class="bottom-box" @click="downImg" v-show="!btnFlag">
       <van-button type="primary" class="btn" >
-        <img src="~@/assets/images/kanban/icon_pic@2x.png"class="icon-pic" />
+        <!-- <img src="~@/assets/images/kanban/icon_pic@2x.png" class="icon-pic" /> -->
+        <svg-icon icon-class="icon_pic" class-name="icon-pic"></svg-icon>
         <span>长按保存为图片至相册</span>
       </van-button>
-      <img :src="picUrl" class="down-pic">
     </div>
+    <img :src="picUrl" class="down-pic" @click="downImg" >
     <sel-picker ref="selPicker" @selPicker="selPicker"></sel-picker>
     <select-people-single ref="selectPeople" :list="list" @selPeople="selPeople"></select-people-single>
   </div>
@@ -60,6 +65,7 @@
         list: [],
         active: '',
         picFlag:false,
+        btnFlag:false,
         picUrl:''
       }
     },
@@ -122,14 +128,17 @@
 
       },
       createImg() {
-        this.picFlag = true
         this.$nextTick(()=>{
+          this.picFlag = true
+          this.btnFlag = true
           let content = this.$refs.content
           let tableBody = this.$refs.tableBody
           let scrollHeight = tableBody.scrollHeight + 100
           let scrollWidth = tableBody.scrollWidth
+          console.info('去生成图片')
+
           html2canvas(content, {
-            scale: window.devicePixelRatio * 2,
+            scale: 0.9, //window.devicePixelRatio * 2
             useCORS: true, //开启跨域配置，但和allowTaint不能共存
             width: scrollWidth,
             height: scrollHeight,
@@ -138,12 +147,37 @@
             x: 0,
             y: 0
           }).then((canvas) => {
-            this.operType = 'edit'
-            let dataURL = canvas.toDataURL("image/jpg");
-            this.picUrl = dataURL
-            this.picFlag = false
+            console.info('生成图片成功')
+
+            let that = this
+            let isAndroid = that.isAndroid()
+            if(isAndroid){
+              let dataURL = canvas.toDataURL("image/jpg");
+              that.picUrl = dataURL
+            }else{
+              canvas.toBlob(function(blob) {
+                var url = URL.createObjectURL(blob);
+                that.picUrl = url
+              });
+            }
+            this.btnFlag = false
+          }).catch(err=>{
+            console.info('报错')
           })
+
+          this.picFlag = false
         })
+      },
+      isAndroid(){
+        var u = navigator.userAgent, app = navigator.appVersion;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //如果输出结果是true就判定是android终端或者uc浏览器
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //根据输出结果true或者false来判断ios终端
+        //!!双叹号一般用来将后面的表达式转换为布尔型的数据（boolean）
+        if(isAndroid){
+          return true
+        }else if(isioS){
+          return false
+        }
       },
       downImg(){
         let link = document.createElement("a");
@@ -243,17 +277,6 @@
       display: block;
       position: relative;
     }
-    .down-pic {
-      width:100%;
-      height: 88px;
-      position: fixed;
-      left:0;
-      bottom:0;
-      opacity: 0;
-      z-index: 20;
-      -webkit-touch-callout: default !important;
-    }
-
     .icon-pic {
       width: 16px;
       height: 16px;
@@ -262,6 +285,16 @@
       position: relative;
       top: -2px;
     }
+  }
+  .down-pic {
+    width:100%;
+    height: 88px;
+    position: fixed;
+    left:0;
+    bottom:0;
+    opacity: 0;
+    z-index: 20;
+    // -webkit-touch-callout: default !important;
   }
 
   .yd {

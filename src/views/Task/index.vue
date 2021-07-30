@@ -2,7 +2,8 @@
   <div class="container">
     <div class="project" @click="switchItems">
       <span>{{project.name}}</span>
-      <img src="@/assets/images/icon_change.png" class="icon-change"  />
+      <!-- <img src="@/assets/images/icon_change.png" class="icon-change"  /> -->
+      <svg-icon icon-class="icon_change" class-name="icon-change"></svg-icon>
     </div>
     <div class="task-num">
       <div>
@@ -12,14 +13,16 @@
       <div>
         <div class="task-box">
           <span>
-            <img src="@/assets/images/task/icon_wc@2x.png" class="icon-wc"/>
+            <!-- <img src="@/assets/images/task/icon_wc@2x.png" class="icon-wc"/> -->
+            <svg-icon icon-class="icon_wc" class-name="icon-wc"></svg-icon>
             <span>昨日完成人数</span>
           </span>
           <span class="num">{{finish || 0}}</span>
         </div>
         <div class="task-box">
           <span>
-            <img src="@/assets/images/task/icon_wwc@2x.png" class="icon-wc"/>
+            <!-- <img src="@/assets/images/task/icon_wwc@2x.png" class="icon-wc"/> -->
+            <svg-icon icon-class="icon_wwc" class-name="icon-wc"></svg-icon>
             <span>昨日未完成人数</span>
           </span>
 
@@ -53,7 +56,7 @@
           </div>
           <van-empty description="暂无数据" v-else/>
         </van-list>
-        
+
       </van-pull-refresh>
     </div>
     <select-options ref="SelectOptions" @selProject="selProject"></select-options>

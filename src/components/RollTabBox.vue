@@ -5,7 +5,8 @@
         <span :ref="'tab'+index" class="tab" :class="{'active':tabActive.id === item.id}" v-for="(item,index) in tabList" :key="item.id" @click="changeTab(item)">{{item.name}}</span>
       </div>
       <div class="items" @click="showPopup">
-        <img src="@/assets/images/task/icon_search@2x.png" class="icon-search"/>
+        <!-- <img src="@/assets/images/task/icon_search@2x.png" class="icon-search"/> -->
+        <svg-icon icon-class="icon_search" class-name="icon-search"></svg-icon>
       </div>
     </div>
     <select-people-single ref="selectPeople" :list="tabList" @selPeople="selPeople"></select-people-single>

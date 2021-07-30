@@ -6,9 +6,10 @@
       <div class="tab-content">
         <div class="items" @click="switchTime">
           <span>{{chineseNum(month)}}月</span>
-          <img src="@/assets/images/icon_change.png"
+          <!-- <img src="@/assets/images/icon_change.png"
             srcset='../../assets/images/icon_change.png 1x,
-                     ../../assets/images/icon_change@2x.png 2x' class="icon-change"/>
+                     ../../assets/images/icon_change@2x.png 2x' class="icon-change"/> -->
+          <svg-icon icon-class="icon_change" class-name="icon-change"></svg-icon>
         </div>
         <div class="tab-box" ref="tab_box">
           <span class="tab" :class="{'active':tabActive===0}" @click="changeTab(0)">任务总览</span>

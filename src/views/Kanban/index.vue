@@ -2,9 +2,10 @@
   <div class="container">
     <div class="project" @click="switchItems">
       <span>{{project.name}}</span>
-      <img src="@/assets/images/icon_change.png"
+      <svg-icon icon-class="icon_change" class-name="icon-change"></svg-icon>
+      <!-- <img src="@/assets/images/icon_change.png"
         srcset='../../assets/images/icon_change.png 1x,
-                 ../../assets/images/icon_change@2x.png 2x' class="icon-change" />
+                 ../../assets/images/icon_change@2x.png 2x' class="icon-change" /> -->
     </div>
     <div class="profile">
       <div class="profile-item">
@@ -13,9 +14,10 @@
           <p class="desc">房间数</p>
         </div>
         <div class="icon-boxs boxs1">
-          <img src="@/assets/images/kanban/icon_room.png"
+          <!-- <img src="@/assets/images/kanban/icon_room.png"
           srcset='../../assets/images/kanban/icon_room.png 1x,
-                 ../../assets/images/kanban/icon_room@2x.png 2x'/>
+                 ../../assets/images/kanban/icon_room@2x.png 2x'/> -->
+          <svg-icon icon-class="icon_room"></svg-icon>
         </div>
       </div>
       <div class="profile-item">
@@ -24,9 +26,10 @@
           <p class="desc">工牌数</p>
         </div>
         <div class="icon-boxs boxs2">
-          <img src="@/assets/images/kanban/icon_card.png"
+          <!-- <img src="@/assets/images/kanban/icon_card.png"
           srcset='../../assets/images/kanban/icon_card.png 1x,
-                 ../../assets/images/kanban/icon_card@2x.png 2x'/>
+                 ../../assets/images/kanban/icon_card@2x.png 2x'/> -->
+          <svg-icon icon-class="icon_card"></svg-icon>
         </div>
       </div>
       <div class="profile-item">
@@ -35,9 +38,10 @@
           <p class="desc">信标数</p>
         </div>
         <div class="icon-boxs boxs3">
-          <img src="@/assets/images/kanban/icon_beacon.png"
+          <!-- <img src="@/assets/images/kanban/icon_beacon.png"
           srcset='../../assets/images/kanban/icon_beacon.png 1x,
-                 ../../assets/images/kanban/icon_beacon@2x.png 2x'/>
+                 ../../assets/images/kanban/icon_beacon@2x.png 2x'/> -->
+          <svg-icon icon-class="icon_beacon"></svg-icon>
         </div>
       </div>
       <div class="profile-item">
@@ -46,9 +50,10 @@
           <p class="desc">劳动者总数</p>
         </div>
         <div class="icon-boxs boxs4">
-          <img src="@/assets/images/kanban/icon_laborer.png"
+          <!-- <img src="@/assets/images/kanban/icon_laborer.png"
           srcset='../../assets/images/kanban/icon_laborer.png 1x,
-                 ../../assets/images/kanban/icon_laborer@2x.png 2x'/>
+                 ../../assets/images/kanban/icon_laborer@2x.png 2x'/> -->
+          <svg-icon icon-class="icon_laborer"></svg-icon>
         </div>
       </div>
       <div class="profile-list">
@@ -224,7 +229,8 @@
       height:42px;
       text-align: center;
       border-radius: 50%;
-      >img {
+      >img,
+      >svg {
         width:24px;
         height:24px;
         margin-top: 9px;

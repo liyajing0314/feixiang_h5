@@ -25,8 +25,8 @@ export default {
             name: 'Kanban'
           },
           icon: {
-            active:require('@/assets/images/tabBar/kanban.png'),
-            inactive:require('@/assets/images/tabBar/kanban_normal.png'),
+            active:"tab_kanban_active",
+            inactive:"tab_kanban",
           }
         },
         {
@@ -35,8 +35,8 @@ export default {
             name: 'Location'
           },
           icon: {
-            active:require('@/assets/images/tabBar/location.png'),
-            inactive:require('@/assets/images/tabBar/location_normal.png'),
+            active:"tab_location_active",
+            inactive:"tab_location",
           }
         },
         {
@@ -45,8 +45,8 @@ export default {
             name: 'Task'
           },
           icon: {
-            active:require('@/assets/images/tabBar/task.png'),
-            inactive:require('@/assets/images/tabBar/task_normal.png'),
+            active:"tab_task_active",
+            inactive:"tab_task",
           }
         },
         {
@@ -55,8 +55,8 @@ export default {
             name: 'Console'
           },
           icon: {
-            active:require('@/assets/images/tabBar/console.png'),
-            inactive:require('@/assets/images/tabBar/console_normal.png'),
+            active:"tab_console_active",
+            inactive:"tab_console",
           }
         }
       ]

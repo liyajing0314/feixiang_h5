@@ -9,11 +9,13 @@
         <p class="desc">欢迎使用新物业劳动力管理智能化云平台</p>
         <div class="grid">
           <div @click="$router.push('/checkWork')">
-            <img src="@/assets/images/console/icon_kq.png" class="grid-icon"/>
+            <!-- <img src="@/assets/images/console/icon_kq.png" class="grid-icon"/> -->
+            <svg-icon icon-class="icon_kq" class-name="grid-icon"></svg-icon>
             <span>考勤管理</span>
           </div>
           <div @click="$router.push('/classes')">
-            <img src="@/assets/images/console/icon_bc.png" class="grid-icon"/>
+            <!-- <img src="@/assets/images/console/icon_bc.png" class="grid-icon"/> -->
+            <svg-icon icon-class="icon_bc" class-name="grid-icon"></svg-icon>
             <span>班次管理</span>
           </div>
         </div>
@@ -21,9 +23,10 @@
     </div>
     <van-cell title="修改密码" is-link url="/updatePassword" title-class="titleClass" :border="false">
       <template #icon>
-        <img src="@/assets/images/console/icon_updatepassword.png" class="icon_updatepassword"
+       <!-- <img src="@/assets/images/console/icon_updatepassword.png" class="icon_updatepassword"
         srcset='../../assets/images/console/icon_updatepassword.png 1x,
-               ../../assets/images/console/icon_updatepassword@2x.png 2x'/>
+               ../../assets/images/console/icon_updatepassword@2x.png 2x'/> -->
+        <svg-icon icon-class="icon_updatepassword" class-name="icon_updatepassword"></svg-icon>
       </template>
     </van-cell>
     <span @click="loginOut" class="login-out">退出登录</span>

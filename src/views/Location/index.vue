@@ -1,18 +1,22 @@
 <template>
-  <div class="container">
-    <div class="location-head" @click="switchItems">
-      <span>{{project.name}}</span>
-      <img src="@/assets/images/icon_change.png" class="icon-change"/>
-    </div>
-    <!-- :style="{height:contentHeight+'px'}" -->
-    <div style="position: relative;width:100%;height:100%;" ref="wrap" >
-      <img ref="bacImg" :src="imgSrc"  :style="imgstyle" style="opacity: 0;"/>
-      <canvas id="canvas" class="canvas"  :width="canvasWidth" :height="canvasHeight" :style="canvasstyle"></canvas>
-    </div>
-    <div class="bottom-fixed" @click="toList">
-      <img src="@/assets/images/location/icon_location_list.png" class="icon-location-list" srcset='../../assets/images/location/icon_location_list.png 1x,
-             ../../assets/images/location/icon_location_list@2x.png 2x' />
-      <span>查看定位列表</span>
+  <div>
+    <div class="container" ref="container">
+      <div class="location-head" @click="switchItems">
+        <span>{{project.name}}</span>
+        <!-- <img src="@/assets/images/icon_change.png" class="icon-change"/> -->
+        <svg-icon icon-class="icon_change" class-name="icon-change"></svg-icon>
+      </div>
+      <!-- :style="{height:contentHeight+'px'}" -->
+      <div style="position: relative;width:100%;height:100%;" ref="wrap" >
+        <img ref="bacImg" :src="imgSrc"  :style="imgstyle" style="opacity: 0;"/>
+        <canvas id="canvas" class="canvas"  :width="canvasWidth" :height="canvasHeight" :style="canvasstyle"></canvas>
+      </div>
+      <div class="bottom-fixed" @click="toList">
+       <!-- <img src="@/assets/images/location/icon_location_list.png" class="icon-location-list" srcset='../../assets/images/location/icon_location_list.png 1x,
+               ../../assets/images/location/icon_location_list@2x.png 2x' /> -->
+        <svg-icon icon-class="icon_location_list" class-name="icon-location-list"></svg-icon>
+        <span>查看定位列表</span>
+      </div>
     </div>
     <select-options ref="SelectOptions" @selProject="selProject"></select-options>
   </div>
@@ -54,6 +58,11 @@
     mounted() {
       this.flagPC = this.IsPC()
       this.getData()
+
+      //禁止移动端页面下滑
+      this.$refs.container.addEventListener('touchmove', function (e) {
+        e.preventDefault(); //阻止默认的处理方式(阻止下拉滑动的效果)
+      }, {passive: false}); //passive 参数不能省略，用来兼容ios和android
     },
     computed: {
       project:{
@@ -88,7 +97,6 @@
             this.$nextTick(()=>{
               this.canvasInit()
             })
-
           }else{
             this.$toast(res.msg || '请求失败')
           }
@@ -114,8 +122,11 @@
 
       },
       loadImg() {
+        this.imgScale = 1
         this.initArr = []
         this.iconArr = []
+        this.imgX = 0
+        this.imgY = 0
         let bacImg = this.$refs.bacImg
         let imgWidth = bacImg.offsetWidth
         let imgHeight = bacImg.clientHeight
@@ -358,18 +369,18 @@
                 _this.imgY  += y;
 
                 /*背景拖到边缘时禁止拖动*/
-                if (_this.imgX >= 0) {
-                  _this.imgX = 0;
-                }
-                if (_this.imgY >= 0) {
-                  _this.imgY = 0;
-                }
-                if (-(_this.imgX) >= (_this.canvas.width * _this.imgScale - _this.canvas.width)) {
-                  _this.imgX = -(_this.canvas.width * _this.imgScale - _this.canvas.width)
-                }
-                if (-(_this.imgY) >= (_this.canvas.height * _this.imgScale - _this.canvas.height)) {
-                  _this.imgY = -(_this.canvas.height * _this.imgScale - _this.canvas.height)
-                }
+                // if (_this.imgX >= 0) {
+                //   _this.imgX = 0;
+                // }
+                // if (_this.imgY >= 0) {
+                //   _this.imgY = 0;
+                // }
+                // if (-(_this.imgX) >= (_this.canvas.width * _this.imgScale - _this.canvas.width)) {
+                //   _this.imgX = -(_this.canvas.width * _this.imgScale - _this.canvas.width)
+                // }
+                // if (-(_this.imgY) >= (_this.canvas.height * _this.imgScale - _this.canvas.height)) {
+                //   _this.imgY = -(_this.canvas.height * _this.imgScale - _this.canvas.height)
+                // }
 
                 _this.pos = JSON.parse(JSON.stringify(_this.posl));
 
@@ -501,10 +512,10 @@
     // width: 100%;
     // height: 100%;
     position: absolute;
-    top: 0;
+    top: 50% !important;
     // left:0;
     left: 50% !important;
-    transform: translateX(-50%);
+    transform: translate(-50%,-50%);
   }
 
   .bottom-fixed {

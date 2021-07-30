@@ -4,7 +4,8 @@
     <div class="container">
       <p class="title">选择分组</p>
       <div class="search-container">
-        <img src="@/assets/images/icon_search.png" class="icon-search"/>
+        <!-- <img src="@/assets/images/icon_search.png" class="icon-search"/> -->
+        <svg-icon icon-class="icon_input_search" class-name="icon-search"></svg-icon>
         <input type="text" v-model="searchValue" placeholder="搜索分组" class="search-input"  @keyup.enter="onSearch" @input="changeWord"/>
         <span @click="onSearch" class="search">搜索</span>
       </div>

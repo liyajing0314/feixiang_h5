@@ -18,6 +18,7 @@
           <span class="recordStatus" :class="'status'+calendarActive.status">{{formatterStatus(calendarActive.status)}}</span>
         </span>
         <span class="update" @click="updateRecord">
+          <svg-icon icon-class="icon_update" class-name="icon-update"></svg-icon>
           <span>修改考勤</span>
         </span>
       </div>
@@ -46,7 +47,7 @@
           <van-button type="primary" class="btn btn-ok" @click="submit">确认</van-button>
         </div>
       </div>
-      
+
     </van-popup>
   </div>
 </template>
@@ -324,6 +325,12 @@
     font-weight: 400;
     color: #2574f0;
     cursor: pointer;
+  }
+  .icon-update {
+    width:16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 4px;
   }
 }
 .status0 {

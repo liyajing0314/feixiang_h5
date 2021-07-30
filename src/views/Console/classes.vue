@@ -14,7 +14,8 @@
     <div class="bottom-box" v-show="active.length >0">
       <span>已选<span class="activeColor">{{active.length}}</span>个班次</span>
       <span class="update" @click="showPopup">
-        <img src="~@/assets/images/console/icon_update@2x.png" class="icon-update"/>
+        <!-- <img src="~@/assets/images/console/icon_update@2x.png" class="icon-update"/> -->
+        <svg-icon icon-class="icon_update" class-name="icon-update"></svg-icon>
         修改班次
       </span>
     </div>

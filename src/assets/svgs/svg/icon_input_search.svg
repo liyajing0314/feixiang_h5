@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="通用侧边抽屉---房间&amp;分组---多选---选择" transform="translate(-83.000000, -150.000000)">
+            <g id="编组-14" transform="translate(0.000000, 86.000000)">
+                <g id="编组-2" transform="translate(55.000000, 0.000000)">
+                    <g id="编组-9" transform="translate(16.000000, 54.000000)">
+                        <g id="编组" transform="translate(12.000000, 10.000000)">
+                            <rect id="矩形" fill-opacity="0.01" fill="#FFFFFF" fill-rule="nonzero" x="0" y="0" width="16" height="16"></rect>
+                            <path d="M7,12.6666667 C10.1296,12.6666667 12.6666667,10.1296 12.6666667,7 C12.6666667,3.8704 10.1296,1.33333333 7,1.33333333 C3.8704,1.33333333 1.33333333,3.8704 1.33333333,7 C1.33333333,10.1296 3.8704,12.6666667 7,12.6666667 Z" id="路径" stroke="#BFC5CE" stroke-width="1.5" stroke-linejoin="round"></path>
+                            <path d="M8.8856,4.78103333 C8.40303333,4.29846667 7.73636667,4 7,4 C6.26363333,4 5.59696667,4.29846667 5.11436667,4.78103333" id="路径" stroke="#BFC5CE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <line x1="11.0739333" y1="11.0739333" x2="13.9023667" y2="13.9023667" id="路径" stroke="#BFC5CE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></line>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

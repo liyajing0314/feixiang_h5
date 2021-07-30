@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <img src="@/assets/images/login/logo@2x.png" class="logo"/>
+    <!-- <img src="@/assets/images/login/logo@2x.png" class="logo"/> -->
+    <svg-icon icon-class="logo" class-name="logo"></svg-icon>
     <p class="title">
       新物业劳动力管理<br> 智能化云平台
     </p>
@@ -8,13 +9,15 @@
       <van-field v-model="username"  placeholder="请输入手机号"
         :rules="[{ required: true, message: '请输入手机号' }]" >
         <template #left-icon>
-          <img src="@/assets/images/login/icon_phone.png" class="icon"/>
+          <!-- <img src="@/assets/images/login/icon_phone.png" class="icon"/> -->
+           <svg-icon icon-class="icon_phone" class-name="icon"></svg-icon>
         </template>
       </van-field>
       <van-field v-model="password" type="password" placeholder="请输入密码"
         :rules="[{ required: true, message: '请输入密码' }]" >
         <template #left-icon>
-          <img src="@/assets/images/login/icon_password.png" class="icon"/>
+          <!-- <img src="@/assets/images/login/icon_password.png" class="icon"/> -->
+          <svg-icon icon-class="icon_password" class-name="icon"></svg-icon>
         </template>
       </van-field>
       <div style="margin: 16px;">
