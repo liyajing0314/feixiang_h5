@@ -64,6 +64,7 @@
 
 <style scoped lang="scss">
   .container {
+    
     min-height:100vh;
     padding: 36px 32px;
     // background: url('~@/assets/images/login/bg@2x.png') no-repeat bottom left /contain;
