@@ -11,9 +11,9 @@
         <div class="table-row table-head">
           <div class="table-col table-col-1">
             <div class="search-box" @click="changePeople" v-show="!picFlag">
-            <!-- <img src="@/assets/images/task/icon_search@2x.png" class="icon-search" /> -->
-            <svg-icon icon-class="icon_search" class-name="icon-search"></svg-icon>
-            查找人</div>
+              <svg-icon icon-class="icon_search" class-name="icon-search"></svg-icon>
+              查找人
+            </div>
           </div>
           <div class="yd table-col">应到</div>
           <div class="sd table-col">实到</div>
@@ -53,7 +53,8 @@
   import SelectPeopleSingle from '@/components/SelectPeopleSingle'
   import SelPicker from '@/components/SelPicker'
   import {attendanceReport} from '@/api/kanban'
-  import html2canvas from 'html2canvas'
+  // import html2canvas from 'html2canvas'
+  import html2canvas from "@/assets/js/html2canvas";
   export default {
     components: {
       SelPicker,
@@ -65,7 +66,7 @@
         list: [],
         active: '',
         picFlag:false,
-        btnFlag:true,
+        btnFlag:false,
         picUrl:''
       }
     },
@@ -98,7 +99,7 @@
             })
             this.list = data
             this.$nextTick(()=>{
-              // this.createImg()
+              this.createImg()
             })
           } else {
             this.list = []
@@ -131,15 +132,47 @@
         this.$nextTick(()=>{
           this.picFlag = true
           this.btnFlag = true
-          // let content = this.$refs.content
-          let content = document.getElementById("content");
+          let content = this.$refs.content
+          // let content = document.getElementById("content");
           let tableBody = this.$refs.tableBody
           let scrollHeight = tableBody.scrollHeight + 100
           let scrollWidth = tableBody.scrollWidth
-          console.info('去生成图片')
+          console.info('去生成图片');
 
-          html2canvas(content, {
-            scale: 0.9, //window.devicePixelRatio * 2
+          // html2canvas(content, {
+          //   scale: 0.9, //window.devicePixelRatio * 2
+          //   useCORS: true, //开启跨域配置，但和allowTaint不能共存
+          //   width: scrollWidth,
+          //   height: scrollHeight,
+          //   windowWidth: scrollWidth,
+          //   windowHeight: scrollHeight,
+          //   x: 0,
+          //   y: 0
+          // }).then((canvas) => {
+          //   console.info('生成图片成功')
+
+          //   let that = this
+          //   let isAndroid = that.isAndroid()
+          //   if(isAndroid){
+          //     let dataURL = canvas.toDataURL("image/jpg");
+          //     that.picUrl = dataURL
+          //   }else{
+          //     canvas.toBlob(function(blob) {
+          //       var url = URL.createObjectURL(blob);
+          //       that.picUrl = url
+          //     });
+          //   }
+          //   this.btnFlag = false
+          // }).catch(err=>{
+          //   console.info('报错')
+          // })
+
+
+
+          // 使用, 全局window对象加入html2canvas，如果没有window就调用原来的，所以需要做判断
+          (window.html2canvas || html2canvas)(content,
+          {
+            scale: window.devicePixelRatio, //window.devicePixelRatio * 2
             useCORS: true, //开启跨域配置，但和allowTaint不能共存
             width: scrollWidth,
             height: scrollHeight,
@@ -147,24 +180,15 @@
             windowHeight: scrollHeight,
             x: 0,
             y: 0
-          }).then((canvas) => {
-            console.info('生成图片成功')
-
-            let that = this
-            let isAndroid = that.isAndroid()
-            if(isAndroid){
-              let dataURL = canvas.toDataURL("image/jpg");
-              that.picUrl = dataURL
-            }else{
-              canvas.toBlob(function(blob) {
-                var url = URL.createObjectURL(blob);
-                that.picUrl = url
-              });
-            }
+          }).then(canvas => {
+            let url = canvas.toDataURL("image/jpg");
+            console.log(url)
+            this.picUrl = url
             this.btnFlag = false
-          }).catch(err=>{
-            console.info('报错')
           })
+          .catch(err => {
+            // do sth
+          });
 
           this.picFlag = false
         })
