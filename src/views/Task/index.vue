@@ -1,8 +1,7 @@
 <template>
   <div class="container">
     <div class="project" @click="switchItems">
-      <span>{{project.name}}</span>
-      <!-- <img src="@/assets/images/icon_change.png" class="icon-change"  /> -->
+      <span v-if="project">{{project.name}}</span>
       <svg-icon icon-class="icon_change" class-name="icon-change"></svg-icon>
     </div>
     <div class="task-num">
@@ -102,9 +101,6 @@
       }
     },
     computed: {
-      ...mapGetters([
-        'getProjectData',
-      ]),
       project:{
         get(){
           return this.$store.getters.getSelProject
@@ -114,13 +110,26 @@
         }
       }
     },
+    watch:{
+      project: {
+        handler(newName, oldName) {
+          this.init()
+        },
+        immediate: true
+      }
+    },
     mounted() {
-      this.param.projectid = this.project.id
-
-      this.getYesterdayTaskUserNum()
-      this.getYesterdayTaskInfo()
+      // this.init()
     },
     methods: {
+      init(){
+        if(this.project){
+          this.param.projectid = this.project.id
+
+          this.getYesterdayTaskUserNum()
+          this.getYesterdayTaskInfo()
+        }
+      },
       getYesterdayTaskUserNum() {
         getYesterdayTaskUserNum({
           projectid: this.param.projectid
@@ -199,8 +208,8 @@
         this.project = val
         this.param.projectid = val.id
         this.param.pName = val.name
-        this.getYesterdayTaskUserNum()
-        this.getYesterdayTaskInfo()
+        // this.getYesterdayTaskUserNum()
+        // this.getYesterdayTaskInfo()
         this.onRefresh()
 
       },

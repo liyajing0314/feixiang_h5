@@ -37,7 +37,9 @@
       project: {
         handler(newName, oldName) {
           this.$nextTick(() => {
-            this.getData()
+            if(this.project){
+              this.getData()
+            }
           })
         },
         immediate: true

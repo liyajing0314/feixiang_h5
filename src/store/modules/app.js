@@ -60,6 +60,13 @@ const actions = {
         console.info('selProject',selProject,JSON.stringify(selProject))
         if(!selProject || JSON.stringify(selProject) === '{}'){
           commit('SET_SEL_PROJECT',list[0])
+        }else{
+          let index = list.findIndex(item=>{
+            return item.id === selProject.id
+          })
+          if(index === -1){
+            commit('SET_SEL_PROJECT',list[0])
+          }
         }
         resolve()
       }).catch(error=>{

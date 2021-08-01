@@ -13,7 +13,7 @@
       <span class="record" v-show="searchFlag && searchValue">共<span class="num">{{searchResult.length}}</span>条搜索记录</span>
       <div ref="content" class="content">
         <van-checkbox-group v-model="result">
-            <van-checkbox :name="item"  v-for="(item,index) in dataList" >
+            <van-checkbox :name="item"  v-for="(item,index) in dataList" :key="index">
               <template #icon="props">
                 <div class="items" :class="{'active':props.checked}" :ref="'items'+index">
                   <span v-html="item.roomName"></span>

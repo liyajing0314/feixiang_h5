@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="project" @click="switchItems">
-      <span>{{project.name}}</span>
+      <span v-if="project">{{project.name}}</span>
       <svg-icon icon-class="icon_change" class-name="icon-change"></svg-icon>
     </div>
     <div class="profile">
@@ -86,9 +86,6 @@
       }
     },
     computed: {
-      ...mapGetters([
-        'getProjectData',
-      ]),
       project:{
         get(){
           return this.$store.getters.getSelProject
@@ -101,12 +98,24 @@
     mounted() {
       let time = new Date().getTime()
       this.nowDate = parseTime(time,'{y}-{m}-{d}')
-
-      this.projectDataCount()
-      this.attendanceNum()
-      this.getDateList()
+    },
+    watch:{
+      project: {
+        handler(newName, oldName) {
+          this.init()
+        },
+        immediate: true
+      }
     },
     methods:{
+      init(){
+        if(!this.project){
+          return
+        }
+        this.projectDataCount()
+        this.attendanceNum()
+        this.getDateList()
+      },
       //查询项目统计数据
       projectDataCount(){
         projectDataCount({id:this.project.id}).then(res=>{
@@ -151,9 +160,9 @@
       },
       selProject(val){
         this.project = val
-        this.projectDataCount()
-        this.attendanceNum()
-        this.getDateList()
+        // this.projectDataCount()
+        // this.attendanceNum()
+        // this.getDateList()
       },
       switchTime(){
         this.$refs.SelPicker.showPopup()

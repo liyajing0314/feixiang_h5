@@ -8,7 +8,19 @@ export default {
   name: 'App',
   mounted() {
     console.info(this.$route)
-    // this.$store.dispatch('getProjectData')
+
+    if (window.performance.navigation.type == 1) {
+      console.log("页面被刷新")
+    }else{
+      console.log("首次被加载")
+      let path = this.$route.path
+      console.log("首次被加载",path)
+      if(path != '/' || path !='/login'){
+        console.info('重新加载')
+        // this.$store.dispatch('getProjectData')
+        location.reload()
+      }
+    }
   },
   computed:{
     key(){

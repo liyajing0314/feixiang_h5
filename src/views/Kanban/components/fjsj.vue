@@ -60,7 +60,9 @@
           let time = new Date().getTime()
           this.month = parseTime(time,'{y}-{m}')
           this.$nextTick(()=>{
-            this.getData()
+            if(this.project){
+              this.getData()
+            }
           })
 
         },

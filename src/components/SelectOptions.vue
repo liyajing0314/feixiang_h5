@@ -6,10 +6,10 @@
           <span>{{item.name}}</span>
         </div>
       </div>
-      <div class="bottom-oper">
+      <!-- <div class="bottom-oper">
         <van-button type="primary" class="btn btn-cancel" @click="cancel">取消</van-button>
         <van-button type="primary" class="btn btn-ok" @click="submit">确定</van-button>
-      </div>
+      </div> -->
     </div>
   </van-action-sheet>
 </template>
@@ -28,6 +28,16 @@
       this.active = {}
       this.getData()
     },
+    computed: {
+      project:{
+        get(){
+          return this.$store.getters.getSelProject
+        },
+        set(data){
+          this.$store.commit('SET_SEL_PROJECT',data)
+        }
+      }
+    },
     methods:{
       showAction(){
         this.show = true
@@ -35,14 +45,28 @@
       getData(){
         projectList().then(res=>{
           if(res.code === 200){
-            this.list = res.rows
+            let rows = res.rows
+            this.list = rows
+            if(this.project && JSON.stringify(this.project) != '{}'){
+              let index = rows.findIndex(item=>{
+                return item.id === this.project.id
+              })
+              if(index === -1){
+                this.project = rows[0]
+              }
+            }else{
+              this.project = rows[0]
+            }
           }else{
             this.list = []
+            this.project = {}
           }
         })
       },
       toSel(item){
         this.active = item
+        this.$emit('selProject',this.active)
+        this.cancel()
       },
       cancel(){
         this.active = {}
@@ -62,7 +86,7 @@
 
 <style scoped lang="scss">
   .content {
-    padding: 16px 16px 88px;
+    padding: 16px;
     .list-box {
       max-height: 300px;
       overflow: auto;
@@ -72,10 +96,12 @@
       line-height: 52px;
       font-size: 14px;
       font-weight: 400;
-      border-bottom: 1px solid #eaedf1;
       position: relative;
       padding-right: 16px;
       @include textoverflow(1);
+      &:not(:last-of-type){
+        border-bottom: 1px solid #eaedf1;
+      }
       &.active {
         color:$theme-color;
         &:before {

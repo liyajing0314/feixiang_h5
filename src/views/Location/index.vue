@@ -2,8 +2,7 @@
   <div>
     <div class="container" ref="container">
       <div class="location-head" @click="switchItems">
-        <span>{{project.name}}</span>
-        <!-- <img src="@/assets/images/icon_change.png" class="icon-change"/> -->
+        <span v-if="project">{{project.name}}</span>
         <svg-icon icon-class="icon_change" class-name="icon-change"></svg-icon>
       </div>
       <!-- :style="{height:contentHeight+'px'}" -->
@@ -57,8 +56,6 @@
     },
     mounted() {
       this.flagPC = this.IsPC()
-      this.getData()
-
       //禁止移动端页面下滑
       this.$refs.container.addEventListener('touchmove', function (e) {
         e.preventDefault(); //阻止默认的处理方式(阻止下拉滑动的效果)
@@ -74,7 +71,18 @@
         }
       }
     },
+    watch:{
+      project: {
+        handler(newName, oldName) {
+          this.init()
+        },
+        immediate: true
+      }
+    },
     methods: {
+      init(){
+        this.getData()
+      },
       toList() {
         this.$store.commit('SET_LOCATION_DATA',this.data)
         this.$router.push('/locationList')
@@ -84,9 +92,12 @@
       },
       selProject(val){
         this.project = val
-        this.getData()
+        // this.getData()
       },
       getData() {
+        if(!this.project){
+          return
+        }
         let param = {
           pid: this.project.id
         }
