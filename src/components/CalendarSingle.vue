@@ -1,7 +1,7 @@
 <template>
   <div >
     <van-calendar
-      title="5月"
+      title=""
       type ="single"
       :poppable="false"
       :show-confirm="false"

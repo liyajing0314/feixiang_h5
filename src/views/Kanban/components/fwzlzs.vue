@@ -129,22 +129,13 @@
             axisLabel: {
               show: true,
               color: 'rgba(191,197,206,1)',
-              // formatter:function(value,index){
-              //   console.info('value',value,index)
-              //   let v = value.split('-')
-              //   return v[2]
-              // },
-              // formatter: {
-              //     month: '{MMM}',
-              //     day: '{d}'
-              // },
               interval: 0,
               formatter: function (value,index) {
                   const date = new Date(value);
                   const monthStart = new Date(value);
 
-                  monthStart.setDate(0);
-                  monthStart.setHours(1);
+                  monthStart.setDate(1);
+                  monthStart.setHours(8);
                   monthStart.setMinutes(0);
                   monthStart.setSeconds(0);
                   monthStart.setMilliseconds(0);
@@ -153,10 +144,10 @@
                         + '{month|' + (date.getMonth() + 1)  + '月}';
                   }else{
                     if (date.getTime() === monthStart.getTime()) {
-                        return '{month|' + (date.getMonth() + 1)  + '月}\n'
-                            + '{day|' + date.getDate() + '}';
+                      return '{day|' + date.getDate() + '}\n'
+                          + '{month|' + (date.getMonth() + 1)  + '月}';
                     }else {
-                        return '{day|' + date.getDate() + '}'
+                      return '{day|' + date.getDate() + '}'
                     }
                   }
               },

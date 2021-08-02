@@ -4,7 +4,6 @@
     <div class="container">
       <p class="title">选择房间</p>
       <div class="search-container">
-        <!-- <img src="@/assets/images/icon_search.png" class="icon-search"/> -->
         <svg-icon icon-class="icon_input_search" class-name="icon-search"></svg-icon>
         <input type="text" v-model="searchValue" placeholder="搜索房间名" class="search-input"  @keyup.enter="onSearch" @input="changeWord"/>
         <span @click="onSearch" class="search">搜索</span>
@@ -85,20 +84,29 @@
             }
             return item
           })
-
-
         }
 
         this.result = result
-        let items = this.$refs['items' + index][0]
-        let top = items.offsetTop
-        this.$refs.content.scrollTo({
-          top: top ,
-          behavior: "smooth" // 平滑滚动
-        })
-
+        if(index > -1){
+          let items = this.$refs['items' + index][0]
+          let top = items.offsetTop
+          this.$refs.content.scrollTo({
+            top: top ,
+            behavior: "smooth" // 平滑滚动
+          })
+        }
       },
       selItem(item,index){ //选择房间
+        let patt1 = new RegExp("<span style='color: #ff6326;'>");
+        let patt2 = new RegExp("</span>");
+        if(this.type === 'global'){
+          item.roomName = item.roomName.replace(patt1,``)
+          item.roomName = item.roomName.replace(patt2,``)
+        }else{
+          item = item.replace(patt1,``)
+          item = item.replace(patt2,``)
+        }
+
         this.activeItem = item
         this.$emit('selRoom',item,index)
         this.show = false

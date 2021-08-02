@@ -66,13 +66,21 @@
     mounted() {
     },
     computed:{
-      data(){
-        let planData = this.$store.getters.planData
-        planData.daylist = planData.daylist.toString()
-        planData.usernamelist = eval(planData.usernamelist)
-        planData.roomnamelist = eval(planData.roomnamelist)
-        return planData
+      data:{
+        get(){
+          let planData = this.$store.getters.planData
+          planData.daylist = planData.daylist.toString()
+          planData.usernamelist = eval(planData.usernamelist)
+          planData.roomnamelist = eval(planData.roomnamelist)
+          return planData
+        },
+        set(data){
+          this.$store.commit('SET_PLAN_DATA',data)
+        }
       }
+    },
+    beforeDestroy(){
+      this.data = {}
     },
     methods:{
 

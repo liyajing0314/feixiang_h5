@@ -86,17 +86,29 @@
             return item
           })
         }
-
         this.result = result
+        if(index > -1){
+          let items = this.$refs['items' + index][0]
+          let top = items.offsetTop
+          this.$refs.content.scrollTo({
+            top: top ,
+            behavior: "smooth" // 平滑滚动
+          })
+        }
 
-        let items = this.$refs['items' + index][0]
-        let top = items.offsetTop
-        this.$refs.content.scrollTo({
-          top: top ,
-          behavior: "smooth" // 平滑滚动
-        })
       },
       selItem(item,index){ //选择人员
+
+        let patt1 = new RegExp("<span style='color: #ff6326;'>");
+        let patt2 = new RegExp("</span>");
+        if(this.type === 'global'){
+          item.name = item.name.replace(patt1,``)
+          item.name = item.name.replace(patt2,``)
+        }else{
+          item = item.replace(patt1,``)
+          item = item.replace(patt2,``)
+        }
+
         this.activeItem = item
         this.$emit('selPeople',item,index)
         this.show = false

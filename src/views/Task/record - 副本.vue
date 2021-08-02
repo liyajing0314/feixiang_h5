@@ -18,30 +18,55 @@
     </div>
 
     <div class="content">
-      <div v-show="tabActive === 0">
-        <calendar-box :month="month" :data="tabList0" :tabActive="tabActive"></calendar-box>
+      <div class="sub-tab-content" v-if="tabActive !== 0 && subTabList.length >0">
+        <div class="sub-tab-box" ref="tabBox">
+          <span :ref="'tab'+index" class="sub-tab" :class="{'active':subTabActive === item}" v-for="(item,index) in subTabList" :key="item" @click="changeSubTab(item)">{{item}}</span>
+        </div>
+        <div class="sub-items" @click="showSelect">
+          <svg-icon icon-class="icon_search" class-name="icon-search"></svg-icon>
+        </div>
       </div>
-      <div v-show="tabActive === 1">
-        <calendar-box :month="month" :data="tabList1" :tabActive="tabActive" :subTabActive="subTabActive1" :subTabList="subTabList1" @changeSub="changeSub"></calendar-box>
-      </div>
-      <div v-show="tabActive === 2">
-        <calendar-box :month="month" :data="tabList2" :tabActive="tabActive" :subTabActive="subTabActive2" :subTabList="subTabList2" @changeSub="changeSub"></calendar-box>
-      </div>
-      <div v-show="tabActive === 3">
-        <calendar-box :month="month" :data="tabList3" :tabActive="tabActive" :subTabActive="subTabActive3" :subTabList="subTabList3" @changeSub="changeSub"></calendar-box>
+      <div class="calendar-box">
+        <calendar-single :month="month" :data="calendarList" @selCalendar="selCalendar"></calendar-single>
+        <div class="abnormal-box" v-if="errorList.length >0">
+          <div class="title">异常情况</div>
+          <div class="abnormal-item" v-for="item in errorList" :key="item.id">
+            <div class="head">{{item.pname}}</div>
+            <div class="abnormal-item-content">
+              <div class="abnormal-left">
+                <svg-icon icon-class="icon_daka" class-name="icon-daka"></svg-icon>
+                <span>打卡次数</span>
+                <span class="num">{{item.cts}}</span>
+              </div>
+              <div>
+                <svg-icon icon-class="icon_shichang" class-name="icon-daka"></svg-icon>
+                <span>停留时长</span>
+                <span class="num">{{item.time}}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
     <sel-picker ref="SelPicker" @selPicker="selPicker"></sel-picker>
+    <select-people-single ref="selectPeople" :list="subTabList" @selPeople="selSubTab"></select-people-single>
+    <select-room-single ref="selectRoom" :list="subTabList" @selRoom="selSubTab"></select-room-single>
+    <select-group-single ref="selectGroup" :list="subTabList" @selGroup="selSubTab" ></select-group-single>
   </div>
 </template>
 
 <script>
-  import CalendarBox from './components/CalendarBox'
+  import SelectGroupSingle from '@/components/SelectGroupSingle'
+  import SelectRoomSingle from '@/components/SelectRoomSingle'
+  import SelectPeopleSingle from '@/components/SelectPeopleSingle'
   import {toChineseNum,parseTime} from '@/utils/index.js'
   import SelPicker from '@/components/SelPicker'
+  import {roomList,employeeList,groupList} from '@/api/common'
   import {getMonthProjectTaskInfoByTask,getMonthProjectTaskInfo,getErrorTaskInfo} from '@/api/task'
+  import CalendarSingle from '@/components/CalendarSingle'
   export default {
-    components:{SelPicker,CalendarBox},
+    components:{CalendarSingle,SelPicker,SelectPeopleSingle,SelectRoomSingle,SelectGroupSingle},
     data(){
       return {
         tabActive:0,
@@ -49,16 +74,9 @@
         planname:'',
         id:'',
         month:"",
-        tabList0:[], //任务总览
-        tabList1:[],//房间视图数据
-        tabList2:[], //人员
-        tabList3:[],//分组
-        subTabActive1:'',
-        subTabActive2:'',
-        subTabActive3:'',
-        subTabList1:[],
-        subTabList2:[],
-        subTabList3:[],
+        calendarList:[],
+        subTabList:[],
+        errorList:[],
       }
     },
     computed: {
@@ -67,21 +85,13 @@
           return this.$store.getters.getSelProject
         }
       },
-      taskData:{
-        get(){
-          let planData = this.$store.getters.planData
-          planData.daylist = planData.daylist.toString()
-          planData.usernamelist = eval(planData.usernamelist)
-          planData.roomnamelist = eval(planData.roomnamelist)
-          return planData
-        },
-        set(data){
-          this.$store.commit('SET_PLAN_DATA',data)
-        }
+      taskData(){
+        let planData = this.$store.getters.planData
+        planData.daylist = planData.daylist.toString()
+        planData.usernamelist = eval(planData.usernamelist)
+        planData.roomnamelist = eval(planData.roomnamelist)
+        return planData
       }
-    },
-    beforeDestroy(){
-      this.taskData = {}
     },
     mounted() {
       this.id = this.$route.query.id
@@ -90,8 +100,6 @@
       let time = new Date().getTime()
       let nowDate = parseTime(time,'{y}-{m}')
       this.month = nowDate
-
-      this.initSubList()
 
       this.getData()
 
@@ -112,18 +120,6 @@
       }
     },
     methods:{
-      initSubList(){
-        let roomnamelist = this.taskData.roomnamelist
-        this.subTabList1 = roomnamelist
-
-        let usernamelist = this.taskData.usernamelist
-        if(this.taskData.usertype === 1){ //人员
-          this.subTabList2 = usernamelist
-        }else{
-          this.subTabList3 = usernamelist
-        }
-
-      },
       getData(){
         let param = {
           month:this.month,
@@ -132,94 +128,114 @@
         }
         getMonthProjectTaskInfoByTask(param).then(res=>{
           if(res.code === 200){
-            this.tabList0 = res.data
+            this.calendarList = res.data
           }else{
-            this.tabList0 = []
+            this.calendarList = []
           }
         })
       },
-      changeSub(sub,index){ //切换二级tab
-        if(index === 1){ //房间
-          this.subTabActive1 = sub
-        }else if(index === 2){ //人员
-          this.subTabActive2 = sub
-        }else if(index === 3){ //分组
-          this.subTabActive3 = sub
-        }
-        this.getOtherData(sub,index)
-      },
-      getOtherData(name,tab){
+      getOtherData(){
         let param = {
           month:this.month,
           taskplanid:this.id,
-          name:name,
+          name:this.subTabActive,
           type:this.tabActive,
           projectid:this.project.id
         }
         getMonthProjectTaskInfo(param).then(res=>{
           if(res.code === 200){
-            let data = res.data
-            if(tab === 1){ //房间
-              this.tabList1 = data
-            }else if(tab === 2){ //人员
-              this.tabList2 = data
-            }else if(tab === 3){//分组
-              this.tabList3 = data
-            }
+            this.calendarList = res.data
           }else{
-            this.tabList1 = []
-            this.tabList2 = []
-            this.tabList3 = []
+            this.calendarList = []
           }
         })
       },
       switchTime(){
         this.$refs.SelPicker.showPopup()
       },
-      selPicker(val){ //切换时间
+      selPicker(val){
         this.month = val
-        this.tabList0 = []
-        this.tabList1 = []
-        this.tabList2 = []
-        this.tabList3 = []
-
+        this.errorList = []
         if(this.tabActive === 0){
           this.getData()
         }else {
-          let subTabActive = this.tabActive == 1 ? this.subTabActive1 : (this.tabActive == 2 ? this.subTabActive2 : this.subTabActive3)
-          this.getOtherData(subTabActive,this.tabActive)
+          this.getOtherData()
         }
       },
       changeTab(tab){
         // 0任务 1房间  2人员  3分组
         this.tabActive = tab
         if(tab === 0){
-          if(this.tabList0.length === 0){
-            this.getData()
-          }
+          this.getData()
         }else{
           if(tab === 1){
-            if(this.tabList1.length === 0 || this.subTabActive1 === ''){
-              this.subTabActive1 = this.subTabList1[0]
-              this.getOtherData(this.subTabActive1,tab)
-            }
+            let roomnamelist = this.taskData.roomnamelist
+            this.subTabList = roomnamelist
           }else if(tab === 2){
-            if(this.tabList2.length === 0 || this.subTabActive2 === ''){
-              this.subTabActive2 = this.subTabList2[0]
-              this.getOtherData(this.subTabActive2,tab)
-            }
+            let usernamelist = this.taskData.usernamelist
+            this.subTabList = usernamelist
           }else if(tab === 3){
-            if(this.tabList3.length === 0 || this.subTabActive3 === ''){
-              this.subTabActive3 = this.subTabList3[0]
-              this.getOtherData(this.subTabActive3,tab)
-            }
+            let usernamelist = this.taskData.usernamelist
+            this.subTabList = usernamelist
           }
+          this.subTabActive = this.subTabList[0]
+          this.getOtherData()
         }
+        this.errorList = []
+      },
+      changeSubTab(subTab){
+        this.subTabActive = subTab
+        this.errorList = []
+        this.getOtherData()
+      },
+      selCalendar(val){
+        this.getErrorTaskInfo(val)
+      },
+      showSelect(){
+        console.info('this.tabActive',this.tabActive)
+        if(this.tabActive === 1){ //房间
+          this.$refs.selectRoom.showPopup('task')
+        }else if(this.tabActive === 2){ //人员
+          this.$refs.selectPeople.showPopup('task')
+        }else if(this.tabActive === 3){ //分组
+          this.$refs.selectGroup.showPopup('task')
+        }
+      },
+      selSubTab(item,index){ //筛选房间 /人员 /分组
+        this.changeSubTab(item)
+        let clientWidth = this.$refs['tab'+index][0].clientWidth
+        let left = (clientWidth + 10) * index
+        this.$refs.tabBox.scrollTo({
+          left: left,
+          behavior: "smooth" // 平滑滚动
+        })
+      },
+      getErrorTaskInfo(val){
+        let name = ''
+        if(this.tabActive !== 0){
+          name = this.subTabActive
+        }
+
+        let param = {
+          data:val.data,
+          name:name,
+          projectid:this.project.id ,
+          taskrecordId:val.taskrecordId ,
+          type:this.tabActive + 1 //1 按任务 2 按房间 3 按人员 4按分组
+        }
+        getErrorTaskInfo(param).then(res=>{
+          if(res.code === 200){
+            this.errorList = res.data
+          }else{
+            this.errorList = []
+          }
+        })
       },
       chineseNum(val){
         if(!val){
           return ''
         }
+
         let month = val.split('-')[1]
         let data = month >= 10 ? month :(month.length > 1 ? month.split('')[1] : month)
         return toChineseNum(data)

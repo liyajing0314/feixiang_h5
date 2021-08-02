@@ -2,9 +2,6 @@
   <div class="container" ref="container">
     <div ref="content" id="content">
       <div class="head" @click="changeTime">{{month}}
-        <!-- <img src="@/assets/images/icon_change.png" srcset='../../assets/images/icon_change.png 1x,
-                   ../../assets/images/icon_change@2x.png 2x'
-          class="icon-change" v-show="!picFlag"/> -->
         <svg-icon icon-class="icon_change" class-name="icon-change" v-show="!picFlag"></svg-icon>
       </div>
       <div>
@@ -129,9 +126,10 @@
 
       },
       createImg() {
+        this.picFlag = true
+        this.btnFlag = true
         this.$nextTick(()=>{
-          this.picFlag = true
-          this.btnFlag = true
+          
           let content = this.$refs.content
           // let content = document.getElementById("content");
           let tableBody = this.$refs.tableBody
@@ -239,7 +237,7 @@
       height: 16px;
       margin-left: 4px;
       position: relative;
-      top: 2px;
+      top:0;
     }
   }
 

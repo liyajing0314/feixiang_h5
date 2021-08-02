@@ -17,17 +17,10 @@ export default {
     }
   },
   mounted() {
-    // if (window.performance.navigation.type === 1) {
-    //   console.log("页面被刷新")
-    //   window.isReload = 'isReload'
-
-    // }else{
-    //   location.reload()
-    // }
-  },
-  computed:{
-    key(){
-      return this.$route.name ?this.$route.name + + new Date():this.$route+ + new Date()
+    if (window.performance.navigation.type === 1) {
+      window.isReload = 'isReload'
+    }else{ //页面首次进入
+      location.reload()
     }
   },
   methods: {

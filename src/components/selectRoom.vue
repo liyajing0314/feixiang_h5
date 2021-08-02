@@ -80,14 +80,15 @@
         })
 
         this.searchResult = searchResult
-        let items = this.$refs['items' + index][0]
-        let top = items.offsetTop - 140
-
-        this.$refs.content.scrollTo({
-          top: top ,
-          behavior: "smooth" // 平滑滚动
-        })
-
+        if(index > -1){
+          let items = this.$refs['items' + index][0]
+          let top = items.offsetTop - 140
+          
+          this.$refs.content.scrollTo({
+            top: top ,
+            behavior: "smooth" // 平滑滚动
+          })
+        }
       },
       confirm() {
         if (this.result.length === 0) {

@@ -28,7 +28,7 @@ export const constantRouterMap = [
         path: '/task',
         name: 'Task',
         component: () => import('@/views/Task/index'),
-        meta: { title: '任务', keepAlive: false }
+        meta: { title: '任务', keepAlive: true }
       },
       {
         path: '/console',

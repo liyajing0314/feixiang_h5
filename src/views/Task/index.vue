@@ -48,7 +48,6 @@
               </div>
               <van-popover v-model="item.showPopover" trigger="click" placement="bottom-end" :actions="item.actions" @select="onSelect">
                 <template #reference>
-                  <!-- <span class="more"></span> -->
                   <svg-icon icon-class="icon_more" class-name="icon-more"></svg-icon>
                 </template>
               </van-popover>
@@ -117,9 +116,6 @@
         },
         immediate: true
       }
-    },
-    mounted() {
-      // this.init()
     },
     methods: {
       init(){
