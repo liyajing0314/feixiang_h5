@@ -4,9 +4,6 @@ import {ACCESS_TOKEN} from '@/store/mutation-types'
 const whiteList = ['/login']
 
 router.beforeEach((to, from, next) => {
-  // setTimeout(function () {
-  //   window.location = window.location;
-  // }, 500);
   document.title = to.meta.title
   let token = localStorage.getItem(ACCESS_TOKEN)
   if (token) {
